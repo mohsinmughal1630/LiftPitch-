@@ -1,10 +1,13 @@
 import React from 'react';
 import {
-  GroceryStack,
+  ContactStack,
+  DynamicLinkStack,
+  FunctionStack,
   HomeStack,
-  MoreStack,
-  OffersStack,
-  OrdersStack,
+  ProfileStack,
+  ScanStack,
+  SettingsStack,
+  ShopStack,
 } from '../../../../Navigation/InnerStack';
 
 export const containerStateEnum = {
@@ -13,7 +16,10 @@ export const containerStateEnum = {
 export const containerInitialState = {
   selectedTab: 0,
 };
-export const containerReducer = (state = containerInitialState, action) => {
+export const containerReducer = (
+  state = containerInitialState,
+  action: any,
+) => {
   switch (action.type) {
     case containerStateEnum.changeTab:
       return {
@@ -24,17 +30,23 @@ export const containerReducer = (state = containerInitialState, action) => {
       return state;
   }
 };
-export const setContainerStack = (index, navigation) => {
+export const setContainerStack = (index: number) => {
   if (index == 0) {
     return <HomeStack />;
   } else if (index == 1) {
-    return <GroceryStack />;
+    return <ContactStack />;
   } else if (index == 2) {
-    return <OrdersStack />;
+    return <FunctionStack />;
   } else if (index == 3) {
-    return <OffersStack />;
+    return <ShopStack />;
   } else if (index == 4) {
-    return <MoreStack />;
+    return <ScanStack />;
+  } else if (index == 5) {
+    return <DynamicLinkStack />;
+  } else if (index == 6) {
+    return <SettingsStack />;
+  } else if (index == 7) {
+    return <ProfileStack />;
   } else {
     return null;
   }

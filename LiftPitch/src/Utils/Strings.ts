@@ -1,37 +1,42 @@
 export const AppStrings = {
-  Home: {
-    closedResDes1: 'Open in Next',
-    closedResDes2: 'You can replace order for future',
+  Network: {
+    internetError: 'Please check your internet connection and try again',
+    somethingWrong: 'Something went wrong',
+    requestTimeoutError: 'Request Timed out',
+    errorTitle: 'Alert',
+    tokenExpired: 'Unauthenticated.',
+    noNfcError: 'No NFC connected yet.',
+    recordNotFound: 'Record Not Found',
+    notLoggedIn: 'User not logged in yet',
   },
-  login: {
-    forgotTxt: 'Forget Password ?',
-    SignTxt: 'Sign In',
-    guestTxt: 'Continue as Guest',
+  Validation: {
+    fieldsEmptyError: 'Please fill the fields properly',
+    invalidEmailError: 'Email is invalid',
+    passwordLengthError: 'Password should not be less than 8 characters.',
+    passwordNotMatchError: 'Passwords does not match',
+    emailEmptyError: "Email can't be empty",
+    otpCodeEmptyError: "OTP Code can't be empty",
+    maxImageSizeError:
+      'The selected image size exceeds the maximum limit of 10MB.',
   },
-  signUp: {
-    privacyLabel1: 'I accept the',
-    privacyLabel12: 'Privacy Policy',
-    btn: 'Next',
+
+  Permissions: {
+    contactPermission:
+      'The app wants to access contacts. Go to Settings and enable it!',
+    cameraPermission:
+      'The app wants to access your camera. Go to Settings and enable it!',
+    contactsUnavailable: 'Contacts not accessible',
+    cancelled: 'Cancelled',
+    success: 'Success',
   },
-  otp: {
-    des: 'Waiting to automatically detect an SMS send to your mobile number',
-    label1: 'Didn’t receive the code? ',
-    label2: 'Resend Code',
-    enterCode: 'Enter 6 - Digit Code',
-    btnTxt: 'Verify',
+};
+
+export const AsyncKeyStrings = {
+  Auth: {
+    userToken: 'user_token',
+    userdata: 'user_data',
   },
-  forget: {
-    heading: 'Forget your Password ?',
-    des: 'Keep Calm, Enter the email address associated with your account',
-    resetPasstxt: 'You can get reset password link through email',
-  },
-  cart: {
-    // kr: 'kr ',
-    TexasTxt: ' Inclusive of Texas',
-    noteTxt: 'If you have any food elergy add a note',
-  },
-  checkout: {
-    termLabel1: 'I accept the',
-    termLabel12: 'HB Terms & Conditions',
+  Teams: {
+    secretData: 'secret_data',
   },
 };
