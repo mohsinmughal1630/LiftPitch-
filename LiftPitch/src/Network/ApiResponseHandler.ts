@@ -1,5 +1,5 @@
 export interface ApiResponseHandler<T> {
-  message: string;
-  data: T;
-  success: boolean;
+    message: string,
+    data: T,
+    success: boolean
 }

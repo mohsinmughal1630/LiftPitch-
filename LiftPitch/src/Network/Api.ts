@@ -1,6 +1,7 @@
 import axios from 'axios';
 import CommonDataManager from '../Utils/CommonManager';
 import {AppStrings} from '../Utils/Strings';
+import {refreshTokenRequest} from './Services/UserServices';
 
 const Api = async (
   internetValue = true,
@@ -55,13 +56,19 @@ const Api = async (
   }
 
   return axios(structure)
-    .then((resp: any) => {
+    .then(resp => {
       clearTimeout(apiTimeout);
       return resp.data;
     })
-    .catch(async (error: any) => {
+    .catch(async error => {
       clearTimeout(apiTimeout);
       if (error?.response?.data?.message == AppStrings.Network.tokenExpired) {
+        let result = await refreshTokenRequest(internetValue);
+        if (result) {
+          await Api(internetValue, url, method, token, body, isFormData);
+        } else {
+          await CommonDataManager.getSharedInstance().logoutUser();
+        }
       }
       return error?.response?.data
         ? error.response.data

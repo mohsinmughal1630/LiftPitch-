@@ -1,6 +1,10 @@
 import React from 'react';
 import {Platform} from 'react-native';
 import {
+  appleAuth,
+  appleAuthAndroid,
+} from '@invertase/react-native-apple-authentication';
+import {
   GoogleSignin,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
@@ -108,3 +112,69 @@ export const facebookLoginRequest = async (internetValue: any) => {
   }
   return obj;
 };
+
+export const appleLoginRequest = async (internetValue: boolean) => {
+  let obj;
+  if (!internetValue) {
+    obj = {
+      message: AppStrings.Network.internetError,
+      data: null,
+      success: false,
+    };
+  }
+  const appleAuthRequestResponse = await appleAuth
+    .performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+    })
+    .catch(e => {
+      obj = {
+        message: JSON.stringify(e),
+        data: null,
+        success: false,
+      };
+    });
+
+  // get current authentication state for user
+  // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+  const credentialState = await appleAuth
+    .getCredentialStateForUser(appleAuthRequestResponse.user)
+    .catch(e => {
+      obj = {
+        message: JSON.stringify(e),
+        data: null,
+        success: false,
+      };
+    });
+  // use credentialState response to ensure the user is authenticated
+  if (credentialState === appleAuth.State.AUTHORIZED) {
+    // user is authenticated
+    obj = {
+      message: AppStrings.Permissions.success,
+      data: appleAuthRequestResponse,
+      success: true,
+    };
+  }
+  return obj;
+};
+
+// export const fbLoginRequest = async (completionHanlder: (data: any) => void) => {
+//   console.log("Facebook login request")
+//   FBLoginManager.loginWithPermissions(["email", "public_profile"], function(error, data){
+//     if (!error) {
+//       completionHanlder(data)
+//     } else {
+//       console.log("Login error" + JSON.stringify(error));
+//      }
+//   })
+// }
+// export const getFbUserFullData = async(token : string,completionHanlder: (data: any) => void) => {
+//   console.log("new data call")
+//   let fullData = await axios.get('https://graph.facebook.com/v2.5/me?fields=name,email,first_name,last_name,picture,friends&access_token=' + token)
+//    completionHanlder(fullData)
+// }
+// export const getFbUserImage = async(userId : string,completionHanlder: (data: any) => void)=>{
+//   console.log(userId)
+//   let profilePic = await axios.get(`http://graph.facebook.com/${userId}/picture?type=large`)
+//   completionHanlder(profilePic.data)
+// }

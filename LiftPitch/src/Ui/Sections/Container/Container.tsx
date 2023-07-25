@@ -1,14 +1,8 @@
 import React, {useEffect, useReducer} from 'react';
-import {
-  Dimensions,
-  Platform,
-  StatusBar,
-  View,
-  SafeAreaView,
-} from 'react-native';
+import {Dimensions, Platform, StatusBar, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {AppRootStore} from '../../../Redux/store/AppStore';
-import {AppColors, ScreenProps, ScreenSize} from '../../../Utils/AppConstants';
+import {AppColors, ScreenProps} from '../../../Utils/AppConstants';
 import {AppStyles} from '../../../Utils/AppStyles';
 import CommonDataManager from '../../../Utils/CommonManager';
 import BottomBar from '../../Components/BottomBar/BottomBar';
@@ -26,17 +20,14 @@ const Container = (props: ScreenProps) => {
   const windowHeight = Dimensions.get('window').height;
   let statusHeight = StatusBar?.currentHeight ? StatusBar.currentHeight : 0;
   const calculateWindowHeight = () => {
-    // console.log('status bar height is ', StatusBar.currentHeight);
-    let diff =
-      Dimensions.get('screen').height - Dimensions.get('window').height;
-    // console.log('diff is ', diff);
-    let findedDiff = diff - statusHeight;
-    // console.log('difference is ', findedDiff);
+    let diff = Dimensions.get('screen').height - windowHeight;
     const isPoco = Platform?.constants?.Brand?.toLowerCase() == 'poco';
-    if (diff <= 50 && !isPoco) {
-      return Dimensions.get('window').height - (diff - statusHeight - 3);
+    const isRedmi = Platform?.constants?.Brand?.toLowerCase() == 'redmi';
+
+    if (diff <= 50 && !isPoco && !isRedmi) {
+      return windowHeight - (diff - statusHeight - 3);
     }
-    return Dimensions.get('window').height;
+    return windowHeight;
   };
   return (
     <View style={AppStyles.mainContainer}>
