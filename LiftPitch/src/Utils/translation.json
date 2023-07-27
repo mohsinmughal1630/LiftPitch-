@@ -1,0 +1,12 @@
+{
+  "English": {
+    "startup": {
+      "signin": "Sign in"
+    }
+  },
+  "Swedish": {
+    "startup": {
+      "signin": "Logga in"
+    }
+  }
+}
