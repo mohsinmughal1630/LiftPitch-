@@ -1,438 +1,266 @@
+import React, {useRef, useState} from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
+  Image,
   KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
   Text,
+  TouchableOpacity,
   View,
-  Keyboard,
 } from 'react-native';
-import React, {useState} from 'react';
-import {AppStyles} from '../../../../Utils/AppStyles';
 import {
   AppColors,
-  AppFonts,
-  hv,
-  isSmallDevice,
-  normalized,
+  AppImages,
   ScreenProps,
-  ScreenSize,
+  hv,
+  normalized,
 } from '../../../../Utils/AppConstants';
-import RoundInput from '../../../Components/CustomInput/RoundInput';
-import RoundButton from '../../../Components/Button/RoundButton';
-import LabelButton from '../../../Components/Button/LabelButton';
-import {Routes} from '../../../../Utils/Routes';
-import SocialComponent from '../Components/SocialComponent';
-import {useDispatch, useSelector} from 'react-redux';
-import {
-  setAlertObj,
-  setLoader,
-  setMoveToBindScreen,
-  setTab,
-  setTeamSignupData,
-  setUserData,
-} from '../../../../Redux/reducers/AppReducer';
-import {AppRootStore} from '../../../../Redux/store/AppStore';
-import CommonDataManager from '../../../../Utils/CommonManager';
-import {AppStrings} from '../../../../Utils/Strings';
-import {
-  signupRequest,
-  socialLoginRequest,
-} from '../../../../Network/Services/UserServices';
-
+import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
+import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
+import SimpleInput from '../../../Components/CustomInput/SimpleInput';
+import CustomFilledBtn from '../../../Components/CustomButtom/CustomButton';
 const SignUp = (props: ScreenProps) => {
-  const dispatch = useDispatch();
-  const {isNetConnected, teamSignupData} = useSelector(
-    (state: AppRootStore) => state.AppReducer,
-  );
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState(
-    teamSignupData?.email ? teamSignupData.email : '',
-  );
+  const [image, setImage] = useState<any>(null);
+  const [compName, setCompName] = useState('');
+  const [compAddress, setCompAddress] = useState('');
+  const [compRNumber, setRNumber] = useState('');
+  const [compType, setCompType] = useState('');
+  const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [cPassword, setCPassword] = useState('');
-  const [error, setError] = useState({
-    firstName: false,
-    lastName: false,
-    email:
-      teamSignupData?.email &&
-      !CommonDataManager.getSharedInstance().isEmailValid(teamSignupData.email)
-        ? true
-        : false,
-    password: false,
-    cPassword: false,
-  });
-  const [showError, setShowError] = useState(false);
 
-  const signupClicked = async () => {
-    Keyboard.dismiss();
-    setShowError(true);
-    let body = {
-      firstName,
-      lastName,
-      email,
-      password,
-      cPassword,
-    };
-    if (
-      CommonDataManager.getSharedInstance().checkEmptyObj(
-        body,
-        (errorObj: any) => setError(errorObj),
-      )
-    ) {
-      dispatch(
-        setAlertObj({
-          title: AppStrings.Network.errorTitle,
-          message: AppStrings.Validation.fieldsEmptyError,
-        }),
-      );
-      return;
-    }
-    if (!CommonDataManager.getSharedInstance().isEmailValid(email)) {
-      dispatch(
-        setAlertObj({
-          title: AppStrings.Network.errorTitle,
-          message: AppStrings.Validation.invalidEmailError,
-        }),
-      );
-      setError({
-        ...error,
-        email: true,
-      });
-      return;
-    }
-    if (!CommonDataManager.getSharedInstance().isPasswordValid(password)) {
-      dispatch(
-        setAlertObj({
-          title: AppStrings.Network.errorTitle,
-          message: AppStrings.Validation.passwordLengthError,
-        }),
-      );
-      setError({
-        ...error,
-        password: true,
-      });
-      return;
-    }
-    if (!CommonDataManager.getSharedInstance().isPasswordValid(cPassword)) {
-      dispatch(
-        setAlertObj({
-          title: AppStrings.Network.errorTitle,
-          message: AppStrings.Validation.passwordLengthError,
-        }),
-      );
-      setError({
-        ...error,
-        cPassword: true,
-      });
-      return;
-    }
-    if (password !== cPassword) {
-      dispatch(
-        setAlertObj({
-          title: AppStrings.Network.errorTitle,
-          message: AppStrings.Validation.passwordNotMatchError,
-        }),
-      );
-      setError({
-        ...error,
-        password: true,
-        cPassword: true,
-      });
-      return;
-    }
-    let apiBody: any = {
-      first_name: CommonDataManager.getSharedInstance().truncateString(
-        body.firstName,
-      ),
-      last_name: CommonDataManager.getSharedInstance().truncateString(
-        body.lastName,
-      ),
-      email: body.email,
-      password: body.password,
-      confirm_password: body.cPassword,
-    };
-    if (teamSignupData) {
-      apiBody['uuid'] = teamSignupData.uuid;
-      apiBody['team_id'] = teamSignupData.team_id;
-    }
-    try {
-      dispatch(setLoader(true));
-      let response: any = await signupRequest(isNetConnected, apiBody);
-      if (response.success) {
-        await CommonDataManager.getSharedInstance().saveUserData(response.data);
-        await CommonDataManager.getSharedInstance().saveUserToken(
-          response.data?.token,
-        );
-        dispatch(setMoveToBindScreen(true));
-        dispatch(setUserData(response.data));
-        await CommonDataManager.getSharedInstance().manageSecretId(
-          response.data,
-        );
-        await CommonDataManager.getSharedInstance().registerDeviceForNotifications(
-          response.data?.id,
-        );
-      } else {
-        dispatch(setTab(0));
-        dispatch(
-          setAlertObj({
-            title: AppStrings.Network.errorTitle,
-            message: response?.message,
-          }),
-        );
-      }
-    } catch (e) {
-      console.log('er login ', e);
-    } finally {
-      dispatch(setLoader(false));
-      dispatch(setTeamSignupData(null));
-    }
-  };
+  const compAddressRef = useRef();
+  const compRNRef = useRef();
+  const compTypeRef = useRef();
+  const userNameRef = useRef();
+  const passwordRef = useRef();
+  const cPAsswordRef = useRef();
 
-  const onSocialLogin = async (apiBody: any) => {
-    dispatch(setLoader(true));
-    try {
-      const res: any = await socialLoginRequest(isNetConnected, apiBody);
-      if (res.success) {
-        if (!res.data?.is_profile) {
-          dispatch(setTab(7));
-          dispatch(setMoveToBindScreen(true));
-        }
-        await CommonDataManager.getSharedInstance().saveUserData(res.data);
-        await CommonDataManager.getSharedInstance().saveUserToken(
-          res.data?.token,
-        );
-        dispatch(setUserData(res.data));
-        await CommonDataManager.getSharedInstance().manageSecretId(res.data);
-        await CommonDataManager.getSharedInstance().registerDeviceForNotifications(
-          res.data?.id,
-        );
-      } else {
-        dispatch(setTab(0));
-        dispatch(
-          setAlertObj({
-            title: AppStrings.Network.errorTitle,
-            message: res?.message,
-          }),
-        );
-      }
-    } catch (e) {
-      console.log('Error social sign up ', e);
-    } finally {
-      dispatch(setLoader(false));
-    }
-  };
+  //error====>
+  const [compNameError, setCompNameError] = useState('');
+  const [compAddressError, setCompAddressError] = useState('');
+  const [compRNumberError, setCompRNumberError] = useState('');
+  const [compTypeError, setCompTypeError] = useState('');
+  const [userNameError, setUserNameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
-  const socialBtnClicked = async (socialType: string) => {
-    Keyboard.dismiss();
-    dispatch(setLoader(true));
-    let socialParams = await CommonDataManager.getSharedInstance()
-      .socialCallRequest(socialType)
-      .catch(e => console.log('Er ', e))
-      .finally(() => dispatch(setLoader(false)));
-
-    if (socialParams) {
-      onSocialLogin(socialParams);
-    } else {
-      console.log('Some problem getting social data');
+  const focusNextField = (inputRef: any) => {
+    if (inputRef?.current) {
+      inputRef?.current?.focus();
     }
   };
 
   return (
-    <View
-      style={{
-        ...AppStyles.MainStyle,
-        backgroundColor: AppColors.dark.darkLevel7,
-      }}>
+    <View style={AppStyles.MainStyle}>
       <SafeAreaView />
+      <CustomHeader title={'Create Account'} atBackPress={() => {}} />
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={{
-          flex: 1,
-        }}>
-        <View style={styles.headingView}>
-          <Text style={styles.heading}>Sign Up</Text>
-          <Text style={styles.subHeading}>Create your free account</Text>
-        </View>
+        style={{flex: 1}}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
         <ScrollView
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="always"
-          bounces={false}
-          contentContainerStyle={styles.container}>
-          <View style={styles.subContainer}>
-            <RoundInput
-              title="First Name"
-              placeholder="David"
-              value={firstName}
-              onChangeText={e => {
-                setFirstName(e);
-              }}
-              containerStyle={{
-                ...styles.inputFields,
-                marginTop: hv(10),
-              }}
-              maxLength={25}
-            />
-            <RoundInput
-              title="Last Name"
-              placeholder="Carls"
-              value={lastName}
-              onChangeText={e => {
-                setLastName(e);
-              }}
-              containerStyle={styles.inputFields}
-              maxLength={25}
-            />
-            <RoundInput
-              title="Email"
-              placeholder="example@empl"
-              value={email}
-              onChangeText={e => {
-                setEmail(e);
-                setError({
-                  ...error,
-                  email:
-                    CommonDataManager.getSharedInstance().isEmailValid(e) ||
-                    e == ''
-                      ? false
-                      : true,
-                });
-              }}
-              containerStyle={styles.inputFields}
-              keyboardType="email-address"
-              isError={error.email}
-              maxLength={50}
-              disabled={teamSignupData ? true : false}
-            />
-            <RoundInput
-              title="Password"
-              placeholder="*****"
-              value={password}
-              onChangeText={e => {
-                setPassword(e);
-                setError({
-                  ...error,
-                  password:
-                    !CommonDataManager.getSharedInstance().isPasswordValid(e) &&
-                    e !== ''
-                      ? true
-                      : cPassword !== '' && cPassword !== e
-                      ? true
-                      : false,
-                  cPassword: cPassword !== '' && cPassword !== e ? true : false,
-                });
-              }}
-              isPassword
-              containerStyle={styles.inputFields}
-              isError={error.password}
-            />
-            <RoundInput
-              title="Confirm Password"
-              placeholder="*****"
-              value={cPassword}
-              onChangeText={e => {
-                setCPassword(e);
-                setError({
-                  ...error,
-                  cPassword:
-                    !CommonDataManager.getSharedInstance().isPasswordValid(e) &&
-                    e !== ''
-                      ? true
-                      : password !== '' && password !== e
-                      ? true
-                      : false,
-                  password: password !== '' && password !== e ? true : false,
-                });
-              }}
-              isPassword
-              containerStyle={styles.inputFields}
-              isError={error.cPassword}
-            />
-            <RoundButton
-              title="Create account"
-              onPress={() => {
-                dispatch(setTab(7));
-                signupClicked();
-              }}
-              containerStyle={{
-                marginTop: hv(35),
-                width: '85%',
-              }}
-              isDisabled={
-                CommonDataManager.getSharedInstance().isFieldEmpty(firstName) ||
-                CommonDataManager.getSharedInstance().isFieldEmpty(lastName) ||
-                !CommonDataManager.getSharedInstance().isEmailValid(email) ||
-                !CommonDataManager.getSharedInstance().isPasswordValid(
-                  password,
-                ) ||
-                !CommonDataManager.getSharedInstance().isPasswordValid(
-                  cPassword,
-                ) ||
-                password !== cPassword
-              }
-            />
-            <SocialComponent onIconPress={socialBtnClicked} />
+          style={styles.containerStyle}
+          showsVerticalScrollIndicator={false}>
+          <View style={{alignSelf: 'center'}}>
+            {image ? (
+              <TouchableOpacity activeOpacity={1} style={styles.imageCont}>
+                <Image source={image?.uri ? image?.uri : {uri: image}} />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity style={styles.imageCont} activeOpacity={1}>
+                <Image source={AppImages.Auth.Camera} />
+              </TouchableOpacity>
+            )}
+            <Text style={styles.uploadTxt}>Upload Logo</Text>
           </View>
-          <LabelButton
-            title="Sign In Account"
-            onPress={() => props.navigation.push(Routes.Auth.login)}
-            containerStyle={{
-              marginVertical: hv(30),
+          <SimpleInput
+            onSubmitEditing={() => focusNextField(compAddressRef)}
+            returnKeyType={'next'}
+            placeHold={'Company Name'}
+            container={styles.inputMainCont}
+            textInputStyle={{width: normalized(270)}}
+            setValue={(txt: any) => {
+              setCompNameError('');
+              setCompName(txt);
             }}
-            fontSize={
-              Platform.OS == 'ios' && !isSmallDevice
-                ? normalized(17)
-                : normalized(16)
-            }
+            value={compName}
+            secureEntry={false}
+            errorMsg={compNameError}
           />
+          <SimpleInput
+            ref={compAddressRef}
+            onSubmitEditing={() => focusNextField(compRNRef)}
+            returnKeyType={'next'}
+            placeHold={'Company address'}
+            container={styles.inputMainCont}
+            textInputStyle={{width: normalized(270)}}
+            setValue={(txt: any) => {
+              setCompAddressError('');
+              setCompAddress(txt);
+            }}
+            value={compAddress}
+            secureEntry={false}
+            errorMsg={compAddressError}
+          />
+          <SimpleInput
+            ref={compRNRef}
+            onSubmitEditing={() => focusNextField(compTypeRef)}
+            returnKeyType={'next'}
+            placeHold={'Company Registration Number '}
+            container={styles.inputMainCont}
+            textInputStyle={{width: normalized(270)}}
+            setValue={(txt: any) => {
+              setCompRNumberError('');
+              setRNumber(txt);
+            }}
+            value={compRNumber}
+            secureEntry={false}
+            errorMsg={compRNumberError}
+          />
+          <SimpleInput
+            ref={compTypeRef}
+            onSubmitEditing={() => focusNextField(userNameRef)}
+            returnKeyType={'next'}
+            placeHold={'Business Type / Industry'}
+            container={styles.inputMainCont}
+            textInputStyle={{width: normalized(270)}}
+            setValue={(txt: any) => {
+              setCompTypeError('');
+              setCompType(txt);
+            }}
+            value={compType}
+            secureEntry={false}
+            errorMsg={compTypeError}
+          />
+          <SimpleInput
+            ref={userNameRef}
+            onSubmitEditing={() => focusNextField(passwordRef)}
+            returnKeyType={'next'}
+            placeHold={'Your Name'}
+            container={styles.inputMainCont}
+            textInputStyle={{width: normalized(270)}}
+            setValue={(txt: any) => {
+              setUserNameError('');
+              setUserName(txt);
+            }}
+            value={userName}
+            secureEntry={false}
+            errorMsg={userNameError}
+          />
+
+          <SimpleInput
+            ref={passwordRef}
+            onSubmitEditing={() => focusNextField(cPAsswordRef)}
+            placeHold={'Password'}
+            returnKeyType={'next'}
+            container={styles.inputMainCont}
+            textInputStyle={{width: normalized(270)}}
+            setValue={(passTxt: any) => {
+              if (passTxt.includes(' ')) {
+                setPassword(passTxt.trim());
+              } else {
+                setPasswordError('');
+                setPassword(passTxt);
+              }
+            }}
+            value={password}
+            secureEntry={true}
+            errorMsg={passwordError}
+          />
+          <SimpleInput
+            ref={cPAsswordRef}
+            placeHold={'Confirm Password'}
+            container={styles.inputMainCont}
+            textInputStyle={{width: normalized(270)}}
+            setValue={(passTxt: any) => {
+              if (passTxt.includes(' ')) {
+                setCPassword(passTxt.trim());
+              } else {
+                setPasswordError('');
+                setCPassword(passTxt);
+              }
+            }}
+            value={cPassword}
+            secureEntry={true}
+            errorMsg={passwordError}
+          />
+          <View style={styles.termCont}>
+            <View style={styles.checkCont} />
+            <Text style={styles.termsTxt}>
+              Yes I agree to terms & conditions{' '}
+            </Text>
+          </View>
+          <CustomFilledBtn label={'Create Account'} onPressBtn={() => {}} />
+          <Text style={styles.bottomTxt}>
+            Already have an account?{' '}
+            <Text onPress={() => {}} style={styles.signUpBtn}>
+              {' '}
+              Sign in
+            </Text>
+          </Text>
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    paddingVertical: hv(10),
+  containerStyle: {
+    flex: 1,
+    marginHorizontal: AppHorizontalMargin,
   },
-  headingView: {
-    alignItems: 'center',
-    marginVertical: hv(20),
-  },
-  heading: {
-    color: AppColors.white.white,
-    fontSize: normalized(32),
-    ...AppStyles.textSemiBold,
-  },
-  subHeading: {
-    color: AppColors.dark.darkLevel1,
-    fontSize: normalized(16),
-    marginTop: hv(10),
-    fontFamily: AppFonts.Regular,
-  },
-  subContainer: {
-    alignItems: 'center',
-    backgroundColor: AppColors.dark.darkLevel5,
-    width: ScreenSize.width * 0.9,
-    borderRadius: 15,
-    paddingVertical: hv(20),
-    minHeight: ScreenSize.height * 0.8,
-  },
-  logoStyle: {
-    alignSelf: 'center',
-    marginBottom: hv(40),
-  },
-  inputSection: {
-    marginHorizontal: normalized(30),
+  imageCont: {
+    backgroundColor: '#959595',
+    height: normalized(120),
+    width: normalized(120),
+    borderRadius: normalized(120 / 2),
     justifyContent: 'center',
     alignItems: 'center',
   },
-  inputFields: {
-    marginTop: hv(15),
-    width: '85%',
+  uploadTxt: {
+    fontSize: normalized(14),
+    color: '#8391A1',
+    fontWeight: '400',
+    alignSelf: 'center',
+    marginVertical: normalized(10),
+  },
+  inputMainCont: {
+    width: '100%',
+    marginTop: 15,
+  },
+  bottomTxt: {
+    fontSize: normalized(13),
+    fontWeight: '500',
+    color: AppColors.black.black,
+    alignSelf: 'center',
+    marginVertical: normalized(20),
+  },
+  signUpBtn: {
+    fontSize: normalized(13),
+    fontWeight: '500',
+    color: '#7E2A70',
+    alignSelf: 'center',
+    marginVertical: normalized(20),
+  },
+  termCont: {
+    flexDirection: 'row',
+    // justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: normalized(20),
+  },
+  checkCont: {
+    borderRadius: normalized(5),
+    height: normalized(25),
+    width: normalized(25),
+    borderWidth: 1,
+    borderColor: '#E4DFDF',
+  },
+  termsTxt: {
+    fontSize: normalized(14),
+    fontWeight: '400',
+    color: AppColors.black.black,
+    marginStart: normalized(5),
   },
 });
 

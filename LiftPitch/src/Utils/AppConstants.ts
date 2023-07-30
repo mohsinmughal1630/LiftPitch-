@@ -1,6 +1,10 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import {Dimensions, Platform, PixelRatio} from 'react-native';
-import {ActiveFunctionTypeStrings, PackageDetailStrings, SocialTypeStrings} from './AppEnums';
+import {
+  ActiveFunctionTypeStrings,
+  PackageDetailStrings,
+  SocialTypeStrings,
+} from './AppEnums';
 import {cardPronounTypes} from './AppEnums';
 import CommonDataManager from './CommonManager';
 import {UserViewModel} from '../Models/UserViewModel';
@@ -26,245 +30,18 @@ export const maxImageSizeInBytes = 10 * 1024 * 1024; // 10MB
 
 export const AppImages = {
   Auth: {
-    ContactLogo: require('../Ui/assets/images/Auth/ContactLogo.png'),
-    Slider1: require('../Ui/assets/images/Auth/Slider1.png'),
-    Slider2: require('../Ui/assets/images/Auth/Slider2.png'),
-    Slider3: require('../Ui/assets/images/Auth/Slider3.png'),
-    ShowPassword: require('../Ui/assets/images/Auth/ShowPassword.png'),
-    HidePassword: require('../Ui/assets/images/Auth/HidePassword.png'),
-    FacebookIcon: require('../Ui/assets/images/Auth/FacebookIcon.png'),
-    TwitterIcon: require('../Ui/assets/images/Auth/TwitterIcon.png'),
-    InstagramIcon: require('../Ui/assets/images/Auth/InstagramIcon.png'),
-    LinkedInIcon: require('../Ui/assets/images/Auth/LinkedInIcon.png'),
-    GoogleIcon: require('../Ui/assets/images/Auth/GoogleIcon.png'),
-    AppleIcon: require('../Ui/assets/images/Auth/AppleIcon.png'),
-  },
-  Home: {
-    ContactLogoGreen: require('../Ui/assets/images/Home/Home/ContactLogoGreen.png'),
-    EmptyHomeBanner: require('../Ui/assets/images/Home/Home/EmptyHomeBanner.png'),
-    VenmoIcon: require('../Ui/assets/images/Home/Home/VenmoIcon.png'),
-    CashAppIcon: require('../Ui/assets/images/Home/Home/CashAppIcon.png'),
-    LinkIcon: require('../Ui/assets/images/Home/Home/LinkIcon.png'),
-    BindBraceletBanner: require('../Ui/assets/images/Home/Home/BindBraceletBanner.png'),
-    BindBraceletHomeBg: require('../Ui/assets/images/Home/Home/BindBraceletHomeBg.png'),
-    EmergencyContactPlaceholder: require('../Ui/assets/images/Home/Home/EmergencyContactPlaceholder.png'),
-  },
-  Common: {
-    CameraPicker: require('../Ui/assets/images/Common/CameraPicker.png'),
-    GalleryPicker: require('../Ui/assets/images/Common/GalleryPicker.png'),
-    ThreeDotsIcon: require('../Ui/assets/images/Common/ThreeDotsIcon.png'),
-    LinkMiniIcon: require('../Ui/assets/images/Common/LinkMiniIcon.png'),
-    CrossIconFilled: require('../Ui/assets/images/Common/CrossIconFilled.png'),
-    CrossIcon: require('../Ui/assets/images/Common/CrossIcon.png'),
-    ProfilePlaceholderIcon: require('../Ui/assets/images/Common/ProfilePlaceholderIcon.png'),
-    ShortArrowForward: require('../Ui/assets/images/Common/ShortArrowForward.png'),
-    WarningIcon: require('../Ui/assets/images/Common/WarningIcon.png'),
-    AppIcon: require('../Ui/assets/images/Common/AppIcon.png'),
-    RoundAppIcon: require('../Ui/assets/images/Common/RoundAppIcon.png'),
-    RoundAppIconTransparent: require('../Ui/assets/images/Common/RoundAppIconTransparent.png'),
-  },
-  Cards: {
-    ArrowBack: require('../Ui/assets/images/Cards/ArrowBack.png'),
-    MenuIcon: require('../Ui/assets/images/Cards/MenuIcon.png'),
-    MenuIconInverted: require('../Ui/assets/images/Cards/MenuIconInverted.png'),
-    EmptyCards: require('../Ui/assets/images/Cards/EmptyCards.png'),
-    ChooseCard: require('../Ui/assets/images/Cards/ChooseCard.png'),
-    DropDown: require('../Ui/assets/images/Cards/DropDown.png'),
-    DropDownOutlined: require('../Ui/assets/images/Cards/DropDownOutlined.png'),
-    TickIcon: require('../Ui/assets/images/Cards/TickIcon.png'),
-    SingleTickIcon: require('../Ui/assets/images/Cards/SingleTickIcon.png'),
-    SingleDarkTick: require('../Ui/assets/images/Cards/SingleDarkTick.png'),
-    SingleTickIconBold: require('../Ui/assets/images/Cards/SingleTickIconBold.png'),
-    NextButton: require('../Ui/assets/images/Cards/NextButton.png'),
-    CardPerson: require('../Ui/assets/images/Cards/CardPerson.png'),
-    CardImagePlaceholder: require('../Ui/assets/images/Cards/CardImagePlaceholder.png'),
-    CardContact: require('../Ui/assets/images/Cards/CardContact.png'),
-    SocialProfileFrame: require('../Ui/assets/images/Cards/SocialProfileFrame.png'),
-    SocialProfileFrame2: require('../Ui/assets/images/Cards/SocialProfileFrame2.png'),
-    BinIcon: require('../Ui/assets/images/Cards/BinIcon.png'),
-    CrossIcon: require('../Ui/assets/images/Cards/CrossIcon.png'),
-    DocumentIcon: require('../Ui/assets/images/Cards/DocumentIcon.png'),
-    LocationIcon: require('../Ui/assets/images/Cards/LocationIcon.png'),
-    LocationUnfilledIcon: require('../Ui/assets/images/Cards/LocationUnfilledIcon.png'),
-    MailIcon: require('../Ui/assets/images/Cards/MailIcon.png'),
-    MailUnfilledIcon: require('../Ui/assets/images/Cards/MailUnfilledIcon.png'),
-    WebsiteIcon: require('../Ui/assets/images/Cards/WebsiteIcon.png'),
-    PhoneIcon: require('../Ui/assets/images/Cards/PhoneIcon.png'),
-    OfficePhoneIcon: require('../Ui/assets/images/Cards/OfficePhoneIcon.png'),
-    HomePhoneIcon: require('../Ui/assets/images/Cards/HomePhoneIcon.png'),
-    CardCompanyDetailsBanner: require('../Ui/assets/images/Cards/CardCompanyDetailsBanner.png'),
-    CardBioBgIcon: require('../Ui/assets/images/Cards/CardBioBgIcon.png'),
-    EditIcon: require('../Ui/assets/images/Cards/EditIcon.png'),
-    ShareIcon: require('../Ui/assets/images/Cards/ShareIcon.png'),
-    QRIcon: require('../Ui/assets/images/Cards/QRIcon.png'),
-    QrIconGrey: require('../Ui/assets/images/Cards/QrIconGrey.png'),
-    QRPlaceholder: require('../Ui/assets/images/Cards/QRPlaceholder.png'),
-    DownloadIcon: require('../Ui/assets/images/Cards/DownloadIcon.png'),
-    PreviewBg: require('../Ui/assets/images/Cards/PreviewBg.png'),
-    GradientBg: require('../Ui/assets/images/Cards/GradientBg.png'),
-    ExclamationIcon: require('../Ui/assets/images/Cards/ExclamationIcon.png'),
-    CompanyLogoPlaceholder: require('../Ui/assets/images/Cards/CompanyLogoPlaceholder.png'),
-    ExclamationMiniIcon: require('../Ui/assets/images/Cards/ExclamationMiniIcon.png'),
-    ArrowCurl: require('../Ui/assets/images/Cards/ArrowCurl.png'),
-    PhonebookIcon: require('../Ui/assets/images/Cards/PhonebookIcon.png'),
-    FunctionHomeIcons: {
-      CashApp: require('../Ui/assets/images/Cards/CashAppIcon.png'),
-      Emergency: require('../Ui/assets/images/Cards/EmergencyContactIcon.png'),
-      Card: require('../Ui/assets/images/Cards/FunctionCardIcon.png'),
-      Link: require('../Ui/assets/images/Cards/LinkIcon.png'),
-      Venmo: require('../Ui/assets/images/Cards/VenmoIcon.png'),
-      PaymentIcon: require('../Ui/assets/images/Cards/PaymentIcon.png'),
-      UploadFilesIcon: require('../Ui/assets/images/Cards/UploadFilesIcon.png'),
-    },
-    Emergency: {
-      EmptyEmergencyCardsCover: require('../Ui/assets/images/Cards/Emergency/EmptyEmergencyCardsCover.png'),
-      EmergencyDeleteIcon: require('../Ui/assets/images/Cards/Emergency/EmergencyDeleteIcon.png'),
-      EmergencyScanIcon: require('../Ui/assets/images/Cards/Emergency/EmergencyScanIcon.png'),
-    },
-    CustomUrls: {
-      EmptyCustomUrlBg: require('../Ui/assets/images/Cards/CustomUrls/EmptyCustomUrlBg.png'),
-      AddUrlCover: require('../Ui/assets/images/Cards/CustomUrls/AddUrlCover.png'),
-    },
-    Venmo: {
-      EmptyVenmoBg: require('../Ui/assets/images/Cards/Venmo/EmptyVenmoBg.png'),
-    },
-  },
-  Container: {
-    BottomBar: {
-      Home: require('../Ui/assets/images/Home/BottomBar/Home.png'),
-      Contact: require('../Ui/assets/images/Home/BottomBar/Contact.png'),
-      Shop: require('../Ui/assets/images/Home/BottomBar/Shop.png'),
-      Scan: require('../Ui/assets/images/Home/BottomBar/Scan.png'),
-      Setting: require('../Ui/assets/images/Home/BottomBar/Setting.png'),
-      SoloFunctionIcon: require('../Ui/assets/images/Home/BottomBar/SoloFunctionIcon.png'),
-    },
-  },
-  Profile: {
-    CameraIcon: require('../Ui/assets/images/Profile/CameraIcon.png'),
-    BirthdayIcon: require('../Ui/assets/images/Profile/BirthdayIcon.png'),
-    GenderIcon: require('../Ui/assets/images/Profile/GenderIcon.png'),
-    JobIcon: require('../Ui/assets/images/Profile/JobIcon.png'),
-    JobIconFilled: require('../Ui/assets/images/Profile/JobIconFilled.png'),
-    PersonIcon: require('../Ui/assets/images/Profile/PersonIcon.png'),
-    PersonIconBold: require('../Ui/assets/images/Profile/PersonIconBold.png'),
-    PersonIconMedium: require('../Ui/assets/images/Profile/PersonIconMedium.png'),
-    PhoneIcon: require('../Ui/assets/images/Profile/PhoneIcon.png'),
-    ProfileEditIcon: require('../Ui/assets/images/Profile/ProfileEditIcon.png'),
-  },
-  Drawer: {
-    BackIcon: require('../Ui/assets/images/Drawer/BackIcon.png'),
-    NotificationIcon: require('../Ui/assets/images/Drawer/NotificationIcon.png'),
-    NotificationIconUnread: require('../Ui/assets/images/Drawer/NotificationIconUnread.png'),
-    dummyProfilePlaceholder: {
-      uri: 'https://cdn.pixabay.com/photo/2017/09/27/16/06/man-2792549_1280.jpg',
-    },
-    HelpIcon: require('../Ui/assets/images/Drawer/HelpIcon.png'),
-    LogoutIcon: require('../Ui/assets/images/Drawer/LogoutIcon.png'),
-    AnalyticsIcon: require('../Ui/assets/images/Drawer/AnalyticsIcon.png'),
-    UnlinkBracelet: require('../Ui/assets/images/Drawer/UnlinkBracelet.png'),
-  },
-  Contacts: {
-    FilterIcon: require('../Ui/assets/images/Contact/filter_icon.png'),
-    GirdIcon: require('../Ui/assets/images/Contact/grid_icon.png'),
-    ListIcon: require('../Ui/assets/images/Contact/list_icon.png'),
-    SelectedFilterIcon: require('../Ui/assets/images/Contact/selected_filter_icon.png'),
-    SelectedGridIcon: require('../Ui/assets/images/Contact/selected_grid_icon.png'),
-    UnselectedListIcon: require('../Ui/assets/images/Contact/unselected_list_icon.png'),
-    selected_radio_btn: require('../Ui/assets/images/Contact/selected_green_btn.png'),
-    unselected_radio_btn: require('../Ui/assets/images/Contact/unselected_gray_btn.png'),
-    SearchIcon: require('../Ui/assets/images/Contact/SearchIcon.png'),
-    EditIcon: require('../Ui/assets/images/Contact/edit_vec.png'),
-    DeleteIcon: require('../Ui/assets/images/Contact/delete_vec.png'),
-    ShareIcon: require('../Ui/assets/images/Contact/share.png'),
-    InputSearchIcon: require('../Ui/assets/images/Contact/search_vec.png'),
-    InputSearchIconGray: require('../Ui/assets/images/Contact/search_icon.png'),
-    SearchIconMini: require('../Ui/assets/images/Contact/SearchIconMini.png'),
-  },
-  DynamicLink: {
-    CardsEmptyView: require('../Ui/assets/images/DynamicLinks/emptydynamiclinkView.png'),
-    HangDrag: require('../Ui/assets/images/DynamicLinks/hang_drag.png'),
-    EditPencil: require('../Ui/assets/images/DynamicLinks/edit_pencil.png'),
-    shareIcon: require('../Ui/assets/images/DynamicLinks/share.png'),
-    ProfileImg: require('../Ui/assets/images/DynamicLinks/profileImg.png'),
-    Facebook: require('../Ui/assets/images/DynamicLinks/facebook.png'),
-    Twitter: require('../Ui/assets/images/DynamicLinks/twitter.png'),
-    Snapchat: require('../Ui/assets/images/DynamicLinks/snapchat.png'),
-    Pintrest: require('../Ui/assets/images/DynamicLinks/pintrest.png'),
-    Youtube: require('../Ui/assets/images/DynamicLinks/Youtube.png'),
-  },
-  UpgradeAccount: {
-    Aeroplan: require('../Ui/assets/images/UpgradeAccount/aeroplan.png'),
-    Rocket: require('../Ui/assets/images/UpgradeAccount/rocket.png'),
-    Message: require('../Ui/assets/images/UpgradeAccount/messageVec.png'),
-    UpgradeIcon: require('../Ui/assets/images/UpgradeAccount/upgradeIcon.png')
-  },
-  ChangePassword: {
-    rightArrow: require('../Ui/assets/images/ChangePassword/next_arrow.png'),
-  },
-  Settings: {
-    SettingsAboutIcon: require('../Ui/assets/images/Settings/SettingsAboutIcon.png'),
-    CustomerCareIcon: require('../Ui/assets/images/Settings/CustomerCareIcon.png'),
-    HelpFaqIcon: require('../Ui/assets/images/Settings/HelpFaqIcon.png'),
-    SettingsLogoutIcon: require('../Ui/assets/images/Settings/SettingsLogoutIcon.png'),
-    SettingsMiniArrowForward: require('../Ui/assets/images/Settings/SettingsMiniArrowForward.png'),
-    SettingsNotificationIcon: require('../Ui/assets/images/Settings/SettingsNotificationIcon.png'),
-    SettingsPasswordLockIcon: require('../Ui/assets/images/Settings/SettingsPasswordLockIcon.png'),
-    SettingsPersonIcon: require('../Ui/assets/images/Settings/SettingsPersonIcon.png'),
-    SettingsUpgradeAccountIcon: require('../Ui/assets/images/Settings/SettingsUpgradeAccountIcon.png'),
-    EmailSettings: require('../Ui/assets/images/Settings/EmailSettings.png'),
-    NotificationSettings: require('../Ui/assets/images/Settings/NotificationSettings.png'),
-    Help: {
-      ExclamationIcon: require('../Ui/assets/images/Settings/Help/ExclamationIcon.png'),
-      PhoneIcon: require('../Ui/assets/images/Settings/Help/PhoneIcon.png'),
-      VideoIcon: require('../Ui/assets/images/Settings/Help/VideoIcon.png'),
-      FaqIcon: require('../Ui/assets/images/Settings/Help/FaqIcon.png'),
-      TermsIcon: require('../Ui/assets/images/Settings/Help/TermsIcon.png'),
-      PrivacyIcon: require('../Ui/assets/images/Settings/Help/PrivacyIcon.png'),
-      help: require('../Ui/assets/images/Settings/Help/help.png'),
-    },
-    FAQ: require('../Ui/assets/images/Settings/faq.png'),
-    dropDown: require('../Ui/assets/images/Settings/dropDown.png'),
-    termsnCondition: require('../Ui/assets/images/Settings/termsnConditionPic.png'),
-    aboutUs: require('../Ui/assets/images/Settings/aboutUs.png'),
-    contactUs: require('../Ui/assets/images/Settings/contactUs.png'),
-    location: require('../Ui/assets/images/Settings/location.png'),
-    phone: require('../Ui/assets/images/Settings/phone.png'),
-    email: require('../Ui/assets/images/Settings/Help/email.png'),
-    Restore: require('../Ui/assets/images/Settings/Restore.png'),
-  },
-  AboutUs: {
-    aboutUsLogo: require('../Ui/assets/images/AboutUs/aboutUsLogo.png'),
-  },
-  ContactUs: {
-    aboutUsLogo: require('../Ui/assets/images/ContactUs/contactUslogo.png'),
-    locationPinIcon: require('../Ui/assets/images/ContactUs/location.png'),
-    instagramIcon: require('../Ui/assets/images/ContactUs/instagram.png'),
-    phoneIcon: require('../Ui/assets/images/ContactUs/phone.png'),
-    linkedInIcon: require('../Ui/assets/images/ContactUs/linked.png'),
-    facebookIcon: require('../Ui/assets/images/DynamicLinks/facebook.png'),
-    twitterIcon: require('../Ui/assets/images/DynamicLinks/twitter.png'),
-    tiktokIcon: require('../Ui/assets/images/Cards/social/TiktokIcon.png'),
-  },
-  Tutorials: {
-    playbutton: require('../Ui/assets/images/tutorials/playbutton.png'),
-    tutorialsBackground: require('../Ui/assets/images/tutorials/tutorialsbg.png'),
-    VideoError: require('../Ui/assets/images/tutorials/VideoError.png'),
-  },
-  Teams: {
-    TeamMembersIcon: require('../Ui/assets/images/Teams/TeamMembersIcon.png'),
-    SingleUserIcon: require('../Ui/assets/images/Teams/SingleUserIcon.png'),
+    Camera: require('../Ui/assets/images/Auth/Camera.png'),
+    closeEye: require('../Ui/assets/images/Auth/closeEye.png'),
+    fbIcon: require('../Ui/assets/images/Auth/fbIcon.png'),
+    google: require('../Ui/assets/images/Auth/google.png'),
+    logo: require('../Ui/assets/images/Auth/logo.png'),
+    Message: require('../Ui/assets/images/Auth/Message.png'),
+    Password: require('../Ui/assets/images/Auth/Password.png'),
+    eye: require('../Ui/assets/images/Auth/eye.png'),
+    backIcon: require('../Ui/assets/images/Auth/backIcon.png'),
   },
 };
-export const AppFonts = {
-  Regular: 'Poppins-Regular',
-  Medium: 'Poppins-Medium',
-  Bold: 'Poppins-Bold',
-  ExtraBold: 'Poppins-ExtraBold',
-  Light: 'Poppins-Light',
-  Italic: 'Poppins-Italic',
-  ItalicLight: 'Poppins-LightItalic',
-  SemiBold: 'Poppins-SemiBold',
-};
+export const AppFonts = {};
 
 export const AppColors = {
   dark: {
@@ -1695,32 +1472,32 @@ export interface IReduxState {
   } | null;
   isTagScanning: boolean;
   packagePlan: {
-    id: number,
-    name: packagePlanType,
-    subscription_type: 'monthly' | 'yearly',
-    start_date: string,
-    end_date: string,
-    receipt: string,
-    transaction_id: string,
-    isExpired?: boolean
-  } | null,
+    id: number;
+    name: packagePlanType;
+    subscription_type: 'monthly' | 'yearly';
+    start_date: string;
+    end_date: string;
+    receipt: string;
+    transaction_id: string;
+    isExpired?: boolean;
+  } | null;
   userFunctionAvailability: {
-    total_cards: number,
-    total_payments: number,
-    total_emergency_contacts: number,
-    total_custom_urls: number,
-    total_file_uploads: number,
-    total_connections: number
-} | null,
+    total_cards: number;
+    total_payments: number;
+    total_emergency_contacts: number;
+    total_custom_urls: number;
+    total_file_uploads: number;
+    total_connections: number;
+  } | null;
   showUpgradeModal: null | {
-    visible: boolean,
-    isConfirmFirst?: boolean,
-    resetScreen?: boolean,
-    notCloseable?: boolean,
-    title?: string,
-    body?: string
-  },
-  isUpgradeScreenFocused: boolean
+    visible: boolean;
+    isConfirmFirst?: boolean;
+    resetScreen?: boolean;
+    notCloseable?: boolean;
+    title?: string;
+    body?: string;
+  };
+  isUpgradeScreenFocused: boolean;
 }
 
 export const packagePlansList = [
@@ -1729,16 +1506,17 @@ export const packagePlansList = [
     type: 'Starter',
     monthly_price: '0',
     yearly_price: '0',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     image: AppImages.UpgradeAccount.Message,
     features: [
       {
         name: 'Personal/Business cards',
-        value: 1
+        value: 1,
       },
       {
         name: 'Connections',
-        value: 5
+        value: 5,
       },
       {
         name: 'Payment cards',
@@ -1746,25 +1524,25 @@ export const packagePlansList = [
       },
       {
         name: 'Emergency contact',
-        value: 0
+        value: 0,
       },
       {
         name: 'Custom URL',
-        value: 0
-      }, 
+        value: 0,
+      },
       {
         name: 'File Upload URL',
-        value: 0
+        value: 0,
       },
       {
         name: 'Custom Buttons',
-        value: false
+        value: false,
       },
       {
         name: 'Email notifications',
-        value: false
-      }
-    ]
+        value: false,
+      },
+    ],
   },
   {
     id: 2,
@@ -1773,40 +1551,41 @@ export const packagePlansList = [
     yearly_productId: 'com.holguinmedia.contactapp.premium.yearly',
     monthly_price: '6.99',
     yearly_price: '59.99',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     image: AppImages.UpgradeAccount.Aeroplan,
     features: [
       {
         name: 'Personal/Business cards',
-        value: 3
+        value: 3,
       },
       {
         name: 'Connections',
-        value: "Unlimited"
+        value: 'Unlimited',
       },
       {
         name: 'Payment cards',
-        value: 2
+        value: 2,
       },
       {
         name: 'Emergency contact',
-        value: 2
+        value: 2,
       },
       {
         name: 'Custom URL',
-        value: 2
-      }, 
+        value: 2,
+      },
       {
         name: 'File Upload URL',
-        value: 2
+        value: 2,
       },
       {
         name: 'Custom Buttons',
-        value: true
+        value: true,
       },
       {
         name: 'Email notifications',
-        value: false
+        value: false,
       },
       // {
       //   name: 'Business Card Scanner (coming soon)',
@@ -1821,40 +1600,41 @@ export const packagePlansList = [
     yearly_productId: 'com.holguinmedia.contactapp.elite.yearly',
     monthly_price: '13.99',
     yearly_price: '99.99',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     image: AppImages.UpgradeAccount.Rocket,
     features: [
       {
         name: 'Personal/Business cards',
-        value: "Unlimited"
+        value: 'Unlimited',
       },
       {
         name: 'Connections',
-        value: "Unlimited"
+        value: 'Unlimited',
       },
       {
         name: 'Payment cards',
-        value: "Unlimited"
+        value: 'Unlimited',
       },
       {
         name: 'Emergency contact',
-        value: "Unlimited"
+        value: 'Unlimited',
       },
       {
         name: 'Custom URL',
-        value: "Unlimited"
-      }, 
+        value: 'Unlimited',
+      },
       {
         name: 'File Upload URL',
-        value: "Unlimited"
+        value: 'Unlimited',
       },
       {
         name: 'Custom Buttons',
-        value: true
+        value: true,
       },
       {
         name: 'Email notifications',
-        value: true
+        value: true,
       },
       // {
       //   name: 'Lead Capture Form',
@@ -1875,40 +1655,41 @@ export const packagePlansList = [
     type: 'Enterprise',
     monthly_price: 'NA',
     yearly_price: 'NA',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
     image: AppImages.UpgradeAccount.Rocket,
     features: [
       {
         name: 'Personal/Business cards',
-        value: "Unlimited"
+        value: 'Unlimited',
       },
       {
         name: 'Connections',
-        value: "Unlimited"
+        value: 'Unlimited',
       },
       {
         name: 'Payment cards',
-        value: "Unlimited"
+        value: 'Unlimited',
       },
       {
         name: 'Emergency contact',
-        value: "Unlimited"
+        value: 'Unlimited',
       },
       {
         name: 'Custom URL',
-        value: "Unlimited"
-      }, 
+        value: 'Unlimited',
+      },
       {
         name: 'File Upload URL',
-        value: "Unlimited"
+        value: 'Unlimited',
       },
       {
         name: 'Custom Buttons',
-        value: true
+        value: true,
       },
       {
         name: 'Email notifications',
-        value: true
+        value: true,
       },
       // {
       //   name: 'Lead Capture Form',
@@ -1931,10 +1712,10 @@ export const packagePlansList = [
       //   value: true
       // },
     ],
-  }
+  },
 ];
 
-export type packagePlanType = 'Starter' | 'Premium' | 'Elite' | 'Enterprise'
+export type packagePlanType = 'Starter' | 'Premium' | 'Elite' | 'Enterprise';
 
 export const convertUtcToLocal = (dateString: any) => {
   let parsedDate = moment(new Date(dateString)).toDate();
