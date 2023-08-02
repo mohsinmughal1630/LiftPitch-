@@ -1,13 +1,10 @@
 import React from 'react';
 import {
-  ContactStack,
-  DynamicLinkStack,
-  FunctionStack,
+  AddVideoStack,
+  FollowerStack,
   HomeStack,
+  NotificationStack,
   ProfileStack,
-  ScanStack,
-  SettingsStack,
-  ShopStack,
 } from '../../../../Navigation/InnerStack';
 
 export const containerStateEnum = {
@@ -30,24 +27,16 @@ export const containerReducer = (
       return state;
   }
 };
-export const setContainerStack = (index: number) => {
+export const setContainerStack = (index: any) => {
   if (index == 0) {
     return <HomeStack />;
   } else if (index == 1) {
-    return <ContactStack />;
+    return <FollowerStack />;
   } else if (index == 2) {
-    return <FunctionStack />;
+    return <AddVideoStack />;
   } else if (index == 3) {
-    return <ShopStack />;
+    return <NotificationStack />;
   } else if (index == 4) {
-    return <ScanStack />;
-  } else if (index == 5) {
-    return <DynamicLinkStack />;
-  } else if (index == 6) {
-    return <SettingsStack />;
-  } else if (index == 7) {
     return <ProfileStack />;
-  } else {
-    return null;
   }
 };

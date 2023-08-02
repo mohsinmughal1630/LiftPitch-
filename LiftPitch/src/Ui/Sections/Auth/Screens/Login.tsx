@@ -22,7 +22,12 @@ import SocialBtn from '../Components/SocialBtn';
 import CustomFilledBtn from '../../../Components/CustomButtom/CustomButton';
 import SimpleInput from '../../../Components/CustomInput/SimpleInput';
 import CustomSwitch from '../../../Components/CustomSwitch/CustomSwitch';
+import {useDispatch} from 'react-redux';
+import {setUserData} from '../../../../Redux/reducers/AppReducer';
+import {Routes} from '../../../../Utils/Routes';
+import {saveUserData} from '../../../../Utils/AsyncStorage';
 const LoginScreen = (props: ScreenProps) => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passRef: any = useRef();
@@ -100,7 +105,13 @@ const LoginScreen = (props: ScreenProps) => {
                 <Text style={styles.forgetPasTxt}>Forgot Password?</Text>
               </TouchableOpacity>
             </View>
-            <CustomFilledBtn label={'Sign in'} onPressBtn={() => {}} />
+            <CustomFilledBtn
+              label={'Sign in'}
+              onPressBtn={() => {
+                dispatch(setUserData({name: 'usama Malik'}));
+                saveUserData({name: 'usama Malik'});
+              }}
+            />
             <View style={styles.signInWithTxt}>
               <View style={styles.simpleLine} />
               <Text style={styles.signInTxt}>Sign in with</Text>
@@ -120,7 +131,11 @@ const LoginScreen = (props: ScreenProps) => {
             </View>
             <Text style={styles.bottomTxt}>
               Don’t have an account?{' '}
-              <Text onPress={() => {}} style={styles.signUpBtn}>
+              <Text
+                onPress={() => {
+                  props?.navigation.navigate(Routes.Auth.signUp);
+                }}
+                style={styles.signUpBtn}>
                 {' '}
                 Sign up
               </Text>

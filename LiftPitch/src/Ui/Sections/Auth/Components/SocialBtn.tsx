@@ -1,6 +1,6 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {AppColors, normalized} from '../../../utils/AppConstants';
+import {AppColors, normalized} from '../../../../Utils/AppConstants';
 const SocialBtn = (props: any) => {
   return (
     <TouchableOpacity

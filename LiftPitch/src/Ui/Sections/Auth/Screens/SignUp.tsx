@@ -21,7 +21,15 @@ import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import SimpleInput from '../../../Components/CustomInput/SimpleInput';
 import CustomFilledBtn from '../../../Components/CustomButtom/CustomButton';
+import {useDispatch} from 'react-redux';
+import {setUserData} from '../../../../Redux/reducers/AppReducer';
+import {Routes} from '../../../../Utils/Routes';
+import CommonDataManager from '../../../../Utils/CommonManager';
+import AppImagePicker from '../../../Components/CustomModal/AppImagePicker';
+import {saveUserData} from '../../../../Utils/AsyncStorage';
 const SignUp = (props: ScreenProps) => {
+  const dispatch = useDispatch();
+  const [openImage, setOpenImage] = useState(false);
   const [image, setImage] = useState<any>(null);
   const [compName, setCompName] = useState('');
   const [compAddress, setCompAddress] = useState('');
@@ -55,7 +63,12 @@ const SignUp = (props: ScreenProps) => {
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
-      <CustomHeader title={'Create Account'} atBackPress={() => {}} />
+      <CustomHeader
+        title={'Create Account'}
+        atBackPress={() => {
+          props?.navigation.goBack();
+        }}
+      />
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -64,12 +77,31 @@ const SignUp = (props: ScreenProps) => {
           style={styles.containerStyle}
           showsVerticalScrollIndicator={false}>
           <View style={{alignSelf: 'center'}}>
-            {image ? (
-              <TouchableOpacity activeOpacity={1} style={styles.imageCont}>
-                <Image source={image?.uri ? image?.uri : {uri: image}} />
+            {image?.uri ? (
+              <TouchableOpacity
+                activeOpacity={1}
+                style={styles.imageCont}
+                onPress={() => {
+                  setOpenImage(true);
+                }}>
+                <Image
+                  source={
+                    image?.uri || image
+                      ? {
+                          uri: image?.uri,
+                        }
+                      : null
+                  }
+                  style={styles.imageCont}
+                />
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity style={styles.imageCont} activeOpacity={1}>
+              <TouchableOpacity
+                style={styles.imageCont}
+                activeOpacity={1}
+                onPress={() => {
+                  setOpenImage(true);
+                }}>
                 <Image source={AppImages.Auth.Camera} />
               </TouchableOpacity>
             )}
@@ -192,15 +224,41 @@ const SignUp = (props: ScreenProps) => {
               Yes I agree to terms & conditions{' '}
             </Text>
           </View>
-          <CustomFilledBtn label={'Create Account'} onPressBtn={() => {}} />
+          <CustomFilledBtn
+            label={'Create Account'}
+            onPressBtn={() => {
+              dispatch(setUserData({name: 'usama Malik'}));
+              saveUserData({name: 'usama Malik'});
+            }}
+          />
           <Text style={styles.bottomTxt}>
             Already have an account?{' '}
-            <Text onPress={() => {}} style={styles.signUpBtn}>
+            <Text
+              onPress={() => {
+                props?.navigation.navigate(Routes.Auth.login);
+              }}
+              style={styles.signUpBtn}>
               {' '}
               Sign in
             </Text>
           </Text>
         </ScrollView>
+        {openImage ? (
+          <AppImagePicker
+            onClose={() => {
+              setOpenImage(false);
+            }}
+            onImagesSelect={(obj: any) => {
+              let result =
+                CommonDataManager.getSharedInstance().makeImageObj(obj);
+              if (result?.uri) {
+                setImage(result);
+              }
+              setOpenImage(false);
+            }}
+            selectedLimit={1}
+          />
+        ) : null}
       </KeyboardAvoidingView>
     </View>
   );
