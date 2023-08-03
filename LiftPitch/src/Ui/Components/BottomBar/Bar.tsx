@@ -15,24 +15,14 @@ const Bar = ({obj, onPress, index, tab}: any) => {
           bottom: hv(5),
         }}>
         {obj?.title == AppStrings.bottomBar.createVideo ? (
-          <View
+          <Image
             style={{
-              height: normalized(40),
-              width: normalized(40),
-              borderRadius: normalized(40 / 2),
-              backgroundColor: AppColors.red.mainColor,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Image
-              style={{
-                width: 39,
-                height: 25,
-              }}
-              source={obj.icon}
-              resizeMode="contain"
-            />
-          </View>
+              height: normalized(55),
+              width: normalized(55),
+            }}
+            source={obj.icon}
+            resizeMode="contain"
+          />
         ) : tab == index ? (
           <View>
             <Image

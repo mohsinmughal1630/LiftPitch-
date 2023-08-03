@@ -9,8 +9,9 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
 } from 'react-native';
-import {AppStyles} from '../../../../Utils/AppStyles';
+import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import moment from 'moment';
 import CommentInput from './CommentInput';
 import LoadingImage from '../../../Components/LoadingImage';
@@ -33,7 +34,9 @@ const CommentsModal = (props: Props) => {
     <Modal onRequestClose={props.onClose} transparent animationType="slide">
       <View style={styles.outerMainContainer}>
         <TouchableWithoutFeedback onPress={props.onClose}>
-          <View style={styles.bgContainer} />
+          <View
+          // style={styles.bgContainer}
+          />
         </TouchableWithoutFeedback>
         <KeyboardAvoidingView
           behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
@@ -44,17 +47,16 @@ const CommentsModal = (props: Props) => {
                 style={
                   styles.title
                 }>{`${props.commentsList.length} Comments`}</Text>
-              {/* <TouchableWithoutFeedback onPress={props.onClose}>
-                <View style={[styles.endView, AppStyles.centeredCommon]}>
-                  <Image
-                    source={AppImages.Common.CrossIcon}
-                    resizeMode="contain"
-                    style={styles.crossImg}
-                  />
-                </View>
-              </TouchableWithoutFeedback> */}
+              <TouchableOpacity
+                activeOpacity={0.7}
+                style={{padding: normalized(10)}}
+                onPress={() => {
+                  props?.onClose();
+                }}>
+                <Image source={AppImages.Common.CloseIcon} />
+              </TouchableOpacity>
             </View>
-            {/* <View style={styles.commentsMainContainer}> */}
+
             <FlatList
               inverted
               keyExtractor={(item, index) => `${index}`}
@@ -90,15 +92,26 @@ const CommentsModal = (props: Props) => {
                         <Text
                           style={[
                             styles.description,
-                            {color: AppColors.black.black, marginTop: 0},
+                            {color: AppColors.grey.towerGrey, marginTop: 0},
                           ]}>
                           {item.name}
                         </Text>
-                        <Text style={styles.date}>
-                          {moment(item.data).fromNow()}
-                        </Text>
                       </View>
-                      <Text style={styles.description}>{item.message}</Text>
+                      <Text style={styles.msgTxt}>{item.message}</Text>
+                    </View>
+                    <View style={{alignItems: 'center'}}>
+                      <TouchableOpacity
+                        style={{
+                          padding: normalized(5),
+                        }}>
+                        <Image
+                          source={AppImages.Common.menuIcon}
+                          resizeMode="contain"
+                        />
+                      </TouchableOpacity>
+                      <TouchableOpacity style={{padding: normalized(5)}}>
+                        <Image source={AppImages.Videos.Share} />
+                      </TouchableOpacity>
                     </View>
                   </View>
                 );
@@ -114,7 +127,6 @@ const CommentsModal = (props: Props) => {
             />
           </View>
         </KeyboardAvoidingView>
-        {/* </View> */}
       </View>
     </Modal>
   );
@@ -133,21 +145,24 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     minHeight: 400,
-    maxHeight: ScreenSize.height * 0.8,
+    maxHeight: ScreenSize.height * 0.9,
     backgroundColor: AppColors.white.white,
     zIndex: 1,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    paddingVertical: 15,
+    paddingVertical: 3,
     paddingHorizontal: 5,
   },
   headerRow: {
     ...AppStyles.horiCommon,
     justifyContent: 'space-between',
+    paddingVertical: normalized(10),
+    paddingHorizontal: AppHorizontalMargin,
   },
   title: {
-    fontSize: normalized(14),
+    fontSize: normalized(13),
     color: AppColors.black.black,
+    fontWeight: '600',
   },
   endView: {
     height: 35,
@@ -164,14 +179,14 @@ const styles = StyleSheet.create({
   singleCommentContainer: {
     flexDirection: 'row',
     marginVertical: 5,
-    alignItems: 'center',
+    // alignItems: 'center',
     marginHorizontal: normalized(15),
   },
   profileImgBox: {
     backgroundColor: AppColors.red.mainColor,
-    height: 50,
-    width: 50,
-    borderRadius: 30,
+    height: normalized(30),
+    width: normalized(30),
+    borderRadius: normalized(30 / 2),
     ...AppStyles.centeredCommon,
   },
   placeholderImg: {
@@ -187,10 +202,11 @@ const styles = StyleSheet.create({
   description: {
     color: AppColors.grey.grey,
     fontSize: normalized(12),
+    fontWeight: '600',
   },
-  date: {
-    color: AppColors.grey.grey,
-    fontSize: normalized(8),
-    marginTop: 0,
+  msgTxt: {
+    color: AppColors.black.black,
+    fontSize: normalized(12),
+    fontWeight: '400',
   },
 });

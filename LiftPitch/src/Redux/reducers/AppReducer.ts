@@ -2,7 +2,6 @@ import {createSlice} from '@reduxjs/toolkit';
 import {
   normalized,
 } from '../../Utils/AppConstants';
-import {AppStrings} from '../../Utils/Strings';
 
 export interface IReduxState {
   userData: any;
@@ -15,7 +14,7 @@ export interface IReduxState {
 const initialState: IReduxState = {
   userData: null,
   currentTab: 0,
-  bottomBarHeight: normalized(60),
+  bottomBarHeight: normalized(80),
   isNetConnected: false,
   isLoaderStart: false,
   isAlertShow: {value: false, message: ''},

@@ -23,19 +23,10 @@ interface Props {
 }
 
 const CommentInput = (props: Props) => {
-  // const {isNotchDevice} = useSelector(
-  //   (state: AppRootStore) => state.AppReducer,
-  // );
   return (
-    <View
-      style={[
-        styles.mainContainer,
-        {
-          // marginBottom: isNotchDevice && Platform.OS == 'ios' ? 25 : 5,
-        },
-      ]}>
+    <View style={styles.mainContainer}>
       <TextInput
-        placeholder="Write something"
+        placeholder="Add comment... "
         placeholderTextColor={AppColors.grey.dimGrey}
         value={props.messageTxt}
         onChangeText={props.onChangeMessage}
@@ -50,7 +41,7 @@ const CommentInput = (props: Props) => {
             props.messageTxt.trim() == '' && {opacity: 0.7},
           ]}>
           <Image
-            source={AppImages.Chat.SendIcon}
+            source={AppImages.Common.Send}
             resizeMode="contain"
             style={styles.sendImg}
           />
@@ -65,32 +56,24 @@ export default CommentInput;
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: AppColors.white.white,
-    borderRadius: 22,
     ...AppStyles.shadowCommon,
-    height: 55,
+    height: normalized(60),
     paddingHorizontal: normalized(10),
-    marginBottom: 10,
-    marginHorizontal: normalized(20),
     ...AppStyles.horiCommon,
+    width: '100%',
   },
   input: {
-    color: AppColors.grey.grey,
+    color: AppColors.black.black,
     fontSize: normalized(14),
     flex: 1,
     height: '100%',
   },
   sendImgBox: {
-    height: 45,
-    width: 45,
-    borderRadius: 25,
-    backgroundColor: AppColors.red.mainColor,
-    ...AppStyles.centeredCommon,
-    marginLeft: 10,
+    paddingHorizontal: normalized(10),
   },
   sendImg: {
     height: 20,
     width: 20,
-    tintColor: AppColors.white.white,
   },
   voiceBox: {
     height: 45,

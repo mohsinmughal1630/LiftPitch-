@@ -1,7 +1,6 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import {Dimensions, Platform, PixelRatio} from 'react-native';
 import moment from 'moment';
-  export const deviceHeight = Dimensions.get('window').height;
 import { AppStrings } from './Strings';
 export const platformVersion = Platform.Version;
 export type ScreenProps = StackScreenProps<any, any>;
@@ -23,6 +22,9 @@ export const bottomBarHeightConstant = hv(90);
 export const maxDescriptionLength = 60;
 export const maxImageSizeInBytes = 10 * 1024 * 1024; // 10MB
 export const mainBottomPadding = bottomBarHeightConstant + hv(10);
+  export const deviceHeight = Dimensions.get('window').height;
+  export const deviceHeightwithOutBar = Dimensions.get('window').height-normalized(70);
+
 
 
 
@@ -64,6 +66,7 @@ export const AppImages = {
     Share: require('../Ui/assets/images/Videos/Share.png'),
     Error: require('../Ui/assets/images/Videos/Error.png'),
     PauseIcon: require('../Ui/assets/images/Videos/PauseIcon.png'),
+    moreIcon: require('../Ui/assets/images/Videos/moreIcon.png'),
   },
    Common: {
     DropDownIcon: require('../Ui/assets/images/Common/DropDownIcon.png'),
@@ -74,7 +77,7 @@ export const AppImages = {
     MinimizeIcon: require('../Ui/assets/images/Common/MinimizeIcon.png'),
     FavouriteIcon: require('../Ui/assets/images/Common/FavouriteIcon.png'),
     CartIcon: require('../Ui/assets/images/Common/CartIcon.png'),
-    CrossIcon: require('../Ui/assets/images/Common/CrossIcon.png'),
+    CloseIcon: require('../Ui/assets/images/Common/CloseIcon.png'),
     AddIcon: require('../Ui/assets/images/Common/AddIcon.png'),
     MinusIcon: require('../Ui/assets/images/Common/MinusIcon.png'),
     SearchIcon: require('../Ui/assets/images/Common/SearchIcon.png'),
@@ -83,6 +86,9 @@ export const AppImages = {
     HeaderSearch: require('../Ui/assets/images/Common/HeaderSearch.png'),
     DeliveryIcon: require('../Ui/assets/images/Common/DeliveryIcon.png'),
     DeliveryiconLarge: require('../Ui/assets/images/Common/DeliveryiconLarge.png'),
+    Send:require('../Ui/assets/images/Common/Send.png'),
+    menuIcon:require('../Ui/assets/images/Common/menuIcon.png'),
+    LeftArrowIcon:require('../Ui/assets/images/Common/LeftArrowIcon.png'),
   },
 };
 export const AppFonts = {};
@@ -119,18 +125,18 @@ export const AppColors = {
     brown: '#333333',
   },
   grey: {
-    toastColor: '#62656c',
+    towerGrey:'#afb8bb',
     bgGrey: '#BDBDBD',
     greyLevel1: '#E8E8E8',
      grey: '#E4E7EB',
     switchGrey: '#E4E4E4',
     dimGrey: '#ACACAC',
-    lightOpacGray: 'rgba(241, 241, 241, 1)',
     gray: 'rgba(118, 125, 144, 1)',
     gray2: 'rgba(215, 215, 215, 1)',
     grayLight: 'rgba(226, 227, 228, 1)',
     grayExtraLight: 'rgba(234, 236, 237, 1)',
     midGray: 'rgba(146, 148, 151, 1)',
+    simple:'#DDDDDD'
   },
   red: {
     warning: '#E35252',
@@ -542,18 +548,19 @@ export const commentsConstants = [
   {
     id: 6,
     name: 'Salman Khan',
-    // image: 'https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_1280.jpg',
     image: null,
     date: new Date().setHours(6),
-    message: 'This is a simple comment. Its for simple testing purposes. ',
+    message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ',
   },
 ]
 
 export const shareOptionsList = [
+ 
+  
   {
-    id:1,
-    type: 'report',
-    image: AppImages.Videos.Report,
+    id: 3,
+    type: 'comment',
+    image: AppImages.Videos.Comment
   },
   {
     id: 2,
@@ -561,8 +568,8 @@ export const shareOptionsList = [
     image: AppImages.Videos.Share
   },
   {
-    id: 3,
-    type: 'comment',
-    image: AppImages.Videos.Comment
+    id: 4,
+    type: 'more',
+    image: AppImages.Videos.moreIcon
   }
 ]

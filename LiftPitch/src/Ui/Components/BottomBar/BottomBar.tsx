@@ -27,7 +27,7 @@ const BottomBar = ({bottomBarList, dispatch, navigation, tab}: any) => {
       <View
         style={{
           width: '100%',
-          height: normalized(60),
+          height: normalized(80),
           flexDirection: 'row',
           justifyContent: 'space-between',
           backgroundColor: AppColors.white.white,

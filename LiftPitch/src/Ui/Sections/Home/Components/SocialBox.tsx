@@ -9,6 +9,7 @@ import {AppStyles} from '../../../../Utils/AppStyles';
 import {
   AppColors,
   AppImages,
+  normalized,
   shareOptionsList,
 } from '../../../../Utils/AppConstants';
 
@@ -81,13 +82,12 @@ export default SocialBox;
 
 const styles = StyleSheet.create({
   mainStyles: {
-    height: '100%',
+    maxHeight: '80%',
     alignItems: 'center',
     justifyContent: 'flex-end',
     overflow: 'hidden',
   },
   mainDropDownBox: {
-    backgroundColor: AppColors.red.mainColor,
     ...AppStyles.centeredCommon,
     height: 40,
     width: 40,
@@ -95,8 +95,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   mainDropDownImg: {
-    height: 20,
-    width: 20,
+    width: normalized(25),
+    height: normalized(25),
     tintColor: AppColors.white.white,
   },
   listBox: {
@@ -104,15 +104,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   singleShareBox: {
-    width: 30,
-    height: 30,
-    borderRadius: 20,
-    backgroundColor: AppColors.red.mainColor,
+    width: normalized(25),
+    height: normalized(25),
     ...AppStyles.centeredCommon,
   },
   singleShareIcon: {
-    height: 15,
-    width: 15,
+    width: normalized(25),
+    height: normalized(25),
     tintColor: AppColors.white.white,
   },
 });

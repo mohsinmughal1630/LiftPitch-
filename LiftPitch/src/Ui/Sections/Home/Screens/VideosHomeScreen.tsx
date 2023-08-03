@@ -3,19 +3,26 @@ import {FlatList, StyleSheet, View} from 'react-native';
 import SingleVideoComponent from '../Components/SingleVideoComponent';
 import {
   ScreenProps,
-  deviceHeight,
+  deviceHeightwithOutBar,
   vidoesListConstant,
 } from '../../../../Utils/AppConstants';
+import VideoHeaderSection from '../Components/VideoHeaderSection';
 
 const VideosHomeScreen = (props: ScreenProps) => {
+  const [selectedTab, setSelectedTab] = useState(1);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const updateCurrentSlideIndex = (e: any) => {
     const contentOffsetY = e.nativeEvent.contentOffset.y;
-    const currentIndex = Math.round(contentOffsetY / deviceHeight);
+    const currentIndex = Math.round(contentOffsetY / deviceHeightwithOutBar);
     setCurrentVideoIndex(currentIndex);
   };
   return (
     <View style={styles.mainContainer}>
+      <VideoHeaderSection
+        selectedTab={selectedTab}
+        atSelectTab={(val: any) => {}}
+        atSearchBtnPress={() => {}}
+      />
       <FlatList
         data={vidoesListConstant}
         showsVerticalScrollIndicator={false}

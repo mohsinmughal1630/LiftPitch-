@@ -5,11 +5,13 @@ import {
   AppColors,
   commentsConstants,
   deviceHeight,
+  normalized,
   singleVideoItemType,
 } from '../../../../Utils/AppConstants';
 import VideoPlayer from './VideoPlayer';
 import VideoBottomSection from './VideoBottomSection';
 import CommentsModal from './CommentsModal';
+import VideoHeaderSection from './VideoHeaderSection';
 
 interface Props {
   item: singleVideoItemType;
@@ -39,7 +41,9 @@ const SingleVideoComponent = (props: Props) => {
       </View>
       {showCommentsModal && (
         <CommentsModal
-          onClose={() => setShowComments(false)}
+          onClose={() => {
+            setShowComments(false);
+          }}
           commentsList={commentsList}
           onNewComment={val => {
             commentsList.unshift({
@@ -61,7 +65,7 @@ export default SingleVideoComponent;
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: AppColors.black.black,
-    height: deviceHeight,
+    height: deviceHeight - normalized(80),
   },
   innerContainer: {
     flex: 1,

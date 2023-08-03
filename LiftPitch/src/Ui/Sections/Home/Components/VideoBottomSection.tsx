@@ -26,7 +26,7 @@ const VideoBottomSection = (props: Props) => {
   return (
     <View style={styles.mainContainer}>
       <View style={AppStyles.mainContainer}>
-        <View style={styles.descriptionBox}>
+        <View>
           <Text
             onPress={() =>
               CommonDataManager.getSharedInstance().redirectToUrl(
@@ -36,6 +36,11 @@ const VideoBottomSection = (props: Props) => {
             style={styles.linkText}>
             {props.item.productLink}
           </Text>
+          <View style={styles.bottomBox}>
+            <View style={styles.bottomContentBox}>
+              <Text style={styles.userName}>{`@${props.item.userName}`}</Text>
+            </View>
+          </View>
           <Text style={styles.descriptionText}>
             {description.length > maxStrLength
               ? showMore
@@ -61,34 +66,30 @@ const VideoBottomSection = (props: Props) => {
             {props.item.storeLink}
           </Text>
         </View>
-        <View style={styles.bottomBox}>
-          {/* Start of Profile Image */}
-          <View style={styles.profileImgBox}>
-            {profileImg ? (
-              <LoadingImage
-                source={{uri: profileImg}}
-                viewStyle={{
-                  ...styles.profileImgBox,
-                  backgroundColor: AppColors.white.bgWhite,
-                }}
-                resizeMode="cover"
-              />
-            ) : (
-              <Image
-                source={AppImages.bottomBar.Profile}
-                resizeMode="contain"
-                style={styles.placeholderImg}
-              />
-            )}
-          </View>
-          {/* End of Profile Image */}
-          <View style={styles.bottomContentBox}>
-            <Text style={styles.storeName}>{props.item.storeName}</Text>
-            <Text style={styles.userName}>{props.item.userName}</Text>
-          </View>
-        </View>
       </View>
-      <SocialBox onOptionClick={props.onOptionClick} />
+      <View>
+        {/* Start of Profile Image */}
+        <View style={styles.profileImgBox}>
+          {profileImg ? (
+            <LoadingImage
+              source={{uri: profileImg}}
+              viewStyle={{
+                ...styles.profileImgBox,
+                backgroundColor: AppColors.white.bgWhite,
+              }}
+              resizeMode="cover"
+            />
+          ) : (
+            <Image
+              source={AppImages.bottomBar.Profile}
+              resizeMode="contain"
+              style={styles.placeholderImg}
+            />
+          )}
+        </View>
+        {/* End of Profile Image */}
+        <SocialBox onOptionClick={props.onOptionClick} />
+      </View>
     </View>
   );
 };
@@ -99,23 +100,21 @@ const styles = StyleSheet.create({
   mainContainer: {
     bottom: 0,
     position: 'absolute',
-    marginBottom: mainBottomPadding + 10,
+    marginBottom: normalized(20),
     width: '100%',
     paddingHorizontal: normalized(20),
     flexDirection: 'row',
   },
-  descriptionBox: {
-    // backgroundColor: 'purple',
-  },
-
   linkText: {
-    color: AppColors.blue.lightBlue,
-    fontSize: normalized(12),
+    color: AppColors.white.white,
+    fontSize: normalized(13),
     marginVertical: 2,
+    fontWeight: '600',
   },
   descriptionText: {
-    color: AppColors.grey.gray,
-    fontSize: normalized(12),
+    color: AppColors.white.white,
+    fontSize: normalized(13),
+    fontWeight: '400',
   },
   bottomBox: {
     ...AppStyles.horiCommon,
@@ -126,7 +125,10 @@ const styles = StyleSheet.create({
     height: 45,
     width: 45,
     borderRadius: 23,
+    borderWidth: 1,
+    borderColor: AppColors.white.white,
     ...AppStyles.centeredCommon,
+    marginBottom: normalized(10),
   },
   placeholderImg: {
     height: '60%',
@@ -140,11 +142,12 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   storeName: {
-    color: AppColors.grey.gray,
+    color: AppColors.white.white,
     fontSize: normalized(14),
   },
   userName: {
-    color: AppColors.black.black,
+    color: AppColors.white.white,
     fontSize: normalized(14),
+    fontWeight: '900',
   },
 });
