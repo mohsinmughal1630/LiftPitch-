@@ -45,3 +45,12 @@ export const saveUserToken = async (token: string) => {
     console.log('Error storing usertoken', e);
   }
 };
+
+export const clearAppData = async (key:any) => {
+  try {
+    await AsyncStorage.removeItem(key);
+    console.log('Data removed');
+  } catch (exception) {
+    console.log(exception);
+  }
+};
