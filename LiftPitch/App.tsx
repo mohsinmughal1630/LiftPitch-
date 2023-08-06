@@ -8,113 +8,62 @@
  * @format
  */
 
-import React, {type PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section: React.FC<
-  PropsWithChildren<{
-    title: string;
-  }>
-> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
+import React, {useEffect, useState} from 'react';
+import {StatusBar, View} from 'react-native';
+import {Provider, useDispatch} from 'react-redux';
+import store from './src/Redux/store/AppStore';
+import {NavigationContainer} from '@react-navigation/native';
+import AppContainer from './src/AppContainer';
+import {getUserData} from './src/Utils/AsyncStorage';
+import {setNetState, setUserData} from './src/Redux/reducers/AppReducer';
+import NetInfo from '@react-native-community/netinfo';
+import SplashScreen from 'react-native-splash-screen';
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const dispatch = useDispatch();
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  useEffect(() => {
+    fetchUser();
+    onAppStart();
+  }, []);
+
+  const fetchUser = async () => {
+    let userDataa = await getUserData();
+    if (userDataa) {
+      dispatch(setUserData(userDataa));
+      await fetchUserAPI();
+    }
+  };
+  const fetchUserAPI = async () => {
+    // console.log('come to fetch User Data API======>');
+    //fetch user API integrate here.....
+  };
+
+  const onAppStart = async () => {
+    await checkInternet();
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 2000);
+  };
+
+  const checkInternet = () => {
+    NetInfo.addEventListener(state => {
+      dispatch(setNetState(state.isConnected));
+    });
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
+    <View style={{flex: 1}}>
       <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
+        animated={true}
+        backgroundColor="#fff"
+        barStyle={'dark-content'}
+        showHideTransition={'fade'}
       />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+      <NavigationContainer>
+        <AppContainer />
+      </NavigationContainer>
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
 export default App;

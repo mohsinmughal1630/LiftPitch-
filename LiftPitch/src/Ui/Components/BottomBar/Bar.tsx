@@ -1,69 +1,57 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import {useSelector} from 'react-redux';
-import {AppRootStore} from '../../../Redux/store/AppStore';
-import {AppColors, normalized} from '../../../Utils/AppConstants';
-import {AppStyles} from '../../../Utils/AppStyles';
-import CommonDataManager from '../../../Utils/CommonManager';
-import MiddleFunctionComp from './MiddleFunctionComp';
-interface Props {
-  obj: any;
-  onPress: () => void;
-  index: Number;
-  navigation: any;
-}
-const Bar = (props: Props) => {
-  const {obj, onPress, index} = props;
-  const selector = useSelector((AppState: AppRootStore) => AppState);
-  const selectedTab = selector.AppReducer.currentTab;
+import {View, Image, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import {AppColors, hv, normalized} from '../../../Utils/AppConstants';
+import {AppStrings} from '../../../Utils/Strings';
+const Bar = ({obj, onPress, index, tab}: any) => {
   return (
-    <TouchableWithoutFeedback key={obj.title} onPress={onPress}>
-      {index == 2 ? (
-        <MiddleFunctionComp
-          navigation={props.navigation}
-          isActive={selectedTab == index}
-          obj={obj}
-        />
-      ) : (
-        <View style={[AppStyles.barStyle, styles.container]}>
+    <TouchableWithoutFeedback
+      style={{}}
+      key={obj.title}
+      onPress={() => onPress()}>
+      <View
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          bottom: hv(5),
+        }}>
+        {obj?.title == AppStrings.bottomBar.createVideo ? (
           <Image
-            style={[
-              AppStyles.barImageStyle,
-              {
-                tintColor:
-                  selectedTab == index
-                    ? AppColors.primaryGreen
-                    : AppColors.dark.darkLevel1,
-              },
-            ]}
-            source={obj.image}
+            style={{
+              height: normalized(55),
+              width: normalized(55),
+            }}
+            source={obj.icon}
+            resizeMode="contain"
           />
-          <Text
-            style={
-              selectedTab == index ? AppStyles.barText1 : AppStyles.barText
-            }>
-            {CommonDataManager.getSharedInstance().capitalizeFirstLetter(
-              obj.title,
-            )}
-          </Text>
-        </View>
-      )}
+        ) : tab == index ? (
+          <View>
+            <Image
+              style={styles.selectedTab}
+              source={obj.icon}
+              resizeMode="contain"
+            />
+          </View>
+        ) : (
+          <Image
+            style={styles.unSelectedtAb}
+            resizeMode="contain"
+            source={obj.icon}
+          />
+        )}
+      </View>
     </TouchableWithoutFeedback>
   );
 };
-export default Bar;
-
 const styles = StyleSheet.create({
-  container: {
-    minHeight: normalized(40),
-    minWidth: normalized(50),
-    justifyContent: 'flex-end',
+  selectedTab: {
+    tintColor: AppColors.red.mainColor,
+    width: 39,
+    height: 25,
+  },
+  unSelectedtAb: {
+    tintColor: AppColors.black.light,
+    width: 39,
+    height: 25,
   },
 });
+export default Bar;

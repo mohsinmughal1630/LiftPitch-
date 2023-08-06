@@ -10,85 +10,24 @@ export const Routes = {
   GetStarting: {
     onBoarding: 'onBoarding',
   },
-  Home: {
+  HomeTab: {
     homeScreen: 'home',
-    bindBraceletScreen: 'bindBraceletScreen',
   },
-  Profile: {
-    profileUpdateScreen: 'profileUpdateScreen',
-    profilePreviewScreen: 'profilePreviewScreen',
+  FollowerTab: {
+    followerListing: 'followerListing',
   },
-  Container: {
-    main: 'container',
+  addVideoTab: {
+    createVideoScreen: 'createVideoScreen',
   },
-  DrawerStack: {
-    main: 'drawerStack',
+  NotificationTab: {
+    NotificationScreen: 'NotificationScreen',
   },
-  Contact: {
-    contactScreen: 'contactScreen',
+ ProfileTab: {
+    ProfileScreen: 'ProfileScreen',
   },
-  Function: {
-    functionScreen: 'contactScreen',
-    cardsListingScreen: 'cardsListingScreen',
-    chooseCardScreen: 'chooseCardScreen',
-    cardNameScreen: 'cardNameScreen',
-    cardBackgroundScreen: 'cardBackgroundScreen',
-    cardThemeColorScreen: 'cardThemeColorScreen',
-    cardProfileUploadScreen: 'cardProfileUploadScreen',
-    cardContactNumberScreen: 'cardContactNumberScreen',
-    cardSocialMediaScreen: 'cardSocialMediaScreen',
-    cardPersonalBioScreen: 'cardPersonalBioScreen',
-    cardPreviewScreen: 'cardPreviewScreen',
-    cardCompanyDetailsScreen: 'cardCompanyDetailsScreen',
-    cardCompanyLogoScreen: 'cardCompanyLogoScreen',
-    emergencyHomeScreen: 'emergencyHomeScreen',
-    createEmergencyContactScreen: 'createEmergencyContactScreen',
-    newEmergContactScreen: 'newEmergContactScreen',
-    customUrlsHomeScreen: 'customUrlsHomeScreen',
-    addCustomUrlScreen: 'addCustomUrlScreen',
-    newCustomUrlScreen: 'newCustomUrlScreen',
-    createPaymentScreen: 'createPaymentScreen',
-    paymentHomeScreen: 'paymentHomeScreen',
-    newPaymentScreen: 'newPaymentScreen',
-    createUploadFilesScreen: 'createUploadFilesScreen',
-    uploadFilesHomeScreen: 'uploadFilesHomeScreen',
-    newUploadFilesScreen: 'newUploadFilesScreen',
-    editCardScreen: 'editCardScreen',
-  },
-  Shop: {
-    shopScreen: 'shopScreen',
-  },
-  Scan: {
-    scanScreen: 'scanScreen',
-  },
-  DynamicStack: {
-    dynamicScreen: 'dynamicScreen',
-    dynamicDetail: 'dynamicDetail',
-    addNewLink: 'addNewLink',
-  },
-  Settings: {
-    settingsHomeScreen: 'settingsHomeScreen',
-    helpFaqScreen: 'helpFaqScreen',
-    changePassword: 'changePassword',
-    settingsForgetPassScreen: 'settingsForgetPassScreen',
-    settingsOtpScreen: 'settingsOtpScreen',
-    settingsNewPassScreen: 'settingsNewPassScreen',
-    settingsPassSuccessScreen: 'settingsPassSuccessScreen',
-    upgradeAccount: 'upgradeAccount',
-    addNewPassword: 'addNewPassword',
-    aboutUs: 'aboutUs',
-    contactUs: 'contactUs',
-    tutorials: 'tutorials',
-    termAndCondition: 'termAndCondition',
-    privacyPolicy: 'privacyPolicy',
-    faqScreen: 'faqScreen',
-    aboutatSetting: 'aboutatSetting',
-    notificationsListingScreen: 'notificationsListingScreen',
-    exchangePolicyScreen: 'exchangePolicyScreen',
-    IntellectualPropertyScreen: 'intellectualPropertyScreen',
-    enterpriseContactForm: 'EnterpriseContactForm',
-  },
-  Teams: {
-    teamNodes: 'teamNodes',
-  },
+ 
+  Container:{
+    Container:'Container'
+  }
+ 
 };
