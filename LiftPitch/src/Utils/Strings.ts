@@ -53,3 +53,5 @@ export const AsyncKeyStrings = {
 export const Collections = {
   Users: "Users",
 };
+
+export const GOOGLE_API_KEY = "AIzaSyBQyEE67gM0AvoJAzwp7fSdDlPqKwqKTxU";

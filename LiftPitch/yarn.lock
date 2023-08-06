@@ -6527,6 +6527,13 @@ react-native-permissions@^3.6.1:
     picocolors "^1.0.0"
     pkg-dir "^5.0.0"
 
+react-native-places-input@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/react-native-places-input/-/react-native-places-input-1.1.7.tgz#8e36fdd87e1f855d72029f7e2b670f7832a2872c"
+  integrity sha512-Gxl6bNFGK8vCagTRjONKspdgpGs+pGSu/Y3Bp7XZqFaowekhDdQYfs6yXe+WZofH/EmNzFH40jKc83URvqYPXQ==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-reanimated@^2.0.0-rc.3:
   version "2.17.0"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-2.17.0.tgz#eae2308235961cdd79810e01dfdd7e88b1ae5b5c"

@@ -1,66 +1,95 @@
-import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  LayoutAnimation,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView} from 'react-native';
 import {
   AppColors,
   AppImages,
-  hv,
   normalized,
+  videoHeaderOptions,
 } from '../../../../Utils/AppConstants';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
+import {AppStyles} from '../../../../Utils/AppStyles';
 
-const VideoHeaderSection = (props: any) => {
+interface Props {
+  selectedTab: number;
+  onTabSelect: (val: number) => void;
+  searchTxt: string;
+  onSearchChange: (val: string) => void;
+}
+
+const VideoHeaderSection = (props: Props) => {
+  const [showSearch, setShowSearch] = useState(false);
+  const toggleSearch = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setShowSearch(!showSearch);
+  };
   return (
     <View style={styles.mainContainer}>
-      <View style={AppStyles.mainContainer}>
-        <View style={styles.innerContainer}>
-          <View style={{marginHorizontal: normalized(40)}} />
-          <View style={styles.tabCont}>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => {
-                props?.atSelectTab(0);
-              }}>
-              <Text
-                style={[
-                  styles.tabTxt,
-                  {
-                    color:
-                      props?.selectedTab == 0
-                        ? AppColors.white.white
-                        : AppColors.grey.towerGrey,
-                  },
-                ]}>
-                Network
-              </Text>
-            </TouchableOpacity>
-            <View style={{marginHorizontal: normalized(8)}} />
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => {
-                props?.atSelectTab(1);
-              }}>
-              <Text
-                style={[
-                  styles.tabTxt,
-                  {
-                    color:
-                      props?.selectedTab == 1
-                        ? AppColors.white.white
-                        : AppColors.grey.towerGrey,
-                  },
-                ]}>
-                For Business
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            onPress={() => {
-              props?.atSearchBtnPress();
-            }}>
-            <Image source={AppImages.Common.SearchIcon} />
-          </TouchableOpacity>
+      <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
+      <SafeAreaView />
+      <View style={styles.rowContainer}>
+        <View style={AppStyles.horiCommon}>
+          {showSearch ? (
+            <TextInput
+              placeholder={'Search here..'}
+              value={props.searchTxt}
+              onChangeText={props.onSearchChange}
+              style={{
+                height: '90%',
+                backgroundColor: AppColors.white.white,
+                borderRadius: 30,
+                width: '70%',
+                zIndex: 1,
+                marginTop: 10,
+                paddingHorizontal: normalized(15),
+              }}
+              returnKeyType="search"
+              onSubmitEditing={toggleSearch}
+            />
+          ) : (
+            videoHeaderOptions.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                activeOpacity={0.7}
+                onPress={() => {
+                  props?.onTabSelect(index);
+                }}>
+                <View style={styles.singleBtn}>
+                  <Text
+                    style={[
+                      styles.tabTxt,
+                      {
+                        color:
+                          props?.selectedTab == index
+                            ? AppColors.white.white
+                            : AppColors.grey.towerGrey,
+                      },
+                    ]}>
+                    {item.name}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ))
+          )}
         </View>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={toggleSearch}
+          style={styles.searchBox}>
+          <Image
+            source={AppImages.Common.SearchIcon}
+            style={styles.searchImg}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -70,28 +99,37 @@ export default VideoHeaderSection;
 
 const styles = StyleSheet.create({
   mainContainer: {
-    marginTop: hv(70),
     position: 'absolute',
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 200,
+    top: 0,
+    right: 0,
+    left: 0,
+    zIndex: 1,
   },
-  innerContainer: {
-    width: '100%',
-    justifyContent: 'space-between',
+  rowContainer: {
     alignItems: 'center',
-    flexDirection: 'row',
-    marginHorizontal: AppHorizontalMargin,
-  },
-  tabCont: {
     justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
+    height: 50,
+  },
+  singleBtn: {
+    paddingVertical: 10,
+    paddingHorizontal: 5,
   },
   tabTxt: {
     color: AppColors.white.white,
     fontSize: normalized(16),
     fontWeight: '700',
+  },
+  searchBox: {
+    height: 35,
+    width: 35,
+    position: 'absolute',
+    right: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 10,
+  },
+  searchImg: {
+    height: '55%',
+    width: '55%',
   },
 });

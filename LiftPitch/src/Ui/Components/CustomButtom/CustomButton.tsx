@@ -1,6 +1,7 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, TouchableWithoutFeedback} from 'react-native';
 import {AppColors, normalized} from '../../../Utils/AppConstants';
+import LinearGradient from 'react-native-linear-gradient';
 
 interface Props {
   label: string;
@@ -10,24 +11,28 @@ interface Props {
 }
 
 const CustomFilledBtn = (props: Props) => {
+  const colorsList = [AppColors.gradient.dark, AppColors.gradient.light];
   return (
-    <TouchableOpacity
-      activeOpacity={1}
+    <TouchableWithoutFeedback
       onPress={() => {
         if (props?.onPressBtn) {
           props.onPressBtn();
         }
-      }}
-      style={{...styles.container, ...props.mainContainer}}>
-      <Text style={{...styles.label, ...props.labelStyle}}>
-        {props?.label.toUpperCase()}
-      </Text>
-    </TouchableOpacity>
+      }}>
+      <LinearGradient
+        start={{x: 0, y: 0}}
+        end={{x: 0, y: 0.8}}
+        colors={colorsList}
+        style={[styles.container, props.mainContainer]}>
+        <Text style={[styles.label, props.labelStyle]}>
+          {props?.label.toUpperCase()}
+        </Text>
+      </LinearGradient>
+    </TouchableWithoutFeedback>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#502165',
     width: normalized(340),
     height: normalized(55),
     borderRadius: normalized(12),
