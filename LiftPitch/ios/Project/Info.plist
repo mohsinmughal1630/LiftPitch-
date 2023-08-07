@@ -25,25 +25,25 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>com.holguinmedia.contactapp</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.540778185387-4rijujqnue1tlra06s4to5hhicgrpds9</string>
-				<string>fb1263530301266635</string>
+				<string>com.googleusercontent.apps.959745604605-c2p6rl2th0mku3d6uvuembfdm8r0lode</string>
 			</array>
 		</dict>
 	</array>
-	<key>CFBundleVersion</key>
-	<string>1</string>
 	<key>FacebookAppID</key>
-	<string>1263530301266635</string>
+	<string>1693334904423187</string>
 	<key>FacebookClientToken</key>
-	<string>44029df90ee763f1e7e20bc938a85b02</string>
+	<string>0d762b5ec885b6bd82258fccb2beda22</string>
 	<key>FacebookDisplayName</key>
 	<string>LiftPitch</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NFCApp</key>

@@ -35,7 +35,11 @@ import {saveUserData} from '../../../../Utils/AsyncStorage';
 import {AppStrings} from '../../../../Utils/Strings';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import {AppRootStore} from '../../../../Redux/store/AppStore';
-import {loginRequest} from '../../../../Network/Services/AuthServices';
+import {
+  loginRequest,
+  onFacebookButtonPress,
+  onGoogleButtonPress,
+} from '../../../../Network/Services/AuthServices';
 const LoginScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
   const {isNetConnected, isPersisterUser} = useSelector(
@@ -159,12 +163,16 @@ const LoginScreen = (props: ScreenProps) => {
               <SocialBtn
                 label={'FACEBOOK'}
                 icon={AppImages.Auth.fbIcon}
-                atPress={() => {}}
+                atPress={() => {
+                  onFacebookButtonPress();
+                }}
               />
               <SocialBtn
                 label={'GOOGLE'}
                 icon={AppImages.Auth.google}
-                atPress={() => {}}
+                atPress={() => {
+                  onGoogleButtonPress();
+                }}
               />
             </View>
             <Text style={styles.bottomTxt}>
