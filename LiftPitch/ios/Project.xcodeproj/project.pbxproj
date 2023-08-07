@@ -604,7 +604,7 @@
 					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
 				);
 				INFOPLIST_FILE = Project/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "NFC App";
+				INFOPLIST_KEY_CFBundleDisplayName = LiftPitch;
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -643,7 +643,7 @@
 					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
 				);
 				INFOPLIST_FILE = Project/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "NFC App";
+				INFOPLIST_KEY_CFBundleDisplayName = LiftPitch;
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
