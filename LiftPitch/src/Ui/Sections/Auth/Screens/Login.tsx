@@ -1,5 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {
+  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -14,6 +15,7 @@ import {
   AppColors,
   AppImages,
   ScreenProps,
+  ScreenSize,
   hv,
   normalized,
 } from '../../../../Utils/AppConstants';
@@ -22,12 +24,23 @@ import SocialBtn from '../Components/SocialBtn';
 import CustomFilledBtn from '../../../Components/CustomButtom/CustomButton';
 import SimpleInput from '../../../Components/CustomInput/SimpleInput';
 import CustomSwitch from '../../../Components/CustomSwitch/CustomSwitch';
-import {useDispatch} from 'react-redux';
-import {setUserData} from '../../../../Redux/reducers/AppReducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  setIsLoader,
+  setIsPersisterUser,
+  setUserData,
+} from '../../../../Redux/reducers/AppReducer';
 import {Routes} from '../../../../Utils/Routes';
 import {saveUserData} from '../../../../Utils/AsyncStorage';
+import {AppStrings} from '../../../../Utils/Strings';
+import CommonDataManager from '../../../../Utils/CommonManager';
+import {AppRootStore} from '../../../../Redux/store/AppStore';
+import {loginRequest} from '../../../../Network/Services/AuthServices';
 const LoginScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
+  const {isNetConnected, isPersisterUser} = useSelector(
+    (state: AppRootStore) => state.AppReducer,
+  );
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passRef: any = useRef();
@@ -40,6 +53,34 @@ const LoginScreen = (props: ScreenProps) => {
     if (inputRef?.current) {
       inputRef?.current?.focus();
     }
+  };
+
+  const onLoginButton = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', AppStrings.Validation.fieldsEmptyError);
+      return;
+    }
+    if (!CommonDataManager.getSharedInstance().isEmailValid(email)) {
+      Alert.alert('Error', AppStrings.Validation.invalidEmailError);
+      return;
+    }
+    if (!isNetConnected) {
+      Alert.alert('Error', AppStrings.Network.internetError);
+      return;
+    }
+    const paramsObj = {email, password};
+    dispatch(setIsLoader(true));
+    await loginRequest(paramsObj, response => {
+      dispatch(setIsLoader(false));
+      if (response) {
+        dispatch(setUserData(response));
+        if (isPersisterUser) {
+          saveUserData(response);
+        }
+      } else {
+        console.log('Something went wrong');
+      }
+    }).catch(() => dispatch(setIsLoader(false)));
   };
 
   return (
@@ -98,20 +139,17 @@ const LoginScreen = (props: ScreenProps) => {
             />
             <View style={styles.secondCont}>
               <View style={styles.switchCon}>
-                <CustomSwitch value={switchValue} onToggle={setSwitchValue} />
+                <CustomSwitch
+                  value={isPersisterUser}
+                  onToggle={val => dispatch(setIsPersisterUser(val))}
+                />
                 <Text style={styles.remembTxt}>Remember Me</Text>
               </View>
               <TouchableOpacity>
                 <Text style={styles.forgetPasTxt}>Forgot Password?</Text>
               </TouchableOpacity>
             </View>
-            <CustomFilledBtn
-              label={'Sign in'}
-              onPressBtn={() => {
-                dispatch(setUserData({name: 'usama Malik'}));
-                saveUserData({name: 'usama Malik'});
-              }}
-            />
+            <CustomFilledBtn label={'Sign in'} onPressBtn={onLoginButton} />
             <View style={styles.signInWithTxt}>
               <View style={styles.simpleLine} />
               <Text style={styles.signInTxt}>Sign in with</Text>
@@ -149,7 +187,7 @@ const LoginScreen = (props: ScreenProps) => {
 const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
-    marginHorizontal: AppHorizontalMargin,
+    // marginHorizontal: AppHorizontalMargin,
   },
   childContainer: {
     flex: 1,
@@ -168,7 +206,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   inputMainCont: {
-    width: '100%',
+    width: '92%',
     marginTop: 15,
   },
   secondCont: {
@@ -176,6 +214,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: normalized(30),
+    marginHorizontal: AppHorizontalMargin,
   },
   switchCon: {
     flexDirection: 'row',
@@ -199,11 +238,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    marginHorizontal: AppHorizontalMargin,
   },
   simpleLine: {
     height: normalized(0.4),
     backgroundColor: '#8391A1',
-    width: normalized(130),
+    width: normalized(110),
   },
   signInTxt: {
     fontSize: normalized(13),
@@ -216,6 +256,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginHorizontal: AppHorizontalMargin,
   },
   bottomTxt: {
     fontSize: normalized(13),

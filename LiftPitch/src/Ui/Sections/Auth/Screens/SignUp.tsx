@@ -1,5 +1,6 @@
 import React, {useRef, useState} from 'react';
 import {
+  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -8,11 +9,13 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import {
   AppColors,
   AppImages,
+  ILocation,
   ScreenProps,
   hv,
   normalized,
@@ -21,43 +24,126 @@ import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import SimpleInput from '../../../Components/CustomInput/SimpleInput';
 import CustomFilledBtn from '../../../Components/CustomButtom/CustomButton';
-import {useDispatch} from 'react-redux';
-import {setUserData} from '../../../../Redux/reducers/AppReducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {setIsLoader, setUserData} from '../../../../Redux/reducers/AppReducer';
 import {Routes} from '../../../../Utils/Routes';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import AppImagePicker from '../../../Components/CustomModal/AppImagePicker';
 import {saveUserData} from '../../../../Utils/AsyncStorage';
+import {AppStrings} from '../../../../Utils/Strings';
+import {AppRootStore} from '../../../../Redux/store/AppStore';
+import LocationPickerModal from '../../../Components/CustomModal/LocationPickerModal';
+import PressableInput from '../../../Components/CustomInput/PressableInput';
+import {userSignupRequest} from '../../../../Network/Services/AuthServices';
+import LoadingImage from '../../../Components/LoadingImage';
+
 const SignUp = (props: ScreenProps) => {
   const dispatch = useDispatch();
+  const {isNetConnected, isPersisterUser} = useSelector(
+    (state: AppRootStore) => state.AppReducer,
+  );
   const [openImage, setOpenImage] = useState(false);
-  const [image, setImage] = useState<any>(null);
+  const [imgUrl, setImgUrl] = useState<string>('');
   const [compName, setCompName] = useState('');
-  const [compAddress, setCompAddress] = useState('');
   const [compRNumber, setRNumber] = useState('');
   const [compType, setCompType] = useState('');
   const [userName, setUserName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [cPassword, setCPassword] = useState('');
+  const [locationObj, setLocationObj] = useState<null | ILocation>(null);
+  const [showLocationModal, setShowLocationModal] = useState(false);
 
-  const compAddressRef = useRef();
   const compRNRef = useRef();
   const compTypeRef = useRef();
   const userNameRef = useRef();
+  const emailRef = useRef();
   const passwordRef = useRef();
   const cPAsswordRef = useRef();
 
   //error====>
   const [compNameError, setCompNameError] = useState('');
-  const [compAddressError, setCompAddressError] = useState('');
   const [compRNumberError, setCompRNumberError] = useState('');
   const [compTypeError, setCompTypeError] = useState('');
   const [userNameError, setUserNameError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+
+  const [isChecked, setIsChecked] = useState(false);
 
   const focusNextField = (inputRef: any) => {
     if (inputRef?.current) {
       inputRef?.current?.focus();
     }
+  };
+
+  const onRegisterPress = async () => {
+    if (
+      !email ||
+      !password ||
+      !cPassword ||
+      !compName ||
+      !compRNumber ||
+      !compType ||
+      !userName ||
+      !locationObj
+    ) {
+      Alert.alert('Error', AppStrings.Validation.fieldsEmptyError);
+      return;
+    }
+    if (CommonDataManager.getSharedInstance().hasNumber(compName)) {
+      Alert.alert('Error', 'Company name cannot contain numbers');
+      return;
+    }
+    if (!CommonDataManager.getSharedInstance().isEmailValid(email)) {
+      Alert.alert('Error', AppStrings.Validation.invalidEmailError);
+      return;
+    }
+    if (password.length < 8) {
+      Alert.alert('Error', 'Password should be at least 8 characters long');
+      return;
+    }
+    if (password !== cPassword) {
+      Alert.alert('Error', AppStrings.Validation.passwordNotMatchError);
+      return;
+    }
+    if (!isChecked) {
+      Alert.alert('Error', 'Please accept the terms and conditions first');
+      return;
+    }
+    if (!isNetConnected) {
+      Alert.alert('Error', AppStrings.Network.internetError);
+      return;
+    }
+    const paramsObj = {
+      userName,
+      email,
+      password,
+      companyName: compName,
+      companyRegNo: compRNumber,
+      companyType: compType,
+      companyLocation: locationObj,
+      companyLogo: imgUrl,
+    };
+    dispatch(setIsLoader(true));
+    await userSignupRequest(paramsObj, response => {
+      console.log('This is response => ', JSON.stringify(response));
+      dispatch(setIsLoader(false));
+      if (response) {
+        CommonDataManager.getSharedInstance().showPopUpWithOk(
+          'Success',
+          'User successfully registered',
+          () => {
+            dispatch(setUserData(response));
+            if (isPersisterUser) {
+              saveUserData(response);
+            }
+          },
+        );
+      } else {
+        console.log('User not registered');
+      }
+    }).catch(() => dispatch(setIsLoader(false)));
   };
 
   return (
@@ -77,22 +163,16 @@ const SignUp = (props: ScreenProps) => {
           style={styles.containerStyle}
           showsVerticalScrollIndicator={false}>
           <View style={{alignSelf: 'center'}}>
-            {image?.uri ? (
+            {imgUrl ? (
               <TouchableOpacity
                 activeOpacity={1}
-                style={styles.imageCont}
                 onPress={() => {
                   setOpenImage(true);
                 }}>
-                <Image
-                  source={
-                    image?.uri || image
-                      ? {
-                          uri: image?.uri,
-                        }
-                      : null
-                  }
-                  style={styles.imageCont}
+                <LoadingImage
+                  source={{uri: imgUrl}}
+                  viewStyle={styles.imageCont}
+                  resizeMode="cover"
                 />
               </TouchableOpacity>
             ) : (
@@ -102,13 +182,20 @@ const SignUp = (props: ScreenProps) => {
                 onPress={() => {
                   setOpenImage(true);
                 }}>
-                <Image source={AppImages.Auth.Camera} />
+                <Image
+                  source={AppImages.Auth.Camera}
+                  resizeMode="contain"
+                  style={{
+                    height: '30%',
+                    width: '30%',
+                  }}
+                />
               </TouchableOpacity>
             )}
             <Text style={styles.uploadTxt}>Upload Logo</Text>
           </View>
           <SimpleInput
-            onSubmitEditing={() => focusNextField(compAddressRef)}
+            onSubmitEditing={() => setShowLocationModal(true)}
             returnKeyType={'next'}
             placeHold={'Company Name'}
             container={styles.inputMainCont}
@@ -121,20 +208,11 @@ const SignUp = (props: ScreenProps) => {
             secureEntry={false}
             errorMsg={compNameError}
           />
-          <SimpleInput
-            ref={compAddressRef}
-            onSubmitEditing={() => focusNextField(compRNRef)}
-            returnKeyType={'next'}
-            placeHold={'Company address'}
+          <PressableInput
+            value={locationObj?.address}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
-            setValue={(txt: any) => {
-              setCompAddressError('');
-              setCompAddress(txt);
-            }}
-            value={compAddress}
-            secureEntry={false}
-            errorMsg={compAddressError}
+            onPress={() => setShowLocationModal(true)}
+            onClear={() => setLocationObj(null)}
           />
           <SimpleInput
             ref={compRNRef}
@@ -168,7 +246,7 @@ const SignUp = (props: ScreenProps) => {
           />
           <SimpleInput
             ref={userNameRef}
-            onSubmitEditing={() => focusNextField(passwordRef)}
+            onSubmitEditing={() => focusNextField(emailRef)}
             returnKeyType={'next'}
             placeHold={'Your Name'}
             container={styles.inputMainCont}
@@ -180,6 +258,22 @@ const SignUp = (props: ScreenProps) => {
             value={userName}
             secureEntry={false}
             errorMsg={userNameError}
+          />
+
+          <SimpleInput
+            ref={emailRef}
+            onSubmitEditing={() => focusNextField(passwordRef)}
+            returnKeyType={'next'}
+            placeHold={'Your Email'}
+            container={styles.inputMainCont}
+            textInputStyle={{width: normalized(270)}}
+            setValue={(txt: any) => {
+              setEmailError('');
+              setEmail(txt);
+            }}
+            value={email}
+            secureEntry={false}
+            errorMsg={emailError}
           />
 
           <SimpleInput
@@ -219,17 +313,27 @@ const SignUp = (props: ScreenProps) => {
             errorMsg={passwordError}
           />
           <View style={styles.termCont}>
-            <View style={styles.checkCont} />
+            <TouchableWithoutFeedback onPress={() => setIsChecked(!isChecked)}>
+              <View style={styles.checkCont}>
+                {isChecked && (
+                  <Image
+                    source={AppImages.Common.TickIconMini}
+                    resizeMode="contain"
+                    style={{
+                      height: normalized(12),
+                      width: normalized(12),
+                    }}
+                  />
+                )}
+              </View>
+            </TouchableWithoutFeedback>
             <Text style={styles.termsTxt}>
               Yes I agree to terms & conditions{' '}
             </Text>
           </View>
           <CustomFilledBtn
             label={'Create Account'}
-            onPressBtn={() => {
-              dispatch(setUserData({name: 'usama Malik'}));
-              saveUserData({name: 'usama Malik'});
-            }}
+            onPressBtn={onRegisterPress}
           />
           <Text style={styles.bottomTxt}>
             Already have an account?{' '}
@@ -248,18 +352,26 @@ const SignUp = (props: ScreenProps) => {
             onClose={() => {
               setOpenImage(false);
             }}
-            onImagesSelect={(obj: any) => {
-              let result =
-                CommonDataManager.getSharedInstance().makeImageObj(obj);
-              if (result?.uri) {
-                setImage(result);
-              }
+            onImageSelect={(url: string | null) => {
               setOpenImage(false);
+              if (url) {
+                setImgUrl(url);
+              }
             }}
-            selectedLimit={1}
           />
         ) : null}
       </KeyboardAvoidingView>
+      {showLocationModal && (
+        <LocationPickerModal
+          onSelectLocation={loc => {
+            setLocationObj(loc);
+            setTimeout(() => {
+              focusNextField(compRNRef);
+            }, 500);
+          }}
+          onClose={() => setShowLocationModal(false)}
+        />
+      )}
     </View>
   );
 };
@@ -309,10 +421,12 @@ const styles = StyleSheet.create({
   },
   checkCont: {
     borderRadius: normalized(5),
-    height: normalized(25),
-    width: normalized(25),
+    height: normalized(20),
+    width: normalized(20),
     borderWidth: 1,
     borderColor: '#E4DFDF',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   termsTxt: {
     fontSize: normalized(14),

@@ -16,10 +16,27 @@ import {
 } from 'react-native';
 import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
-import {useDispatch} from 'react-redux';
-import {setUserData} from '../../../../Redux/reducers/AppReducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {logoutRequest} from '../../../../Network/Services/AuthServices';
+import {AppRootStore} from '../../../../Redux/store/AppStore';
+import {
+  setIsLoader,
+  setIsPersisterUser,
+  setUserData,
+} from '../../../../Redux/reducers/AppReducer';
+import {saveUserData} from '../../../../Utils/AsyncStorage';
 const ProfileScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
+  const {userData} = useSelector((state: AppRootStore) => state.AppReducer);
+  const logoutClicked = async () => {
+    dispatch(setIsLoader(true));
+    dispatch(setUserData(null));
+    dispatch(setIsPersisterUser(false));
+    saveUserData(null);
+    await logoutRequest(userData?.userId).finally(() =>
+      dispatch(setIsLoader(false)),
+    );
+  };
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
@@ -32,11 +49,7 @@ const ProfileScreen = (props: ScreenProps) => {
           contentContainerStyle={styles.containerStyle}
           showsVerticalScrollIndicator={false}>
           <View style={styles.mainContainer}>
-            <Text
-              style={styles.dummyTxt}
-              onPress={() => {
-                dispatch(setUserData(null));
-              }}>
+            <Text style={styles.dummyTxt} onPress={logoutClicked}>
               Logout from here
             </Text>
           </View>

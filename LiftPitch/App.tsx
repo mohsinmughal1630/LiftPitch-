@@ -17,6 +17,7 @@ import AppContainer from './src/AppContainer';
 import {getUserData} from './src/Utils/AsyncStorage';
 import {setNetState, setUserData} from './src/Redux/reducers/AppReducer';
 import NetInfo from '@react-native-community/netinfo';
+import SplashScreen from 'react-native-splash-screen';
 const App = () => {
   const dispatch = useDispatch();
 
@@ -39,9 +40,9 @@ const App = () => {
 
   const onAppStart = async () => {
     await checkInternet();
-    // setTimeout(() => {
-    //   SplashScreen.hide();
-    // }, 2000);
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 2000);
   };
 
   const checkInternet = () => {

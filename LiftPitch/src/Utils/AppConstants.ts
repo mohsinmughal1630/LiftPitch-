@@ -1,7 +1,7 @@
 import {StackScreenProps} from '@react-navigation/stack';
-import {Dimensions, Platform, PixelRatio} from 'react-native';
+import {Dimensions, Platform, PixelRatio, StatusBar} from 'react-native';
 import moment from 'moment';
-import { AppStrings } from './Strings';
+import {AppStrings} from './Strings';
 export const platformVersion = Platform.Version;
 export type ScreenProps = StackScreenProps<any, any>;
 export const ScreenSize = Dimensions.get('screen');
@@ -22,11 +22,9 @@ export const bottomBarHeightConstant = hv(90);
 export const maxDescriptionLength = 60;
 export const maxImageSizeInBytes = 10 * 1024 * 1024; // 10MB
 export const mainBottomPadding = bottomBarHeightConstant + hv(10);
-  export const deviceHeight = Dimensions.get('window').height;
-  export const deviceHeightwithOutBar = Dimensions.get('window').height-normalized(70);
-
-
-
+export const deviceHeight = Dimensions.get('window').height;
+export const deviceHeightwithOutBar =
+  Dimensions.get('window').height - normalized(70);
 
 export const AppImages = {
   Auth: {
@@ -39,18 +37,17 @@ export const AppImages = {
     Password: require('../Ui/assets/images/Auth/Password.png'),
     eye: require('../Ui/assets/images/Auth/eye.png'),
     backIcon: require('../Ui/assets/images/Auth/backIcon.png'),
-    CameraPicker:require('../Ui/assets/images/Auth/CameraPicker.png'),
-    GalleryPicker:require('../Ui/assets/images/Auth/GalleryPicker.png'),
-
+    CameraPicker: require('../Ui/assets/images/Auth/CameraPicker.png'),
+    GalleryPicker: require('../Ui/assets/images/Auth/GalleryPicker.png'),
   },
-  bottomBar:{
-    Home:require('../Ui/assets/images/BottomBar/Home.png'),
-    followerIcon:require('../Ui/assets/images/BottomBar/followerIcon.png'), 
-    Message:require('../Ui/assets/images/BottomBar/Message.png'),  
-    PlusIcon:require('../Ui/assets/images/BottomBar/PlusIcon.png'),
-    Profile:require('../Ui/assets/images/BottomBar/Profile.png'),
+  bottomBar: {
+    Home: require('../Ui/assets/images/BottomBar/Home.png'),
+    followerIcon: require('../Ui/assets/images/BottomBar/followerIcon.png'),
+    Message: require('../Ui/assets/images/BottomBar/Message.png'),
+    PlusIcon: require('../Ui/assets/images/BottomBar/PlusIcon.png'),
+    Profile: require('../Ui/assets/images/BottomBar/Profile.png'),
   },
-    Chat: {
+  Chat: {
     SendIcon: require('../Ui/assets/images/Chat/SendIcon.png'),
     Voice: require('../Ui/assets/images/Chat/Voice.png'),
     Attachment: require('../Ui/assets/images/Chat/Attachment.png'),
@@ -68,11 +65,12 @@ export const AppImages = {
     PauseIcon: require('../Ui/assets/images/Videos/PauseIcon.png'),
     moreIcon: require('../Ui/assets/images/Videos/moreIcon.png'),
   },
-   Common: {
+  Common: {
     DropDownIcon: require('../Ui/assets/images/Common/DropDownIcon.png'),
     WarningIcon: require('../Ui/assets/images/Common/WarningIcon.png'),
     MorningIcon: require('../Ui/assets/images/Common/MorningIcon.png'),
     TickIcon: require('../Ui/assets/images/Common/TickIcon.png'),
+    TickIconMini: require('../Ui/assets/images/Common/tick.png'),
     MaximizeIcon: require('../Ui/assets/images/Common/MaximizeIcon.png'),
     MinimizeIcon: require('../Ui/assets/images/Common/MinimizeIcon.png'),
     FavouriteIcon: require('../Ui/assets/images/Common/FavouriteIcon.png'),
@@ -86,9 +84,9 @@ export const AppImages = {
     HeaderSearch: require('../Ui/assets/images/Common/HeaderSearch.png'),
     DeliveryIcon: require('../Ui/assets/images/Common/DeliveryIcon.png'),
     DeliveryiconLarge: require('../Ui/assets/images/Common/DeliveryiconLarge.png'),
-    Send:require('../Ui/assets/images/Common/Send.png'),
-    menuIcon:require('../Ui/assets/images/Common/menuIcon.png'),
-    LeftArrowIcon:require('../Ui/assets/images/Common/LeftArrowIcon.png'),
+    Send: require('../Ui/assets/images/Common/Send.png'),
+    menuIcon: require('../Ui/assets/images/Common/menuIcon.png'),
+    LeftArrowIcon: require('../Ui/assets/images/Common/LeftArrowIcon.png'),
   },
 };
 export const AppFonts = {};
@@ -105,6 +103,11 @@ export const AppColors = {
     darkLevel8: '#020101',
   },
   primaryGreen: '#22A081',
+  primaryPurple: '#502165',
+  gradient: {
+    dark: '#0f0e24',
+    light: '#70276c',
+  },
   transparentColor: 'rgba(0,0,0,0.5)',
   transparentColorLight: 'rgba(0,0,0,0.3)',
   white: {
@@ -116,7 +119,7 @@ export const AppColors = {
   black: {
     black: '#000000',
     darkDeep: '#090b0e',
-    light:'#9F9F9F',
+    light: '#9F9F9F',
     lightBlack: '#767D90',
     shadow: 'rgba(0,0,0, 0.7)',
     simpleLight: '#333333',
@@ -125,10 +128,10 @@ export const AppColors = {
     brown: '#333333',
   },
   grey: {
-    towerGrey:'#afb8bb',
+    towerGrey: '#afb8bb',
     bgGrey: '#BDBDBD',
     greyLevel1: '#E8E8E8',
-     grey: '#E4E7EB',
+    grey: '#E4E7EB',
     switchGrey: '#E4E4E4',
     dimGrey: '#ACACAC',
     gray: 'rgba(118, 125, 144, 1)',
@@ -136,31 +139,31 @@ export const AppColors = {
     grayLight: 'rgba(226, 227, 228, 1)',
     grayExtraLight: 'rgba(234, 236, 237, 1)',
     midGray: 'rgba(146, 148, 151, 1)',
-    simple:'#DDDDDD'
+    simple: '#DDDDDD',
+    placeholderGrey: '#c5c5c7',
   },
   red: {
     warning: '#E35252',
-    mainColor:'#7E2A70'
+    mainColor: '#7E2A70',
   },
   green: {
     primaryLight: '#76E2C6',
     primaryLightButton: '#57dbba',
   },
-    blue: {
+  blue: {
     lightBlue: '#5db9ce',
-    seeMoreBlue: '#17444f'
-  }
+    seeMoreBlue: '#17444f',
+  },
 };
-
 
 export const BottomBarList = [
   {
     icon: AppImages.bottomBar.Home,
-    title:AppStrings.bottomBar.home
+    title: AppStrings.bottomBar.home,
   },
   {
     icon: AppImages.bottomBar.followerIcon,
-    title: AppStrings.bottomBar.followers
+    title: AppStrings.bottomBar.followers,
   },
   {
     icon: AppImages.bottomBar.PlusIcon,
@@ -172,7 +175,7 @@ export const BottomBarList = [
   },
   {
     icon: AppImages.bottomBar.Profile,
-    title:AppStrings.bottomBar.profile,
+    title: AppStrings.bottomBar.profile,
   },
 ];
 export const imagePickerConstants = [
@@ -437,35 +440,29 @@ export const convertUtcToLocal = (dateString: any) => {
   return moment(parsedDate).local();
 };
 
-
-
-
-
-
-
 ///////////Dummy Data for video Player
 
-
-
 export type singleVideoItemType = {
-  id: number,
-  storeName: string,
-  userName: string,
-  productLink: string,
-  productDescription: string,
-  storeLink: string,
-  videoUrl: string
-}
-export const vidoesListConstant:Array<singleVideoItemType> = [
+  id: number;
+  storeName: string;
+  userName: string;
+  productLink: string;
+  productDescription: string;
+  storeLink: string;
+  videoUrl: string;
+};
+export const vidoesListConstant: Array<singleVideoItemType> = [
   {
     id: 1,
     storeName: 'Decent Store',
     userName: 'Malik Ahmad',
     productLink: 'www.productLink.com',
-    productDescription: 'Big Buck Bunny tells the story of a giant rabbit with a heart bigger than himself. When one sunny day three rodents rudely harass him.',
+    productDescription:
+      'Big Buck Bunny tells the story of a giant rabbit with a heart bigger than himself. When one sunny day three rodents rudely harass him.',
     storeLink: 'www.storeLink.com',
     // videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-winter-fashion-cold-looking-woman-concept-video-39874-large.mp4'
-    videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4'
+    videoUrl:
+      'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4',
   },
   {
     id: 2,
@@ -475,17 +472,20 @@ export const vidoesListConstant:Array<singleVideoItemType> = [
     productDescription: 'The first Blender Open Movie from 2006',
     storeLink: 'www.storeLink.com',
     // videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-pov-of-a-basket-of-easter-eggs-48595-large.mp4',
-    videoUrl: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    videoUrl:
+      'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
   },
   {
     id: 3,
     storeName: 'HBO',
     userName: 'Zohair Khan',
     productLink: 'www.productLink.com',
-    productDescription: 'HBO GO now works with Chromecast -- the easiest way to enjoy online video on your TV. For when you want to settle into your Iron Throne to watch the latest episodes. For $35.\nLearn how to use Chromecast with HBO GO and more at google.com/chromecast.',
+    productDescription:
+      'HBO GO now works with Chromecast -- the easiest way to enjoy online video on your TV. For when you want to settle into your Iron Throne to watch the latest episodes. For $35.\nLearn how to use Chromecast with HBO GO and more at google.com/chromecast.',
     storeLink: 'www.storeLink.com',
     // videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-little-girl-eating-easter-egg-chocolate-in-the-garden-48603-large.mp4',
-    videoUrl: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_10mb.mp4',
+    videoUrl:
+      'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_10mb.mp4',
   },
   {
     id: 4,
@@ -495,53 +495,61 @@ export const vidoesListConstant:Array<singleVideoItemType> = [
     productDescription: `Introducing Chromecast. The easiest way to enjoy online video and music on your TV—for when Batman's escapes aren't quite big enough. For $35.`,
     storeLink: 'www.storeLink.com',
     // videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4',
-    videoUrl: 'https://sample-videos.com/video123/mp4/480/big_buck_bunny_480p_5mb.mp4',
+    videoUrl:
+      'https://sample-videos.com/video123/mp4/480/big_buck_bunny_480p_5mb.mp4',
   },
   {
     id: 5,
     storeName: 'Tier Chromecast',
     userName: 'Vision Pro',
     productLink: 'www.productLink.com',
-    productDescription: 'Introducing Chromecast. The easiest way to enjoy online video and music on your TV. For $35.  Find out more at google.com/chromecast.',
+    productDescription:
+      'Introducing Chromecast. The easiest way to enjoy online video and music on your TV. For $35.  Find out more at google.com/chromecast.',
     storeLink: 'www.storeLink.com',
     // videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-hand-selecting-bowling-balls-from-the-tray-49116-large.mp4',
-    videoUrl: 'https://sample-videos.com/video123/mp4/360/big_buck_bunny_360p_5mb.mp4',
+    videoUrl:
+      'https://sample-videos.com/video123/mp4/360/big_buck_bunny_360p_5mb.mp4',
   },
-]
+];
 
 export const commentsConstants = [
   {
     id: 1,
     name: 'Kabir Khan',
-    image: 'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
+    image:
+      'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
     date: new Date().setHours(0),
     message: 'This is a simple comment. Its for simple testing purposes. ',
   },
   {
     id: 2,
     name: 'Salman Khan',
-    image: 'https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_1280.jpg',
+    image:
+      'https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_1280.jpg',
     date: new Date().setHours(1),
     message: 'This is a simple comment. Its for simple testing purposes. ',
   },
   {
     id: 3,
     name: 'Kabir Khan',
-    image: 'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
+    image:
+      'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
     date: new Date().setHours(2),
     message: 'This is a simple comment. Its for simple testing purposes. ',
   },
   {
     id: 4,
     name: 'Salman Khan',
-    image: 'https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_1280.jpg',
+    image:
+      'https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_1280.jpg',
     date: new Date().setHours(3),
     message: 'This is a simple comment. Its for simple testing purposes. ',
   },
   {
     id: 5,
     name: 'Kabir Khan',
-    image: 'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
+    image:
+      'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
     date: new Date().setHours(4),
     message: 'This is a simple comment. Its for simple testing purposes. ',
   },
@@ -550,26 +558,72 @@ export const commentsConstants = [
     name: 'Salman Khan',
     image: null,
     date: new Date().setHours(6),
-    message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ',
+    message:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ',
   },
-]
+];
 
 export const shareOptionsList = [
- 
-  
   {
     id: 3,
     type: 'comment',
-    image: AppImages.Videos.Comment
+    image: AppImages.Videos.Comment,
   },
   {
     id: 2,
     type: 'share',
-    image: AppImages.Videos.Share
+    image: AppImages.Videos.Share,
   },
   {
     id: 4,
     type: 'more',
-    image: AppImages.Videos.moreIcon
+    image: AppImages.Videos.moreIcon,
+  },
+];
+
+export interface ILocation {
+  address: string;
+  lat: number;
+  lng: number;
+}
+
+// export const calculateWindowHeight = () => {
+//   let statusHeight = StatusBar?.currentHeight ? StatusBar.currentHeight : 0;
+//   let diff = Dimensions.get('screen').height - Dimensions.get('window').height;
+//   const isPoco = Platform?.constants?.Brand?.toLowerCase() == 'poco';
+//   const isRedmi = Platform?.constants?.Brand?.toLowerCase() == 'redmi';
+//   if (diff <= 50 && !isPoco && !isRedmi) {
+//     return Dimensions.get('window').height - (diff - statusHeight - 3);
+//   }
+//   return Dimensions.get('window').height;
+// };
+export const calculateWindowHeight = () => {
+  const diff =
+    Dimensions.get('screen').height - Dimensions.get('window').height;
+  const isPoco = Platform?.constants?.Brand?.toLowerCase() == 'poco';
+  const isRedmi = Platform?.constants?.Brand?.toLowerCase() == 'redmi';
+  const statusHeight = StatusBar?.currentHeight || 0;
+  return Dimensions.get('screen').height - statusHeight;
+};
+
+export const makeid = (length: number) => {
+  var result = '';
+  var characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
-]
+  return result;
+};
+
+export const videoHeaderOptions = [
+  {
+    id: 1,
+    name: 'Network',
+  },
+  {
+    id: 2,
+    name: 'For Business',
+  },
+];

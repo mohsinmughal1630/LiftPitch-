@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: normalized(20),
     flexDirection: 'row',
+    zIndex: 2,
   },
   linkText: {
     color: AppColors.white.white,

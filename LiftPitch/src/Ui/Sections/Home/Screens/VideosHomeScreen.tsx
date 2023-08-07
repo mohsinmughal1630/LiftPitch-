@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {FlatList, StatusBar, StyleSheet, View} from 'react-native';
 import SingleVideoComponent from '../Components/SingleVideoComponent';
 import {
   ScreenProps,
@@ -10,6 +10,7 @@ import VideoHeaderSection from '../Components/VideoHeaderSection';
 
 const VideosHomeScreen = (props: ScreenProps) => {
   const [selectedTab, setSelectedTab] = useState(1);
+  const [searchTxt, setSearchTxt] = useState('');
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const updateCurrentSlideIndex = (e: any) => {
     const contentOffsetY = e.nativeEvent.contentOffset.y;
@@ -18,10 +19,12 @@ const VideosHomeScreen = (props: ScreenProps) => {
   };
   return (
     <View style={styles.mainContainer}>
+      <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
       <VideoHeaderSection
         selectedTab={selectedTab}
-        atSelectTab={(val: any) => {}}
-        atSearchBtnPress={() => {}}
+        onTabSelect={setSelectedTab}
+        searchTxt={searchTxt}
+        onSearchChange={setSearchTxt}
       />
       <FlatList
         data={vidoesListConstant}

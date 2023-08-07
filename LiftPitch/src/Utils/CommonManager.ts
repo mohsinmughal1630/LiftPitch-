@@ -1,18 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  Alert,
-  Linking,
-  Platform,
-} from 'react-native';
-import {
-  normalized,
-  ScreenProps,
-} from './AppConstants';
-import {
-  AppStrings,
-  AsyncKeyStrings,
-} from './Strings';
-import { setUserData } from '../Redux/reducers/AppReducer';
+import {Alert, Linking, Platform} from 'react-native';
+import {normalized, ScreenProps} from './AppConstants';
+import {AppStrings, AsyncKeyStrings} from './Strings';
+import {setUserData} from '../Redux/reducers/AppReducer';
 
 export default class CommonDataManager {
   static shared: CommonDataManager;
@@ -197,13 +187,6 @@ export default class CommonDataManager {
     setUser(users);
   };
 
- 
-  logoutUser = async () => {
-    await AsyncStorage.removeItem(AsyncKeyStrings.Auth.userToken);
-    await AsyncStorage.removeItem(AsyncKeyStrings.Auth.userdata);
-    this.dispatch(setUserData(null));
-  };
-
   isUpper(str: string) {
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!()@#$%&?’*+,-./:";<=>^_`{|}~])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -243,6 +226,10 @@ export default class CommonDataManager {
     }
   };
 
+  hasNumber = (str: string) => {
+    const regex = /\d/;
+    return regex.test(str);
+  };
 
   isValidUsNumber = (number: string) => {
     const secondRegex = /^(1-)?\d{3}-\d{3}-\d{4}$/;
@@ -309,51 +296,6 @@ export default class CommonDataManager {
       routes: [routeData],
     });
   };
-  getUserData = async () => {
-    try {
-      let user = await AsyncStorage.getItem(AsyncKeyStrings.Auth.userdata);
-      if (user) {
-        return JSON.parse(user);
-      } else {
-        return null;
-      }
-    } catch (e) {
-      console.log('Error ', e);
-      return null;
-    }
-  };
-  saveUserData = async (data: any) => {
-    try {
-      await AsyncStorage.setItem(
-        AsyncKeyStrings.Auth.userdata,
-        JSON.stringify(data),
-      );
-    } catch (e) {
-      console.log('Error storing userdata', e);
-    }
-  };
-  getUserToken = async () => {
-    try {
-      let t = await AsyncStorage.getItem(AsyncKeyStrings.Auth.userToken);
-      if (t) {
-        return t;
-      } else {
-        return null;
-      }
-    } catch (e) {
-      console.log('Error', e);
-      return null;
-    }
-  };
-  saveUserToken = async (token: string) => {
-    try {
-      await AsyncStorage.setItem(AsyncKeyStrings.Auth.userToken, token);
-    } catch (e) {
-      console.log('Error storing usertoken', e);
-    }
-  };
-
- 
 
   removePlusFromNumber = (str: any) => {
     if (!str) {
@@ -377,13 +319,10 @@ export default class CommonDataManager {
     }
   };
 
- 
-
   getUniqueId = () => {
     return Math.random().toString(36).substr(2, 9);
   };
 
-  
   getFirstNameCharacters = (name: string) => {
     if (!name) {
       return '';
@@ -432,8 +371,6 @@ export default class CommonDataManager {
     }
   };
 
-  
-
   getCapitalizedNameInitials = (name: string) => {
     if (!name) {
       return '-';
@@ -453,7 +390,6 @@ export default class CommonDataManager {
     return this.getCapitalizedNameInitials(fullname);
   };
 
- 
   makeImageObj = (image: any) => {
     let obj: any = {};
     if (image) {
@@ -477,5 +413,4 @@ export default class CommonDataManager {
     }
     return obj;
   };
-
 }

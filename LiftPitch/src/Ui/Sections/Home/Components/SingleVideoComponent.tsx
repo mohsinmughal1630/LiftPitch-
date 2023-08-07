@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
 
-import {StyleSheet, View} from 'react-native';
+import {Platform, StyleSheet, View} from 'react-native';
 import {
   AppColors,
+  calculateWindowHeight,
   commentsConstants,
   deviceHeight,
   normalized,
@@ -65,7 +66,10 @@ export default SingleVideoComponent;
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: AppColors.black.black,
-    height: deviceHeight - normalized(80),
+    height:
+      Platform.OS == 'android'
+        ? calculateWindowHeight() - normalized(80)
+        : deviceHeight - normalized(80),
   },
   innerContainer: {
     flex: 1,

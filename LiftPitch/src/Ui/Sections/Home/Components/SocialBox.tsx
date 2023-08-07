@@ -36,7 +36,8 @@ const SocialBox = (props: Props) => {
     return {
       transform: [
         {
-          rotateZ: `${rotationDegree.value}deg`,
+          // rotateZ: `${rotationDegree.value}deg`,
+          rotateZ: `${180}deg`,
         },
       ],
     };
@@ -49,6 +50,14 @@ const SocialBox = (props: Props) => {
   });
   return (
     <View style={styles.mainStyles}>
+      <TouchableWithoutFeedback onPress={toggleOptions}>
+        <View style={styles.mainDropDownBox}>
+          <Animated.Image
+            source={AppImages.Common.DropDownIcon}
+            resizeMode="contain"
+            style={[styles.mainDropDownImg, optionsStyles]}></Animated.Image>
+        </View>
+      </TouchableWithoutFeedback>
       <Animated.View style={[styles.listBox, optionsHeightStyles]}>
         {shareOptionsList.map((item, index) => {
           return (
@@ -66,14 +75,6 @@ const SocialBox = (props: Props) => {
           );
         })}
       </Animated.View>
-      <TouchableWithoutFeedback onPress={toggleOptions}>
-        <View style={styles.mainDropDownBox}>
-          <Animated.Image
-            source={AppImages.Common.DropDownIcon}
-            resizeMode="contain"
-            style={[styles.mainDropDownImg, optionsStyles]}></Animated.Image>
-        </View>
-      </TouchableWithoutFeedback>
     </View>
   );
 };
