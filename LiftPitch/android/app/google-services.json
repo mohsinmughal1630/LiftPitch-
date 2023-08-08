@@ -29,6 +29,13 @@
             {
               "client_id": "959745604605-863co3a05bgf69rbjgo9q2km031g4r9t.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "959745604605-c2p6rl2th0mku3d6uvuembfdm8r0lode.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.liftpitch"
+              }
             }
           ]
         }

@@ -23,9 +23,14 @@
 		680D1A3D6C4A4A57AED740B1 /* Poppins-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 02166C204D6A418BADBE6825 /* Poppins-BoldItalic.ttf */; };
 		788F38A4664243418B7D0D62 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2A50D05FD17445A390DFCACA /* Poppins-ThinItalic.ttf */; };
 		79704149E0974048A1F9252C /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D3CE2451BB9436E9B27AB7F /* Poppins-Regular.ttf */; };
+		7CD994662A81740000D73892 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD994622A8173FF00D73892 /* Bolts.framework */; };
+		7CD994672A81740000D73892 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD994632A81740000D73892 /* FBSDKShareKit.framework */; };
+		7CD994682A81740000D73892 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD994642A81740000D73892 /* FBSDKCoreKit.framework */; };
+		7CD994692A81740000D73892 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD994652A81740000D73892 /* FBSDKLoginKit.framework */; };
+		7CF131372A82B38C00F83690 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7CF131362A82B38C00F83690 /* GoogleService-Info.plist */; };
+		7CFAE48C2A82AF7500DC10A0 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFAE48B2A82AF7500DC10A0 /* File.swift */; };
 		7EF68E3733C33B6898317E18 /* libPods-Project-ProjectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFE59519B596E51CEFDCCC0 /* libPods-Project-ProjectTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		843E19A42A7FBF95005454B8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 843E19A32A7FBF95005454B8 /* GoogleService-Info.plist */; };
 		84BB42192A5C34E2003A354E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84BB42182A5C34E2003A354E /* StoreKit.framework */; };
 		C7DD0E334EA942EE84CD8B8D /* Poppins-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 48FC3D4469DD4ADE800D17C9 /* Poppins-ExtraLight.ttf */; };
 		C9A48740D895446C9C796B02 /* Poppins-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B59680E81EE1479284E96893 /* Poppins-Black.ttf */; };
@@ -69,8 +74,14 @@
 		6423831EA8574132BED9D8CC /* libPods-Project.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Project.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66EDC090C3434C879A41CF2E /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../src/Ui/assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		6C97AB639B58BBB4B15BBE30 /* Pods-Project-ProjectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Project-ProjectTests.debug.xcconfig"; path = "Target Support Files/Pods-Project-ProjectTests/Pods-Project-ProjectTests.debug.xcconfig"; sourceTree = "<group>"; };
+		7CD994622A8173FF00D73892 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = "../../../../../../Downloads/facebook-ios-sdk-current/Bolts.framework"; sourceTree = "<group>"; };
+		7CD994632A81740000D73892 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = "../../../../../../Downloads/facebook-ios-sdk-current/FBSDKShareKit.framework"; sourceTree = "<group>"; };
+		7CD994642A81740000D73892 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../../../../../Downloads/facebook-ios-sdk-current/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
+		7CD994652A81740000D73892 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "../../../../../../Downloads/facebook-ios-sdk-current/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
+		7CF131362A82B38C00F83690 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7CFAE48A2A82AF7400DC10A0 /* Project-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Project-Bridging-Header.h"; sourceTree = "<group>"; };
+		7CFAE48B2A82AF7500DC10A0 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Project/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		843E19A32A7FBF95005454B8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		84BB42182A5C34E2003A354E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		8E20FD1DCADF44189CB77A16 /* Poppins-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-MediumItalic.ttf"; path = "../src/Ui/assets/fonts/Poppins-MediumItalic.ttf"; sourceTree = "<group>"; };
 		AA1B3C5E9FAC4D2E90A8E441 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../src/Ui/assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
@@ -101,6 +112,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CD994682A81740000D73892 /* FBSDKCoreKit.framework in Frameworks */,
+				7CD994672A81740000D73892 /* FBSDKShareKit.framework in Frameworks */,
+				7CD994692A81740000D73892 /* FBSDKLoginKit.framework in Frameworks */,
+				7CD994662A81740000D73892 /* Bolts.framework in Frameworks */,
 				6172F2D35A4C3AA820D92908 /* libPods-Project.a in Frameworks */,
 				84BB42192A5C34E2003A354E /* StoreKit.framework in Frameworks */,
 			);
@@ -144,6 +159,10 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7CD994622A8173FF00D73892 /* Bolts.framework */,
+				7CD994642A81740000D73892 /* FBSDKCoreKit.framework */,
+				7CD994652A81740000D73892 /* FBSDKLoginKit.framework */,
+				7CD994632A81740000D73892 /* FBSDKShareKit.framework */,
 				84BB42182A5C34E2003A354E /* StoreKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				6423831EA8574132BED9D8CC /* libPods-Project.a */,
@@ -162,7 +181,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				843E19A32A7FBF95005454B8 /* GoogleService-Info.plist */,
+				7CF131362A82B38C00F83690 /* GoogleService-Info.plist */,
+				7CFAE48B2A82AF7500DC10A0 /* File.swift */,
 				13B07FAE1A68108700A75B9A /* Project */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* ProjectTests */,
@@ -170,6 +190,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				E233CBF5F47BEE60B243DCF8 /* Pods */,
 				B4B532E9EFE14D2FB523C03D /* Resources */,
+				7CFAE48A2A82AF7400DC10A0 /* Project-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -281,7 +302,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1420;
 					};
 				};
 			};
@@ -336,7 +357,7 @@
 				3026B81058174F1A9C6CAE51 /* Poppins-SemiBoldItalic.ttf in Resources */,
 				F0F4CBF1370A4FF7B3506B96 /* Poppins-Thin.ttf in Resources */,
 				788F38A4664243418B7D0D62 /* Poppins-ThinItalic.ttf in Resources */,
-				843E19A42A7FBF95005454B8 /* GoogleService-Info.plist in Resources */,
+				7CF131372A82B38C00F83690 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -517,6 +538,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				7CFAE48C2A82AF7500DC10A0 /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -536,6 +558,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6C97AB639B58BBB4B15BBE30 /* Pods-Project-ProjectTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -564,6 +587,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1D0AE47A65C8663E3B452821 /* Pods-Project-ProjectTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -599,6 +623,7 @@
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = M8Z867B48Y;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
@@ -619,6 +644,7 @@
 				PRODUCT_NAME = Project;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = ContactAppDevProfile;
+				SWIFT_OBJC_BRIDGING_HEADER = "Project-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -638,6 +664,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = M8Z867B48Y;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/LinkingIOS",
@@ -658,6 +685,7 @@
 				PRODUCT_NAME = Project;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = ContactAppAdhocProfile;
+				SWIFT_OBJC_BRIDGING_HEADER = "Project-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

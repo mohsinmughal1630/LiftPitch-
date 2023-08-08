@@ -20,49 +20,26 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>com.holguinmedia.contactapp</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.540778185387-4rijujqnue1tlra06s4to5hhicgrpds9</string>
-				<string>fb1263530301266635</string>
+				<string>com.googleusercontent.apps.959745604605-c2p6rl2th0mku3d6uvuembfdm8r0lode</string>
 			</array>
 		</dict>
 	</array>
-	<key>CFBundleVersion</key>
-	<string>1</string>
 	<key>FacebookAppID</key>
-	<string>1263530301266635</string>
+	<string>1693334904423187</string>
 	<key>FacebookClientToken</key>
-	<string>44029df90ee763f1e7e20bc938a85b02</string>
+	<string>0d762b5ec885b6bd82258fccb2beda22</string>
 	<key>FacebookDisplayName</key>
 	<string>LiftPitch</string>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NFCApp</key>
-	<string>APP-NAME</string>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-		<key>NSExceptionDomains</key>
-		<dict>
-			<key>yourdomain.com</key>
-			<dict>
-				<key>NSIncludesSubdomains</key>
-				<true/>
-				<key>NSThirdPartyExceptionRequiresForwardSecrecy</key>
-				<false/>
-			</dict>
-		</dict>
-	</dict>
+
+
 	<key>NSCameraUsageDescription</key>
 	<string>This app requires to have camera permission.</string>
 	<key>NSContactsUsageDescription</key>
@@ -102,11 +79,7 @@
 		<string>Poppins-Thin.ttf</string>
 		<string>Poppins-ThinItalic.ttf</string>
 	</array>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>fetch</string>
-		<string>remote-notification</string>
-	</array>
+	
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -119,10 +92,6 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
-	<array>
-		<string>D2760000850100</string>
-		<string>D2760000850101</string>
-	</array>
+
 </dict>
 </plist>

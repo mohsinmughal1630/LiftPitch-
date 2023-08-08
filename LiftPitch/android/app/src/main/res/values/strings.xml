@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">LiftPitch</string>
-    <string name="facebook_app_id">1263530301266635</string>
-    <string name="fb_login_protocol_scheme">fb1263530301266635</string>
+
+    //previous FaceBook Login:
+    <!-- <string name="facebook_app_id">1263530301266635</string>
+    <string name="fb_login_protocol_scheme">fb1263530301266635</string> -->
+
+//new FaceBook Login:
+    <string name="facebook_app_id">1693334904423187</string>
+    <string name="fb_login_protocol_scheme">fb1693334904423187</string>
+    <string name="facebook_client_token">0d762b5ec885b6bd82258fccb2beda22</string>
+
 </resources>

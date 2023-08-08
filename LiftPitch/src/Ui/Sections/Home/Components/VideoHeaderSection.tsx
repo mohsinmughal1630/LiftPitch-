@@ -13,6 +13,7 @@ import {SafeAreaView} from 'react-native';
 import {
   AppColors,
   AppImages,
+  hv,
   normalized,
   videoHeaderOptions,
 } from '../../../../Utils/AppConstants';
@@ -43,7 +44,8 @@ const VideoHeaderSection = (props: Props) => {
               value={props.searchTxt}
               onChangeText={props.onSearchChange}
               style={{
-                height: '90%',
+                // height: '90%',
+                height: hv(55),
                 backgroundColor: AppColors.white.white,
                 borderRadius: 30,
                 width: '70%',

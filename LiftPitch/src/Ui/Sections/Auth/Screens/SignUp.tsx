@@ -25,7 +25,11 @@ import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import SimpleInput from '../../../Components/CustomInput/SimpleInput';
 import CustomFilledBtn from '../../../Components/CustomButtom/CustomButton';
 import {useDispatch, useSelector} from 'react-redux';
-import {setIsLoader, setUserData} from '../../../../Redux/reducers/AppReducer';
+import {
+  setIsAlertShow,
+  setIsLoader,
+  setUserData,
+} from '../../../../Redux/reducers/AppReducer';
 import {Routes} from '../../../../Utils/Routes';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import AppImagePicker from '../../../Components/CustomModal/AppImagePicker';
@@ -78,41 +82,134 @@ const SignUp = (props: ScreenProps) => {
   };
 
   const onRegisterPress = async () => {
-    if (
-      !email ||
-      !password ||
-      !cPassword ||
-      !compName ||
-      !compRNumber ||
-      !compType ||
-      !userName ||
-      !locationObj
-    ) {
-      Alert.alert('Error', AppStrings.Validation.fieldsEmptyError);
+    if (!imgUrl) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please select your profile Picture',
+        }),
+      );
+      // Alert.alert('Error', 'Please select your profile Picture');
+      return;
+    }
+    if (!compName) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please enter Company Name',
+        }),
+      );
+      // Alert.alert('Error', 'Please enter Company Name');
       return;
     }
     if (CommonDataManager.getSharedInstance().hasNumber(compName)) {
-      Alert.alert('Error', 'Company name cannot contain numbers');
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Company name cannot contain numbers',
+        }),
+      );
+      // Alert.alert('Error', 'Company name cannot contain numbers');
+      return;
+    }
+    if (!locationObj?.address) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please select location',
+        }),
+      );
+      // Alert.alert('Error', 'Please select location');
+      return;
+    }
+    if (!compRNumber) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please enter Company Number',
+        }),
+      );
+      // Alert.alert('Error', 'Please enter Company Number');
+      return;
+    }
+    if (!compType) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please select Business Type',
+        }),
+      );
+      // Alert.alert('Error', 'Please select Business Type');
+      return;
+    }
+    if (!userName) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please enter username',
+        }),
+      );
+      // Alert.alert('Error', 'Please enter username');
+      return;
+    }
+    if (!email) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please enter Email',
+        }),
+      );
+      // Alert.alert('Error', 'Please enter an Email');
       return;
     }
     if (!CommonDataManager.getSharedInstance().isEmailValid(email)) {
-      Alert.alert('Error', AppStrings.Validation.invalidEmailError);
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Validation.invalidEmailError,
+        }),
+      );
+      // Alert.alert('Error', AppStrings.Validation.invalidEmailError);
       return;
     }
     if (password.length < 8) {
-      Alert.alert('Error', 'Password should be at least 8 characters long');
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Password should be at least 8 characters long',
+        }),
+      );
+      // Alert.alert('Error', 'Password should be at least 8 characters long');
       return;
     }
     if (password !== cPassword) {
-      Alert.alert('Error', AppStrings.Validation.passwordNotMatchError);
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Validation.passwordNotMatchError,
+        }),
+      );
+      // Alert.alert('Error', AppStrings.Validation.passwordNotMatchError);
       return;
     }
     if (!isChecked) {
-      Alert.alert('Error', 'Please accept the terms and conditions first');
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please accept the terms and conditions first',
+        }),
+      );
+      // Alert.alert('Error', 'Please accept the terms and conditions first');
       return;
     }
     if (!isNetConnected) {
-      Alert.alert('Error', AppStrings.Network.internetError);
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.internetError,
+        }),
+      );
+      // Alert.alert('Error', AppStrings.Network.internetError);
       return;
     }
     const paramsObj = {
@@ -127,21 +224,29 @@ const SignUp = (props: ScreenProps) => {
     };
     dispatch(setIsLoader(true));
     await userSignupRequest(paramsObj, response => {
-      console.log('This is response => ', JSON.stringify(response));
       dispatch(setIsLoader(false));
-      if (response) {
+      if (response?.status) {
         CommonDataManager.getSharedInstance().showPopUpWithOk(
           'Success',
           'User successfully registered',
           () => {
-            dispatch(setUserData(response));
+            dispatch(setUserData(response?.data));
             if (isPersisterUser) {
-              saveUserData(response);
+              saveUserData(response?.data);
             }
           },
         );
       } else {
-        console.log('User not registered');
+        let errorMessage = response?.message
+          ? response?.message
+          : 'Something went wrong';
+        dispatch(
+          setIsAlertShow({
+            value: true,
+            message: errorMessage,
+          }),
+        );
+        // Alert.alert('Error', errorMessage);
       }
     }).catch(() => dispatch(setIsLoader(false)));
   };

@@ -18,10 +18,15 @@ import {getUserData} from './src/Utils/AsyncStorage';
 import {setNetState, setUserData} from './src/Redux/reducers/AppReducer';
 import NetInfo from '@react-native-community/netinfo';
 import SplashScreen from 'react-native-splash-screen';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '959745604605-c2p6rl2th0mku3d6uvuembfdm8r0lode.apps.googleusercontent.com',
+    });
     fetchUser();
     onAppStart();
   }, []);
@@ -46,7 +51,7 @@ const App = () => {
   };
 
   const checkInternet = () => {
-    NetInfo.addEventListener(state => {
+    NetInfo.addEventListener((state: any) => {
       dispatch(setNetState(state.isConnected));
     });
   };
