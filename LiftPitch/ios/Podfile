@@ -26,7 +26,7 @@ target 'Project' do
   )
 
 #   Pods for test_google_signin
-  pod 'GoogleSignIn', '~> 6.1.0'
+  pod 'GoogleSignIn', '~> 5.0.0'
 
   target 'ProjectTests' do
     inherit! :complete
