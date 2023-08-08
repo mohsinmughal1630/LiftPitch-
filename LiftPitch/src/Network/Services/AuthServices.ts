@@ -35,27 +35,27 @@ export const userSignupRequest = async (
               ...userInput,
               userId: userId,
             };
-            getResponse(loginObj);
+            getResponse({status: true, data: loginObj});
           })
           .catch(error => {
             console.log('Error at adding user ', error);
-            getResponse(null);
+            getResponse({status: false, message: ''});
           });
       })
       .catch(error => {
+        let errorMsg = '';
         if (error.code === 'auth/email-already-in-use') {
-          Alert.alert('Error', AppStrings.Network.emailAlreadyUse);
+          errorMsg = AppStrings.Network.emailAlreadyUse;
         } else if (error.code === 'auth/invalid-email') {
-          Alert.alert('Error', AppStrings.Network.invalidEmail);
+          errorMsg = AppStrings.Network.invalidEmail;
         } else if (error.code === 'auth/user-not-found') {
-          Alert.alert('Error', AppStrings.Network.userNotFound);
+          errorMsg = AppStrings.Network.userNotFound;
         }
-        console.error(error);
-        getResponse(null);
+        getResponse({status: false, message: errorMsg});
       });
   } catch (e) {
     console.log(e);
-    getResponse(null);
+    getResponse({status: false, message: e});
   }
 };
 
@@ -77,26 +77,23 @@ export const loginRequest = async (
                 ...doc.data(),
                 userId: doc.id,
               };
-              console.log('login user is', loginObj);
-              // const tk = await getFirebaseTokenRequest();
-              // await setFCMTokenFirst(userRole, doc.id, tk);
-              complete(loginObj);
+              complete({status: true, data: loginObj});
             });
           })
           .catch(error => {
             console.log('Error while getting data', error);
-            complete(null);
+            complete({status: false, message: ''});
           });
       });
   } catch (error: any) {
+    let errorMsg = '';
     console.log('error?.code => ', error?.code);
     if (error?.code === 'auth/user-not-found') {
-      Alert.alert('Error', AppStrings.Network.userNotFound);
+      errorMsg = AppStrings.Network.userNotFound;
     } else if (error?.code == 'auth/wrong-password') {
-      Alert.alert('Error', AppStrings.Network.invalidPassword);
+      errorMsg = AppStrings.Network.invalidPassword;
     }
-    console.log('Error => ', error);
-    complete(null);
+    complete({status: false, message: errorMsg});
   }
 };
 

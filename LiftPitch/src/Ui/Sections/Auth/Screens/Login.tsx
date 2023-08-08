@@ -26,6 +26,7 @@ import SimpleInput from '../../../Components/CustomInput/SimpleInput';
 import CustomSwitch from '../../../Components/CustomSwitch/CustomSwitch';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  setIsAlertShow,
   setIsLoader,
   setIsPersisterUser,
   setUserData,
@@ -48,7 +49,6 @@ const LoginScreen = (props: ScreenProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const passRef: any = useRef();
-  const [switchValue, setSwitchValue] = useState(true);
   //error=====>
   const [emailErrorMsg, setEmailErrorMsg] = useState('');
   const [passwordErrorMsg, setPasswordErrorMsg] = useState('');
@@ -60,31 +60,70 @@ const LoginScreen = (props: ScreenProps) => {
   };
 
   const onLoginButton = async () => {
-    if (!email || !password) {
-      Alert.alert('Error', AppStrings.Validation.fieldsEmptyError);
+    if (!email) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please enter an Email',
+        }),
+      );
+      // Alert.alert('Error', 'Please enter an Email');
       return;
     }
     if (!CommonDataManager.getSharedInstance().isEmailValid(email)) {
-      Alert.alert('Error', AppStrings.Validation.invalidEmailError);
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Validation.invalidEmailError,
+        }),
+      );
+      // Alert.alert('Error', AppStrings.Validation.invalidEmailError);
+      return;
+    }
+    if (!password) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please enter Password',
+        }),
+      );
+      // Alert.alert('Error', 'Please enter Password');
       return;
     }
     if (!isNetConnected) {
-      Alert.alert('Error', AppStrings.Network.internetError);
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.internetError,
+        }),
+      );
+      // Alert.alert('Error', AppStrings.Network.internetError);
       return;
     }
     const paramsObj = {email, password};
     dispatch(setIsLoader(true));
     await loginRequest(paramsObj, response => {
       dispatch(setIsLoader(false));
-      if (response) {
-        dispatch(setUserData(response));
+      if (response?.status) {
+        dispatch(setUserData(response?.data));
         if (isPersisterUser) {
-          saveUserData(response);
+          saveUserData(response?.data);
         }
       } else {
-        console.log('Something went wrong');
+        let errorMessage = response?.message
+          ? response?.message
+          : 'Something went wrong';
+        dispatch(
+          setIsAlertShow({
+            value: true,
+            message: errorMessage,
+          }),
+        );
+        // Alert.alert('Error', errorMessage);
       }
-    }).catch(() => dispatch(setIsLoader(false)));
+    }).catch(() => {
+      dispatch(setIsLoader(false));
+    });
   };
 
   return (

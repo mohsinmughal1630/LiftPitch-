@@ -4,7 +4,6 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 // #import <GoogleMaps/GoogleMaps.h>
-
 #import <React/RCTLinkingManager.h> // <- Add This Import
 #import "RNSplashScreen.h"
 #import <Firebase.h>
