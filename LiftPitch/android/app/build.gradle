@@ -196,7 +196,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-     implementation 'com.facebook.android:facebook-android-sdk:[8,9)' //For Facebook Login
+    implementation 'com.facebook.android:facebook-android-sdk:latest.release' // facebook Login:
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0' // <-- add this; newer versions should work too

@@ -20,6 +20,8 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+
+///Facebook login:
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -37,6 +39,10 @@
 	<string>0d762b5ec885b6bd82258fccb2beda22</string>
 	<key>FacebookDisplayName</key>
 	<string>LiftPitch</string>
+
+
+
+
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>

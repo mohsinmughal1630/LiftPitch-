@@ -2,7 +2,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {AppStrings, Collections} from '../../Utils/Strings';
 // import { notifications } from "react-native-firebase-push-notifications";
-import {LoginManager, AccessToken, Settings} from 'react-native-fbsdk-next';
+import {LoginManager, AccessToken} from 'react-native-fbsdk';
 
 import {Alert} from 'react-native';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
@@ -128,8 +128,8 @@ export const getUserFromFirebaseRequest = async (email: string) => {
 };
 
 export const onFacebookButtonPress = async () => {
-  Settings.setAppID('1693334904423187');
-  Settings.initializeSDK();
+  // Settings.setAppID('1693334904423187');
+  // Settings.initializeSDK();
 
   try {
     await auth()
@@ -153,6 +153,7 @@ export const onFacebookButtonPress = async () => {
 
     // Once signed in, get the users AccesToken
     const data = await AccessToken.getCurrentAccessToken();
+    console.log('data--------->', data);
 
     if (!data) {
       throw 'Something went wrong obtaining access token';

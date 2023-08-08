@@ -23,11 +23,15 @@
 		680D1A3D6C4A4A57AED740B1 /* Poppins-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 02166C204D6A418BADBE6825 /* Poppins-BoldItalic.ttf */; };
 		788F38A4664243418B7D0D62 /* Poppins-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2A50D05FD17445A390DFCACA /* Poppins-ThinItalic.ttf */; };
 		79704149E0974048A1F9252C /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3D3CE2451BB9436E9B27AB7F /* Poppins-Regular.ttf */; };
+		7C874BE62A8213F8004015F6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C874BE52A8213F8004015F6 /* GoogleService-Info.plist */; };
+		7CD740CC2A8229440029D1AA /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 7CD740CB2A8229440029D1AA /* FacebookCore */; };
+		7CD740CE2A8229440029D1AA /* FacebookGamingServices in Frameworks */ = {isa = PBXBuildFile; productRef = 7CD740CD2A8229440029D1AA /* FacebookGamingServices */; };
+		7CD740D02A8229440029D1AA /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 7CD740CF2A8229440029D1AA /* FacebookLogin */; };
+		7CD740D22A8229440029D1AA /* FacebookShare in Frameworks */ = {isa = PBXBuildFile; productRef = 7CD740D12A8229440029D1AA /* FacebookShare */; };
 		7CD994662A81740000D73892 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD994622A8173FF00D73892 /* Bolts.framework */; };
 		7CD994672A81740000D73892 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD994632A81740000D73892 /* FBSDKShareKit.framework */; };
 		7CD994682A81740000D73892 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD994642A81740000D73892 /* FBSDKCoreKit.framework */; };
 		7CD994692A81740000D73892 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD994652A81740000D73892 /* FBSDKLoginKit.framework */; };
-		7CF6CF0B2A81807100BA18B3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7CF6CF0A2A81807100BA18B3 /* GoogleService-Info.plist */; };
 		7EF68E3733C33B6898317E18 /* libPods-Project-ProjectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFE59519B596E51CEFDCCC0 /* libPods-Project-ProjectTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		84BB42192A5C34E2003A354E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84BB42182A5C34E2003A354E /* StoreKit.framework */; };
@@ -73,11 +77,11 @@
 		6423831EA8574132BED9D8CC /* libPods-Project.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Project.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66EDC090C3434C879A41CF2E /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBold.ttf"; path = "../src/Ui/assets/fonts/Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		6C97AB639B58BBB4B15BBE30 /* Pods-Project-ProjectTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Project-ProjectTests.debug.xcconfig"; path = "Target Support Files/Pods-Project-ProjectTests/Pods-Project-ProjectTests.debug.xcconfig"; sourceTree = "<group>"; };
+		7C874BE52A8213F8004015F6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7CD994622A8173FF00D73892 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = "../../../../../../Downloads/facebook-ios-sdk-current/Bolts.framework"; sourceTree = "<group>"; };
 		7CD994632A81740000D73892 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = "../../../../../../Downloads/facebook-ios-sdk-current/FBSDKShareKit.framework"; sourceTree = "<group>"; };
 		7CD994642A81740000D73892 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "../../../../../../Downloads/facebook-ios-sdk-current/FBSDKCoreKit.framework"; sourceTree = "<group>"; };
 		7CD994652A81740000D73892 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "../../../../../../Downloads/facebook-ios-sdk-current/FBSDKLoginKit.framework"; sourceTree = "<group>"; };
-		7CF6CF0A2A81807100BA18B3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Project/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		84BB42182A5C34E2003A354E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		8E20FD1DCADF44189CB77A16 /* Poppins-MediumItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-MediumItalic.ttf"; path = "../src/Ui/assets/fonts/Poppins-MediumItalic.ttf"; sourceTree = "<group>"; };
@@ -111,10 +115,14 @@
 			files = (
 				7CD994682A81740000D73892 /* FBSDKCoreKit.framework in Frameworks */,
 				7CD994672A81740000D73892 /* FBSDKShareKit.framework in Frameworks */,
+				7CD740CC2A8229440029D1AA /* FacebookCore in Frameworks */,
 				7CD994692A81740000D73892 /* FBSDKLoginKit.framework in Frameworks */,
 				7CD994662A81740000D73892 /* Bolts.framework in Frameworks */,
+				7CD740D02A8229440029D1AA /* FacebookLogin in Frameworks */,
 				6172F2D35A4C3AA820D92908 /* libPods-Project.a in Frameworks */,
 				84BB42192A5C34E2003A354E /* StoreKit.framework in Frameworks */,
+				7CD740D22A8229440029D1AA /* FacebookShare in Frameworks */,
+				7CD740CE2A8229440029D1AA /* FacebookGamingServices in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,7 +186,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				7CF6CF0A2A81807100BA18B3 /* GoogleService-Info.plist */,
+				7C874BE52A8213F8004015F6 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* Project */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* ProjectTests */,
@@ -280,6 +288,12 @@
 			dependencies = (
 			);
 			name = Project;
+			packageProductDependencies = (
+				7CD740CB2A8229440029D1AA /* FacebookCore */,
+				7CD740CD2A8229440029D1AA /* FacebookGamingServices */,
+				7CD740CF2A8229440029D1AA /* FacebookLogin */,
+				7CD740D12A8229440029D1AA /* FacebookShare */,
+			);
 			productName = Project;
 			productReference = 13B07F961A680F5B00A75B9A /* Project.app */;
 			productType = "com.apple.product-type.application";
@@ -310,6 +324,9 @@
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
+			packageReferences = (
+				7CD740CA2A8229440029D1AA /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
+			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -352,7 +369,7 @@
 				3026B81058174F1A9C6CAE51 /* Poppins-SemiBoldItalic.ttf in Resources */,
 				F0F4CBF1370A4FF7B3506B96 /* Poppins-Thin.ttf in Resources */,
 				788F38A4664243418B7D0D62 /* Poppins-ThinItalic.ttf in Resources */,
-				7CF6CF0B2A81807100BA18B3 /* GoogleService-Info.plist in Resources */,
+				7C874BE62A8213F8004015F6 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -835,6 +852,40 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7CD740CA2A8229440029D1AA /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7CD740CB2A8229440029D1AA /* FacebookCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CD740CA2A8229440029D1AA /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookCore;
+		};
+		7CD740CD2A8229440029D1AA /* FacebookGamingServices */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CD740CA2A8229440029D1AA /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookGamingServices;
+		};
+		7CD740CF2A8229440029D1AA /* FacebookLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CD740CA2A8229440029D1AA /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookLogin;
+		};
+		7CD740D12A8229440029D1AA /* FacebookShare */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CD740CA2A8229440029D1AA /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookShare;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }

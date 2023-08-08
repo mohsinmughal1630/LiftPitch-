@@ -34,7 +34,7 @@ allprojects {
           }
     }
     repositories {
-    mavenLocal()
+     mavenLocal() // faceBook Login:
       jcenter()
       google() // <--- make sure this is included
         maven {

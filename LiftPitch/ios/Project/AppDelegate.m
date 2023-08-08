@@ -5,8 +5,6 @@
 #import <React/RCTRootView.h>
 // #import <GoogleMaps/GoogleMaps.h>
 
-// Facebook Login:
-#import <FBSDKCoreKit/FBSDKCoreKit.h> // <- Add This Import
 #import <React/RCTLinkingManager.h> // <- Add This Import
 #import "RNSplashScreen.h"
 #import <Firebase.h>
@@ -34,8 +32,7 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Facebook Login:
-  [FBSDKApplicationDelegate.sharedInstance initializeSDK];
+  
    [FIRApp configure];
 //  [FirebasePushNotifications configure];
 #ifdef FB_SONARKIT_ENABLED
@@ -58,28 +55,28 @@ static void InitializeFlipper(UIApplication *application) {
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-    // Facebook Login:
-  [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
- 
+
       // [GMSServices provideAPIKey:@"AIzaSyBQyEE67gM0AvoJAzwp7fSdDlPqKwqKTxU"];
   return YES;
 }
 
-// Facebook Login:
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-            options:(nonnull NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
-  BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url options:options];
-  return handled;
-  // return YES;
-}
+///faceBook Login:
 
-//
-// Facebook Login: Log App Activations (Step 5 at https://developers.facebook.com/docs/ios/getting-started/)
-- (void)applicationDidBecomeActive:(UIApplication *)application
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
-  // [FBSDKAppEvents activateApp];
+  if ([[FBSDKApplicationDelegate sharedInstance] application:app openURL:url options:options]) {
+    return YES;
+  }
+ 
+  if ([RCTLinkingManager application:app openURL:url options:options]) {
+    return YES;
+  }
+ 
+  return NO;
 }
+///
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
