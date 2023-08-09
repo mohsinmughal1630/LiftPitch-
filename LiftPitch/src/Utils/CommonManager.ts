@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert, Linking, Platform} from 'react-native';
 import {normalized, ScreenProps} from './AppConstants';
-import {AppStrings, AsyncKeyStrings} from './Strings';
-import {setUserData} from '../Redux/reducers/AppReducer';
+import {AppStrings} from './Strings';
+import { SocialTypeStrings } from './AppEnums';
+import { appleLoginRequest, facebookLoginRequest, gmailLoginRequest } from './Social.d';
 
 export default class CommonDataManager {
   static shared: CommonDataManager;
@@ -185,6 +186,97 @@ export default class CommonDataManager {
       await AsyncStorage.setItem('appleUserList', JSON.stringify(allList));
     }
     setUser(users);
+  };
+
+  truncateString = (str: any) => {
+    if (!str) {
+      return '';
+    }
+    let newStringArray = str.split(' ');
+    let combinedString = '';
+    newStringArray.map((el: any) => {
+      combinedString = combinedString + (el == '' ? '' : el.trim() + ' ');
+    });
+    return combinedString.trim();
+  };
+
+  socialCallRequest = async (isNetConnected: boolean, socialType: string) => {
+    let socialParams;
+    if (socialType == SocialTypeStrings.google) {
+      const response = await gmailLoginRequest(isNetConnected);
+      console.log('This is gmail response => ', JSON.stringify(response));
+      if (response.success) {
+        console.log(
+          'This is response from Google => ',
+          JSON.stringify(response),
+        );
+        socialParams = {
+          token: response.data?.user?.id,
+          first_name: this.truncateString(
+            response.data?.user?.givenName,
+          ),
+          last_name: this.truncateString(
+            response.data?.user?.familyName,
+          ),
+          email: response.data?.user?.email,
+        };
+      } else if (response.message !== AppStrings.Permissions.cancelled) {
+        Alert.alert('Error', response?.message)
+      }
+    }
+
+    if (socialType == SocialTypeStrings.facebook) {
+      const response: any = await facebookLoginRequest(isNetConnected);
+      if (response.success) {
+        socialParams = {
+          token: response.data?.id,
+          first_name: response.data?.first_name
+            ? CommonDataManager.getSharedInstance().truncateString(
+                response.data?.first_name,
+              )
+            : '',
+          last_name: response.data?.last_name
+            ? CommonDataManager.getSharedInstance().truncateString(
+                response.data?.last_name,
+              )
+            : '',
+          email: response.data?.email ? response.data?.email : '',
+        };
+      } else if (response.message !== AppStrings.Permissions.cancelled) {
+        Alert.alert('Error', response?.message)
+      }
+    }
+
+    if (socialType == SocialTypeStrings.apple) {
+      const response: any = await appleLoginRequest(isNetConnected);
+      if (response.success) {
+        console.log(
+          'This is response from Apple => ',
+          JSON.stringify(response),
+        );
+        socialParams = {
+          token: response.data?.user,
+          first_name: CommonDataManager.getSharedInstance().truncateString(
+            response.data?.fullName?.givenName,
+          ),
+          last_name: CommonDataManager.getSharedInstance().truncateString(
+            response.data?.fullName?.familyName,
+          ),
+          email: response.data?.email ? response.data?.email : '',
+        };
+      } else {
+        Alert.alert('Error', response?.message)
+      }
+    }
+
+    if (socialParams) {
+      return {
+        ...socialParams,
+        provider_type: socialType,
+      };
+    } else {
+      return null;
+    }
   };
 
   isUpper(str: string) {

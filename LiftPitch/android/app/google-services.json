@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "959745604605-utt4hf13s56hg7jqkca5p6r920pqebc2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.liftpitch",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
           "client_id": "959745604605-863co3a05bgf69rbjgo9q2km031g4r9t.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "959745604605-863co3a05bgf69rbjgo9q2km031g4r9t.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "959745604605-c2p6rl2th0mku3d6uvuembfdm8r0lode.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.liftpitch"
+              }
             }
           ]
         }

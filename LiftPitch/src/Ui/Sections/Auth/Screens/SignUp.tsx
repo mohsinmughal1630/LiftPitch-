@@ -1,7 +1,8 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Alert,
   Image,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -20,26 +21,32 @@ import {
   hv,
   normalized,
 } from '../../../../Utils/AppConstants';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import SimpleInput from '../../../Components/CustomInput/SimpleInput';
 import CustomFilledBtn from '../../../Components/CustomButtom/CustomButton';
-import {useDispatch, useSelector} from 'react-redux';
-import {setIsLoader, setUserData} from '../../../../Redux/reducers/AppReducer';
-import {Routes} from '../../../../Utils/Routes';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setIsAlertShow,
+  setIsLoader,
+  setUserData,
+} from '../../../../Redux/reducers/AppReducer';
+import { Routes } from '../../../../Utils/Routes';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import AppImagePicker from '../../../Components/CustomModal/AppImagePicker';
-import {saveUserData} from '../../../../Utils/AsyncStorage';
-import {AppStrings} from '../../../../Utils/Strings';
-import {AppRootStore} from '../../../../Redux/store/AppStore';
+import { saveUserData } from '../../../../Utils/AsyncStorage';
+import { AppStrings } from '../../../../Utils/Strings';
+import { AppRootStore } from '../../../../Redux/store/AppStore';
 import LocationPickerModal from '../../../Components/CustomModal/LocationPickerModal';
 import PressableInput from '../../../Components/CustomInput/PressableInput';
-import {userSignupRequest} from '../../../../Network/Services/AuthServices';
+import { userSignupRequest } from '../../../../Network/Services/AuthServices';
 import LoadingImage from '../../../Components/LoadingImage';
+import SocialBtn from '../Components/SocialBtn';
+import { SocialTypeStrings } from '../../../../Utils/AppEnums';
 
 const SignUp = (props: ScreenProps) => {
   const dispatch = useDispatch();
-  const {isNetConnected, isPersisterUser} = useSelector(
+  const { isNetConnected, isPersisterUser } = useSelector(
     (state: AppRootStore) => state.AppReducer,
   );
   const [openImage, setOpenImage] = useState(false);
@@ -78,41 +85,134 @@ const SignUp = (props: ScreenProps) => {
   };
 
   const onRegisterPress = async () => {
-    if (
-      !email ||
-      !password ||
-      !cPassword ||
-      !compName ||
-      !compRNumber ||
-      !compType ||
-      !userName ||
-      !locationObj
-    ) {
-      Alert.alert('Error', AppStrings.Validation.fieldsEmptyError);
+    if (!imgUrl) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please select your profile Picture',
+        }),
+      );
+      // Alert.alert('Error', 'Please select your profile Picture');
+      return;
+    }
+    if (!compName) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please enter Company Name',
+        }),
+      );
+      // Alert.alert('Error', 'Please enter Company Name');
       return;
     }
     if (CommonDataManager.getSharedInstance().hasNumber(compName)) {
-      Alert.alert('Error', 'Company name cannot contain numbers');
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Company name cannot contain numbers',
+        }),
+      );
+      // Alert.alert('Error', 'Company name cannot contain numbers');
+      return;
+    }
+    if (!locationObj?.address) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please select location',
+        }),
+      );
+      // Alert.alert('Error', 'Please select location');
+      return;
+    }
+    if (!compRNumber) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please enter Company Number',
+        }),
+      );
+      // Alert.alert('Error', 'Please enter Company Number');
+      return;
+    }
+    if (!compType) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please select Business Type',
+        }),
+      );
+      // Alert.alert('Error', 'Please select Business Type');
+      return;
+    }
+    if (!userName) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please enter username',
+        }),
+      );
+      // Alert.alert('Error', 'Please enter username');
+      return;
+    }
+    if (!email) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please enter Email',
+        }),
+      );
+      // Alert.alert('Error', 'Please enter an Email');
       return;
     }
     if (!CommonDataManager.getSharedInstance().isEmailValid(email)) {
-      Alert.alert('Error', AppStrings.Validation.invalidEmailError);
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Validation.invalidEmailError,
+        }),
+      );
+      // Alert.alert('Error', AppStrings.Validation.invalidEmailError);
       return;
     }
     if (password.length < 8) {
-      Alert.alert('Error', 'Password should be at least 8 characters long');
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Password should be at least 8 characters long',
+        }),
+      );
+      // Alert.alert('Error', 'Password should be at least 8 characters long');
       return;
     }
     if (password !== cPassword) {
-      Alert.alert('Error', AppStrings.Validation.passwordNotMatchError);
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Validation.passwordNotMatchError,
+        }),
+      );
+      // Alert.alert('Error', AppStrings.Validation.passwordNotMatchError);
       return;
     }
     if (!isChecked) {
-      Alert.alert('Error', 'Please accept the terms and conditions first');
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: 'Please accept the terms and conditions first',
+        }),
+      );
+      // Alert.alert('Error', 'Please accept the terms and conditions first');
       return;
     }
     if (!isNetConnected) {
-      Alert.alert('Error', AppStrings.Network.internetError);
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.internetError,
+        }),
+      );
+      // Alert.alert('Error', AppStrings.Network.internetError);
       return;
     }
     const paramsObj = {
@@ -127,23 +227,80 @@ const SignUp = (props: ScreenProps) => {
     };
     dispatch(setIsLoader(true));
     await userSignupRequest(paramsObj, response => {
-      console.log('This is response => ', JSON.stringify(response));
       dispatch(setIsLoader(false));
-      if (response) {
+      if (response?.status) {
         CommonDataManager.getSharedInstance().showPopUpWithOk(
           'Success',
           'User successfully registered',
           () => {
-            dispatch(setUserData(response));
+            dispatch(setUserData(response?.data));
             if (isPersisterUser) {
-              saveUserData(response);
+              saveUserData(response?.data);
             }
           },
         );
       } else {
-        console.log('User not registered');
+        let errorMessage = response?.message
+          ? response?.message
+          : 'Something went wrong';
+        dispatch(
+          setIsAlertShow({
+            value: true,
+            message: errorMessage,
+          }),
+        );
+        // Alert.alert('Error', errorMessage);
       }
     }).catch(() => dispatch(setIsLoader(false)));
+  };
+
+  const socialBtnClicked = async (socialType: string) => {
+    Keyboard.dismiss();
+    dispatch(setIsLoader(true));
+    let socialParams = await CommonDataManager.getSharedInstance()
+      .socialCallRequest(isNetConnected, socialType)
+      .catch(e => {
+        dispatch(setIsLoader(false))
+        console.log('Er ', e)
+      })
+    if (socialParams) {
+      const fullname = (socialParams?.first_name ? socialParams.first_name : '') + (socialParams?.last_name ? ` ${socialParams.last_name}` : '')
+      const paramsObj = {
+        userName: fullname,
+        email: socialParams.email,
+        password: socialParams.token,
+        companyName: compName || null,
+        companyRegNo: compRNumber || null,
+        companyType: compType || null,
+        companyLocation: locationObj || null,
+        companyLogo: imgUrl || '',
+      };
+      console.log("paramsObj: ", paramsObj);
+      dispatch(setIsLoader(true));
+      await userSignupRequest(paramsObj, response => {
+        console.log("response - userSignupRequest: ", response);
+        dispatch(setIsLoader(false));
+        if (response?.status) {
+          dispatch(setUserData(response?.data));
+          if (isPersisterUser) {
+            saveUserData(response?.data);
+          }
+        } else {
+          let errorMessage = response?.message
+            ? response?.message
+            : 'Something went wrong';
+          dispatch(
+            setIsAlertShow({
+              value: true,
+              message: errorMessage,
+            }),
+          );
+        }
+      }).catch(() => dispatch(setIsLoader(false)));
+    } else {
+      dispatch(setIsLoader(false));
+      console.log('Some problem getting social data');
+    }
   };
 
   return (
@@ -156,13 +313,13 @@ const SignUp = (props: ScreenProps) => {
         }}
       />
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
         <ScrollView
           style={styles.containerStyle}
           showsVerticalScrollIndicator={false}>
-          <View style={{alignSelf: 'center'}}>
+          <View style={{ alignSelf: 'center' }}>
             {imgUrl ? (
               <TouchableOpacity
                 activeOpacity={1}
@@ -170,7 +327,7 @@ const SignUp = (props: ScreenProps) => {
                   setOpenImage(true);
                 }}>
                 <LoadingImage
-                  source={{uri: imgUrl}}
+                  source={{ uri: imgUrl }}
                   viewStyle={styles.imageCont}
                   resizeMode="cover"
                 />
@@ -199,7 +356,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Company Name'}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
+            textInputStyle={{ width: normalized(270) }}
             setValue={(txt: any) => {
               setCompNameError('');
               setCompName(txt);
@@ -220,7 +377,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Company Registration Number '}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
+            textInputStyle={{ width: normalized(270) }}
             setValue={(txt: any) => {
               setCompRNumberError('');
               setRNumber(txt);
@@ -235,7 +392,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Business Type / Industry'}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
+            textInputStyle={{ width: normalized(270) }}
             setValue={(txt: any) => {
               setCompTypeError('');
               setCompType(txt);
@@ -250,7 +407,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Your Name'}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
+            textInputStyle={{ width: normalized(270) }}
             setValue={(txt: any) => {
               setUserNameError('');
               setUserName(txt);
@@ -266,7 +423,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Your Email'}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
+            textInputStyle={{ width: normalized(270) }}
             setValue={(txt: any) => {
               setEmailError('');
               setEmail(txt);
@@ -282,7 +439,7 @@ const SignUp = (props: ScreenProps) => {
             placeHold={'Password'}
             returnKeyType={'next'}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
+            textInputStyle={{ width: normalized(270) }}
             setValue={(passTxt: any) => {
               if (passTxt.includes(' ')) {
                 setPassword(passTxt.trim());
@@ -299,7 +456,7 @@ const SignUp = (props: ScreenProps) => {
             ref={cPAsswordRef}
             placeHold={'Confirm Password'}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
+            textInputStyle={{ width: normalized(270) }}
             setValue={(passTxt: any) => {
               if (passTxt.includes(' ')) {
                 setCPassword(passTxt.trim());
@@ -335,6 +492,25 @@ const SignUp = (props: ScreenProps) => {
             label={'Create Account'}
             onPressBtn={onRegisterPress}
           />
+          <View style={styles.socialCont}>
+            <SocialBtn
+              label={'FACEBOOK'}
+              icon={AppImages.Auth.fbIcon}
+              atPress={() => {
+              }}
+              containerStyle={{
+                width: normalized(150)
+              }}
+            />
+            <SocialBtn
+              label={'GOOGLE'}
+              icon={AppImages.Auth.google}
+              atPress={() => socialBtnClicked(SocialTypeStrings.google)}
+              containerStyle={{
+                width: normalized(150)
+              }}
+            />
+          </View>
           <Text style={styles.bottomTxt}>
             Already have an account?{' '}
             <Text
@@ -433,6 +609,13 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: AppColors.black.black,
     marginStart: normalized(5),
+  },
+  socialCont: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 20,
+    marginHorizontal: 10
   },
 });
 

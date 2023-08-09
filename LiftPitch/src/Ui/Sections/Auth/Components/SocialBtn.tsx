@@ -1,13 +1,13 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {AppColors, normalized} from '../../../../Utils/AppConstants';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { AppColors, normalized } from '../../../../Utils/AppConstants';
 const SocialBtn = (props: any) => {
   return (
     <TouchableOpacity
       onPress={() => {
         props?.atPress();
       }}
-      style={styles.mainBtn}>
+      style={[styles.mainBtn, props.containerStyle]}>
       <Image source={props?.icon} />
       <Text style={styles.label}>{props?.label}</Text>
     </TouchableOpacity>

@@ -26,11 +26,10 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.holguinmedia.contactapp</string>
+			<string>com.liftpitch</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.540778185387-4rijujqnue1tlra06s4to5hhicgrpds9</string>
-				<string>fb1263530301266635</string>
+				<string>com.googleusercontent.apps.959745604605-c2p6rl2th0mku3d6uvuembfdm8r0lode</string>
 			</array>
 		</dict>
 	</array>

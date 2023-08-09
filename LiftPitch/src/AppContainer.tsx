@@ -32,7 +32,7 @@ function AppContainer() {
               dispatch(setIsAlertShow({value: false, message: ''}));
             }}
             message={selector?.isAlertShow?.message}
-            indigo
+            // indigo
           />
         ) : null}
         {selector?.isLoaderStart ? (
