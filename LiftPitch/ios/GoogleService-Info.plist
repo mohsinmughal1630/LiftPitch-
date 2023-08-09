@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>540778185387-4rijujqnue1tlra06s4to5hhicgrpds9.apps.googleusercontent.com</string>
+	<string>959745604605-c2p6rl2th0mku3d6uvuembfdm8r0lode.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
 	<string>com.googleusercontent.apps.959745604605-c2p6rl2th0mku3d6uvuembfdm8r0lode</string>
 	<key>API_KEY</key>
-	<string>AIzaSyD8AuJQcnBEkr2rellMW1RxGYsGx2HFqus</string>
+	<string>AIzaSyBxyKGjTuLnkORKxiL7vmtV0vHMTjd3xiQ</string>
 	<key>GCM_SENDER_ID</key>
-	<string>540778185387</string>
+	<string>959745604605</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.holguinmedia.contactapp</string>
+	<string>com.liftpitch</string>
 	<key>PROJECT_ID</key>
-	<string>contactwearables-fbda4</string>
+	<string>liftpitch-ccae0</string>
 	<key>STORAGE_BUCKET</key>
-	<string>contactwearables-fbda4.appspot.com</string>
+	<string>liftpitch-ccae0.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:540778185387:ios:f5f4eecb47c5e32827edee</string>
+	<string>1:959745604605:ios:f729181ceb1d44962e3794</string>
 </dict>
 </plist>

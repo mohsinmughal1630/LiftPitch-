@@ -4,15 +4,11 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 // #import <GoogleMaps/GoogleMaps.h>
+#import <React/RCTLinkingManager.h> // <- Add This Import
 #import "RNSplashScreen.h"
-#import <React/RCTLinkingManager.h>
 #import <Firebase.h>
-//#import "RNFirebaseMessaging.h"
-//#import "FirebasePushNotifications.h"
 
 #ifdef FB_SONARKIT_ENABLED
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
 #import <FlipperKitUserDefaultsPlugin/FKUserDefaultsPlugin.h>
@@ -35,6 +31,7 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  
    [FIRApp configure];
 //  [FirebasePushNotifications configure];
 #ifdef FB_SONARKIT_ENABLED
@@ -57,9 +54,28 @@ static void InitializeFlipper(UIApplication *application) {
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+
       // [GMSServices provideAPIKey:@"AIzaSyBQyEE67gM0AvoJAzwp7fSdDlPqKwqKTxU"];
   return YES;
 }
+
+///faceBook Login:
+
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  if ([[FBSDKApplicationDelegate sharedInstance] application:app openURL:url options:options]) {
+    return YES;
+  }
+ 
+  if ([RCTLinkingManager application:app openURL:url options:options]) {
+    return YES;
+  }
+ 
+  return NO;
+}
+///
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
