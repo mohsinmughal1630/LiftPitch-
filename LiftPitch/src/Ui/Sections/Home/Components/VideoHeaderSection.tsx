@@ -6,10 +6,11 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
-import {SafeAreaView} from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView } from 'react-native';
 import {
   AppColors,
   AppImages,
@@ -17,7 +18,7 @@ import {
   normalized,
   videoHeaderOptions,
 } from '../../../../Utils/AppConstants';
-import {AppStyles} from '../../../../Utils/AppStyles';
+import { AppStyles } from '../../../../Utils/AppStyles';
 
 interface Props {
   selectedTab: number;
@@ -39,23 +40,47 @@ const VideoHeaderSection = (props: Props) => {
       <View style={styles.rowContainer}>
         <View style={AppStyles.horiCommon}>
           {showSearch ? (
-            <TextInput
-              placeholder={'Search here..'}
-              value={props.searchTxt}
-              onChangeText={props.onSearchChange}
-              style={{
-                // height: '90%',
-                height: hv(55),
-                backgroundColor: AppColors.white.white,
-                borderRadius: 30,
-                width: '70%',
-                zIndex: 1,
-                marginTop: 10,
-                paddingHorizontal: normalized(15),
-              }}
-              returnKeyType="search"
-              onSubmitEditing={toggleSearch}
-            />
+            <View style={{
+              height: hv(55),
+              backgroundColor: AppColors.white.white,
+              borderRadius: 30,
+              width: '85%',
+              zIndex: 1,
+              marginTop: 10,
+              marginLeft: -40,
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingHorizontal: normalized(15),
+            }}>
+              <TextInput
+                placeholder={'Search here..'}
+                value={props.searchTxt}
+                onChangeText={props.onSearchChange}
+                style={{
+                  color: 'black',
+                  fontSize: normalized(14),
+                  flex: 1,
+                }}
+                returnKeyType="search"
+                onSubmitEditing={toggleSearch}
+              />
+              {
+                props.searchTxt ?
+                  <TouchableWithoutFeedback onPress={() => props.onSearchChange('')}>
+                    <View style={{
+                      height: 30,
+                      width: 30,
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }}>
+                      <Image source={AppImages.Common.CrossFilled} resizeMode='contain' style={{
+                        height: '55%',
+                        width: '55%'
+                      }} />
+                    </View>
+                  </TouchableWithoutFeedback> : null
+              }
+            </View>
           ) : (
             videoHeaderOptions.map((item, index) => (
               <TouchableOpacity

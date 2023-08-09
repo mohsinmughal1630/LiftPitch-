@@ -87,6 +87,7 @@ export const AppImages = {
     Send: require('../Ui/assets/images/Common/Send.png'),
     menuIcon: require('../Ui/assets/images/Common/menuIcon.png'),
     LeftArrowIcon: require('../Ui/assets/images/Common/LeftArrowIcon.png'),
+    CrossFilled: require('../Ui/assets/images/Common/CrossIconFilled.png'),
   },
 };
 export const AppFonts = {};

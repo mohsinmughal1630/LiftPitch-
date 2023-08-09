@@ -1,9 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Alert, Linking, Platform} from 'react-native';
+import {Alert, Keyboard, Linking, Platform} from 'react-native';
 import {normalized, ScreenProps} from './AppConstants';
 import {AppStrings} from './Strings';
 import { SocialTypeStrings } from './AppEnums';
 import { appleLoginRequest, facebookLoginRequest, gmailLoginRequest } from './Social.d';
+import { setIsAlertShow, setIsLoader, setUserData } from '../Redux/reducers/AppReducer';
+import { loginRequest, userSignupRequest } from '../Network/Services/AuthServices';
+import { saveUserData } from './AsyncStorage';
+import { Routes } from './Routes';
 
 export default class CommonDataManager {
   static shared: CommonDataManager;
@@ -149,7 +153,7 @@ export default class CommonDataManager {
     let fullNumber = `${this.addPlusToNumber(code)}${phone}`;
     const customNumber = ignoreCode ? phone : fullNumber;
     if (
-      CommonDataManager.getSharedInstance().addPlusToNumber(code) == '+1' &&
+      this.addPlusToNumber(code) == '+1' &&
       phone.length >= 10
     ) {
       return this.formatUSNumber(customNumber);
@@ -204,12 +208,12 @@ export default class CommonDataManager {
     let socialParams;
     if (socialType == SocialTypeStrings.google) {
       const response = await gmailLoginRequest(isNetConnected);
-      console.log('This is gmail response => ', JSON.stringify(response));
+      // console.log('This is gmail response => ', JSON.stringify(response));
       if (response.success) {
-        console.log(
-          'This is response from Google => ',
-          JSON.stringify(response),
-        );
+        // console.log(
+        //   'This is response from Google => ',
+        //   JSON.stringify(response),
+        // );
         socialParams = {
           token: response.data?.user?.id,
           first_name: this.truncateString(
@@ -231,12 +235,12 @@ export default class CommonDataManager {
         socialParams = {
           token: response.data?.id,
           first_name: response.data?.first_name
-            ? CommonDataManager.getSharedInstance().truncateString(
+            ? this.truncateString(
                 response.data?.first_name,
               )
             : '',
           last_name: response.data?.last_name
-            ? CommonDataManager.getSharedInstance().truncateString(
+            ? this.truncateString(
                 response.data?.last_name,
               )
             : '',
@@ -256,10 +260,10 @@ export default class CommonDataManager {
         );
         socialParams = {
           token: response.data?.user,
-          first_name: CommonDataManager.getSharedInstance().truncateString(
+          first_name: this.truncateString(
             response.data?.fullName?.givenName,
           ),
-          last_name: CommonDataManager.getSharedInstance().truncateString(
+          last_name: this.truncateString(
             response.data?.fullName?.familyName,
           ),
           email: response.data?.email ? response.data?.email : '',
@@ -505,4 +509,59 @@ export default class CommonDataManager {
     }
     return obj;
   };
+
+  commonSocialLoginRequest = async (socialType: string, isNetConnected: boolean, isPersisterUser: boolean, navigation: any) => {
+    Keyboard.dismiss();
+    this.dispatch(setIsLoader(true));
+    let socialParams = await this.socialCallRequest(isNetConnected, socialType)
+      .catch(e => {
+        this.dispatch(setIsLoader(false))
+        console.log('Er ', e)
+      })
+    if (socialParams) {
+      const paramsObj = {
+        email: socialParams.email,
+        password: socialParams.token,
+      };
+      console.log("paramsObj: ", paramsObj);
+      await loginRequest(paramsObj, async response => {
+        console.log("response - loginRequest: ");
+        console.log(response);
+        if (response?.status) {
+          this.dispatch(setUserData
+            (response?.data));
+          if (isPersisterUser) {
+            await saveUserData(response?.data);
+          }
+        } else {
+          this.dispatch(setIsLoader(false));
+          let errorMessage = response?.message
+            ? response?.message
+            : 'Something went wrong';
+          console.log("errorMessage: ", errorMessage);
+          if (errorMessage == 'User not found against this Email.') {
+            navigation.push(Routes.Auth.profileCompleteScreen, {
+              socialParams: socialParams
+            })
+            return;
+          }
+          this.dispatch(
+            setIsAlertShow({
+              value: true,
+              message: errorMessage,
+            }),
+          );
+        }
+        this.dispatch(setIsLoader(false));
+      }).catch((e) => {
+        console.log('Err ', e);
+        this.dispatch(setIsLoader(false))
+      })
+    } else {
+      console.log('here 23');
+      this.dispatch(setIsLoader(false));
+      console.log('Some problem getting social data');
+    }
+  };
+
 }

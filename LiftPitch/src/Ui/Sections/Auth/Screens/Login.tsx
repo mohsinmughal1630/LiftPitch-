@@ -67,7 +67,6 @@ const LoginScreen = (props: ScreenProps) => {
           message: 'Please enter an Email',
         }),
       );
-      // Alert.alert('Error', 'Please enter an Email');
       return;
     }
     if (!CommonDataManager.getSharedInstance().isEmailValid(email)) {
@@ -77,7 +76,6 @@ const LoginScreen = (props: ScreenProps) => {
           message: AppStrings.Validation.invalidEmailError,
         }),
       );
-      // Alert.alert('Error', AppStrings.Validation.invalidEmailError);
       return;
     }
     if (!password) {
@@ -87,7 +85,6 @@ const LoginScreen = (props: ScreenProps) => {
           message: 'Please enter Password',
         }),
       );
-      // Alert.alert('Error', 'Please enter Password');
       return;
     }
     if (!isNetConnected) {
@@ -97,7 +94,6 @@ const LoginScreen = (props: ScreenProps) => {
           message: AppStrings.Network.internetError,
         }),
       );
-      // Alert.alert('Error', AppStrings.Network.internetError);
       return;
     }
     const paramsObj = { email, password };
@@ -119,89 +115,10 @@ const LoginScreen = (props: ScreenProps) => {
             message: errorMessage,
           }),
         );
-        // Alert.alert('Error', errorMessage);
       }
     }).catch(() => {
       dispatch(setIsLoader(false));
     });
-  };
-
-  const socialBtnClicked = async (socialType: string) => {
-    Keyboard.dismiss();
-    dispatch(setIsLoader(true));
-    let socialParams = await CommonDataManager.getSharedInstance()
-      .socialCallRequest(isNetConnected, socialType)
-      .catch(e => {
-        dispatch(setIsLoader(false))
-        console.log('Er ', e)
-      })
-    if (socialParams) {
-      const paramsObj = {
-        email: socialParams.email,
-        password: socialParams.token,
-      };
-      console.log("paramsObj: ", paramsObj);
-      await loginRequest(paramsObj, async response => {
-        console.log("response - userSignupRequest: ", response);
-        if (response?.status) {
-          dispatch(setUserData(response?.data));
-          if (isPersisterUser) {
-            await saveUserData(response?.data);
-          }
-        } else {
-          let errorMessage = response?.message
-            ? response?.message
-            : 'Something went wrong';
-          if (errorMessage == 'User not found against this Email.') {
-            const fullname = (socialParams?.first_name ? socialParams.first_name : '') + (socialParams?.last_name ? ` ${socialParams.last_name}` : '')
-            const paramsObj = {
-              userName: fullname,
-              email: socialParams?.email,
-              password: socialParams?.token,
-              companyName: null,
-              companyRegNo: null,
-              companyType: null,
-              companyLocation: null,
-              companyLogo: '',
-            };
-            console.log("paramsObj: ", paramsObj);
-            dispatch(setIsLoader(true));
-            await userSignupRequest(paramsObj, response => {
-              console.log("response - userSignupRequest: ", response);
-              dispatch(setIsLoader(false));
-              if (response?.status) {
-                dispatch(setUserData(response?.data));
-                if (isPersisterUser) {
-                  saveUserData(response?.data);
-                }
-              } else {
-                let errorMessage = response?.message
-                  ? response?.message
-                  : 'Something went wrong';
-                dispatch(
-                  setIsAlertShow({
-                    value: true,
-                    message: errorMessage,
-                  }),
-                );
-              }
-            }).catch(() => dispatch(setIsLoader(false)));
-            return
-          }
-          dispatch(
-            setIsAlertShow({
-              value: true,
-              message: errorMessage,
-            }),
-          );
-        }
-        dispatch(setIsLoader(false));
-      }).catch(() => dispatch(setIsLoader(false)));
-      dispatch(setIsLoader(false));
-    } else {
-      dispatch(setIsLoader(false));
-      console.log('Some problem getting social data');
-    }
   };
 
   return (
@@ -277,15 +194,15 @@ const LoginScreen = (props: ScreenProps) => {
               <View style={styles.simpleLine} />
             </View>
             <View style={styles.socialCont}>
-              <SocialBtn
+              {/* <SocialBtn
                 label={'FACEBOOK'}
                 icon={AppImages.Auth.fbIcon}
                 atPress={() => { }}
-              />
+              /> */}
               <SocialBtn
                 label={'GOOGLE'}
                 icon={AppImages.Auth.google}
-                atPress={() => socialBtnClicked(SocialTypeStrings.google)}
+                atPress={() => CommonDataManager.getSharedInstance().commonSocialLoginRequest(SocialTypeStrings.google, isNetConnected, isPersisterUser, props.navigation)}
               />
             </View>
             <Text style={styles.bottomTxt}>
@@ -308,7 +225,6 @@ const LoginScreen = (props: ScreenProps) => {
 const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
-    // marginHorizontal: AppHorizontalMargin,
   },
   childContainer: {
     flex: 1,
@@ -378,6 +294,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: AppHorizontalMargin,
+    alignSelf: 'center'
   },
   bottomTxt: {
     fontSize: normalized(13),

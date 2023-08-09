@@ -3,9 +3,6 @@ import firestore from '@react-native-firebase/firestore';
 import {AppStrings, Collections} from '../../Utils/Strings';
 // import { notifications } from "react-native-firebase-push-notifications";
 
-import {Alert} from 'react-native';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-
 export const userSignupRequest = async (
   userInput: any,
   getResponse: (userObj: any) => void,
@@ -76,7 +73,9 @@ export const loginRequest = async (
                 ...doc.data(),
                 userId: doc.id,
               };
+              console.log(loginObj);
               complete({status: true, data: loginObj});
+              console.log('here 7');
             });
           })
           .catch(error => {
@@ -85,6 +84,7 @@ export const loginRequest = async (
           });
       });
   } catch (error: any) {
+    console.log("error (loginRequest): ", error);
     let errorMsg = '';
     console.log('error?.code => ', error?.code);
     if (error?.code === 'auth/user-not-found') {
@@ -92,6 +92,7 @@ export const loginRequest = async (
     } else if (error?.code == 'auth/wrong-password') {
       errorMsg = AppStrings.Network.invalidPassword;
     }
+    console.log('here 10');
     complete({status: false, message: errorMsg});
   }
 };
@@ -122,96 +123,3 @@ export const getUserFromFirebaseRequest = async (email: string) => {
     return null;
   }
 };
-
-// export const onFacebookButtonPress = async () => {
-//   // Settings.setAppID('1693334904423187');
-//   // Settings.initializeSDK();
-
-//   try {
-//     await auth()
-//       .signOut()
-//       .then(() => console.log('User signed out!'));
-//   } catch (error) {
-//     console.log(error);
-//   }
-
-//   try {
-//     // Attempt login with permissions
-//     const result = await LoginManager.logInWithPermissions([
-//       'public_profile',
-//       'email',
-//     ]);
-//     console.log('result-------->', result);
-
-//     if (result.isCancelled) {
-//       throw 'User cancelled the login process';
-//     }
-
-//     // Once signed in, get the users AccesToken
-//     const data = await AccessToken.getCurrentAccessToken();
-//     console.log('data--------->', data);
-
-//     if (!data) {
-//       throw 'Something went wrong obtaining access token';
-//     }
-
-//     // Create a Firebase credential with the AccessToken
-//     const facebookCredential = auth.FacebookAuthProvider.credential(
-//       data.accessToken,
-//     );
-//     console.log('facebookCredential------>', facebookCredential);
-
-//     if (!facebookCredential) {
-//       throw 'Something went wrong obtaining facebookCredential';
-//     }
-//     // Sign-in the user with the credential
-//     return auth().signInWithCredential(facebookCredential);
-//   } catch (error) {
-//     console.log('Signin with Facebook Error', error);
-//   }
-// };
-
-// export const onGoogleButtonPress = async () => {
-//   GoogleSignin.signOut();
-
-//   console.log('clicked111');
-
-//   try {
-//     await auth()
-//       .signOut()
-//       .then(() => console.log('User signed out!'));
-//   } catch (error) {
-//     console.log(error);
-//   }
-
-//   try {
-//     // Get the users ID token
-//     const {user, idToken} = await GoogleSignin.signIn();
-
-//     if (!idToken) {
-//       throw 'Something went wrong obtaining access token';
-//     }
-
-//     // Create a Google credential with the token
-//     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-
-//     if (!googleCredential) {
-//       throw 'Something went wrong obtaining googleCredential';
-//     }
-
-//     // Sign-in the user with the credential
-//     auth()
-//       .signInWithCredential(googleCredential)
-//       .then(() => {})
-//       .catch(error => {
-//         console.log('Google SignInWithCredential Error:', error);
-//         throw '';
-//       });
-//   } catch (error: any) {
-//     if (error.message == 'Sign in action cancelled') {
-//       console.log('printError - > ', error.message);
-//       return;
-//     }
-//     console.log('Signin with Google Error', error.message);
-//   }
-// };
