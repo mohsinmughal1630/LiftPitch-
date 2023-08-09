@@ -1,7 +1,8 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Alert,
   Image,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -19,31 +20,30 @@ import {
   hv,
   normalized,
 } from '../../../../Utils/AppConstants';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 import SocialBtn from '../Components/SocialBtn';
 import CustomFilledBtn from '../../../Components/CustomButtom/CustomButton';
 import SimpleInput from '../../../Components/CustomInput/SimpleInput';
 import CustomSwitch from '../../../Components/CustomSwitch/CustomSwitch';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setIsAlertShow,
   setIsLoader,
   setIsPersisterUser,
   setUserData,
 } from '../../../../Redux/reducers/AppReducer';
-import {Routes} from '../../../../Utils/Routes';
-import {saveUserData} from '../../../../Utils/AsyncStorage';
-import {AppStrings} from '../../../../Utils/Strings';
+import { Routes } from '../../../../Utils/Routes';
+import { saveUserData } from '../../../../Utils/AsyncStorage';
+import { AppStrings } from '../../../../Utils/Strings';
 import CommonDataManager from '../../../../Utils/CommonManager';
-import {AppRootStore} from '../../../../Redux/store/AppStore';
+import { AppRootStore } from '../../../../Redux/store/AppStore';
 import {
-  loginRequest,
-  onFacebookButtonPress,
-  onGoogleButtonPress,
+  loginRequest, userSignupRequest,
 } from '../../../../Network/Services/AuthServices';
+import { SocialTypeStrings } from '../../../../Utils/AppEnums';
 const LoginScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
-  const {isNetConnected, isPersisterUser} = useSelector(
+  const { isNetConnected, isPersisterUser } = useSelector(
     (state: AppRootStore) => state.AppReducer,
   );
   const [email, setEmail] = useState('');
@@ -100,7 +100,7 @@ const LoginScreen = (props: ScreenProps) => {
       // Alert.alert('Error', AppStrings.Network.internetError);
       return;
     }
-    const paramsObj = {email, password};
+    const paramsObj = { email, password };
     dispatch(setIsLoader(true));
     await loginRequest(paramsObj, response => {
       dispatch(setIsLoader(false));
@@ -126,11 +126,89 @@ const LoginScreen = (props: ScreenProps) => {
     });
   };
 
+  const socialBtnClicked = async (socialType: string) => {
+    Keyboard.dismiss();
+    dispatch(setIsLoader(true));
+    let socialParams = await CommonDataManager.getSharedInstance()
+      .socialCallRequest(isNetConnected, socialType)
+      .catch(e => {
+        dispatch(setIsLoader(false))
+        console.log('Er ', e)
+      })
+    if (socialParams) {
+      const paramsObj = {
+        email: socialParams.email,
+        password: socialParams.token,
+      };
+      console.log("paramsObj: ", paramsObj);
+      await loginRequest(paramsObj, async response => {
+        console.log("response - userSignupRequest: ", response);
+        if (response?.status) {
+          dispatch(setUserData(response?.data));
+          if (isPersisterUser) {
+            await saveUserData(response?.data);
+          }
+        } else {
+          let errorMessage = response?.message
+            ? response?.message
+            : 'Something went wrong';
+          if (errorMessage == 'User not found against this Email.') {
+            const fullname = (socialParams?.first_name ? socialParams.first_name : '') + (socialParams?.last_name ? ` ${socialParams.last_name}` : '')
+            const paramsObj = {
+              userName: fullname,
+              email: socialParams?.email,
+              password: socialParams?.token,
+              companyName: null,
+              companyRegNo: null,
+              companyType: null,
+              companyLocation: null,
+              companyLogo: '',
+            };
+            console.log("paramsObj: ", paramsObj);
+            dispatch(setIsLoader(true));
+            await userSignupRequest(paramsObj, response => {
+              console.log("response - userSignupRequest: ", response);
+              dispatch(setIsLoader(false));
+              if (response?.status) {
+                dispatch(setUserData(response?.data));
+                if (isPersisterUser) {
+                  saveUserData(response?.data);
+                }
+              } else {
+                let errorMessage = response?.message
+                  ? response?.message
+                  : 'Something went wrong';
+                dispatch(
+                  setIsAlertShow({
+                    value: true,
+                    message: errorMessage,
+                  }),
+                );
+              }
+            }).catch(() => dispatch(setIsLoader(false)));
+            return
+          }
+          dispatch(
+            setIsAlertShow({
+              value: true,
+              message: errorMessage,
+            }),
+          );
+        }
+        dispatch(setIsLoader(false));
+      }).catch(() => dispatch(setIsLoader(false)));
+      dispatch(setIsLoader(false));
+    } else {
+      dispatch(setIsLoader(false));
+      console.log('Some problem getting social data');
+    }
+  };
+
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
         <ScrollView
@@ -147,7 +225,7 @@ const LoginScreen = (props: ScreenProps) => {
               returnKeyType={'next'}
               placeHold={'Email'}
               container={styles.inputMainCont}
-              textInputStyle={{width: normalized(270)}}
+              textInputStyle={{ width: normalized(270) }}
               showLastIcon={false}
               showFirstIcon={true}
               rightIcon={AppImages.Auth.Message}
@@ -164,7 +242,7 @@ const LoginScreen = (props: ScreenProps) => {
               ref={passRef}
               placeHold={'Password'}
               container={styles.inputMainCont}
-              textInputStyle={{width: normalized(270)}}
+              textInputStyle={{ width: normalized(270) }}
               showLastIcon={true}
               showFirstIcon={true}
               rightIcon={AppImages.Auth.Password}
@@ -202,16 +280,12 @@ const LoginScreen = (props: ScreenProps) => {
               <SocialBtn
                 label={'FACEBOOK'}
                 icon={AppImages.Auth.fbIcon}
-                atPress={() => {
-                  onFacebookButtonPress();
-                }}
+                atPress={() => { }}
               />
               <SocialBtn
                 label={'GOOGLE'}
                 icon={AppImages.Auth.google}
-                atPress={() => {
-                  onGoogleButtonPress();
-                }}
+                atPress={() => socialBtnClicked(SocialTypeStrings.google)}
               />
             </View>
             <Text style={styles.bottomTxt}>

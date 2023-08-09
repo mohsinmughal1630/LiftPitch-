@@ -157,24 +157,3 @@ export const appleLoginRequest = async (internetValue: boolean) => {
   }
   return obj;
 };
-
-// export const fbLoginRequest = async (completionHanlder: (data: any) => void) => {
-//   console.log("Facebook login request")
-//   FBLoginManager.loginWithPermissions(["email", "public_profile"], function(error, data){
-//     if (!error) {
-//       completionHanlder(data)
-//     } else {
-//       console.log("Login error" + JSON.stringify(error));
-//      }
-//   })
-// }
-// export const getFbUserFullData = async(token : string,completionHanlder: (data: any) => void) => {
-//   console.log("new data call")
-//   let fullData = await axios.get('https://graph.facebook.com/v2.5/me?fields=name,email,first_name,last_name,picture,friends&access_token=' + token)
-//    completionHanlder(fullData)
-// }
-// export const getFbUserImage = async(userId : string,completionHanlder: (data: any) => void)=>{
-//   console.log(userId)
-//   let profilePic = await axios.get(`http://graph.facebook.com/${userId}/picture?type=large`)
-//   completionHanlder(profilePic.data)
-// }

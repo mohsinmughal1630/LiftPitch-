@@ -18,7 +18,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.android.vending.BILLING" />
-<uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+
     <application
         android:name="com.liftpitch.MainApplication"
         android:allowBackup="false"
@@ -30,13 +30,17 @@
         android:usesCleartextTraffic="true"
         >
 
-////////faceBook login:
-<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
-    <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
-    <provider android:authorities="com.facebook.app.FacebookContentProvider1693334904423187"
-    android:name="com.facebook.FacebookContentProvider"
-    android:exported="true" />
-////////
+        <!-- <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBQyEE67gM0AvoJAzwp7fSdDlPqKwqKTxU" /> -->
+
+              <!--reference your fb_app_id-->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+        <meta-data 
+            android:name="com.facebook.sdk.ClientToken" 
+            android:value="@string/facebook_client_token"/>
 
         <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
             android:value="false" />
@@ -86,7 +90,13 @@
                 <data android:scheme="https"
                     android:host="nfc-frontend.crunchyapps.com/signup*" />
             </intent-filter>
-
+<!--             <intent-filter>-->
+<!--             <action android:name="android.intent.action.VIEW" />-->
+<!--  <category android:name="android.intent.category.DEFAULT" />-->
+<!--  <category android:name="android.intent.category.BROWSABLE" />-->
+<!--                <data android:scheme="https"-->
+<!--                    android:host="nfc-frontend.crunchyapps.com/alreadyMember*" />-->
+<!--            </intent-filter>-->
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
