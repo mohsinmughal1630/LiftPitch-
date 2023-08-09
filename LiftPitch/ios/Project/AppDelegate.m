@@ -65,9 +65,7 @@ static void InitializeFlipper(UIApplication *application) {
             openURL:(NSURL *)url
             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
-  if ([[FBSDKApplicationDelegate sharedInstance] application:app openURL:url options:options]) {
-    return YES;
-  }
+
  
   if ([RCTLinkingManager application:app openURL:url options:options]) {
     return YES;
@@ -90,13 +88,7 @@ static void InitializeFlipper(UIApplication *application) {
 //[[FirebasePushNotifications instance] didReceiveLocalNotification:notification];
 //}
 
-// Open url links
-- (BOOL)application:(UIApplication *)application
-  openURL:(NSURL *)url
-  options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
-{
- return [RCTLinkingManager application:application openURL:url options:options];
-}
+
 
 // Opening universal links
 - (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity
