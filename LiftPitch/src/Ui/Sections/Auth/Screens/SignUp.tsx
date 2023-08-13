@@ -213,16 +213,10 @@ const SignUp = (props: ScreenProps) => {
     await userSignupRequest(paramsObj, response => {
       dispatch(setIsLoader(false));
       if (response?.status) {
-        CommonDataManager.getSharedInstance().showPopUpWithOk(
-          'Success',
-          'User successfully registered',
-          () => {
-            dispatch(setUserData(response?.data));
-            if (isPersisterUser) {
-              saveUserData(response?.data);
-            }
-          },
-        );
+        dispatch(setUserData(response?.data));
+        if (isPersisterUser) {
+          saveUserData(response?.data);
+        }
       } else {
         let errorMessage = response?.message
           ? response?.message

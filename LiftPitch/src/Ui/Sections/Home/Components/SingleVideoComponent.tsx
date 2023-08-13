@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {Platform, StyleSheet, View} from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import {
   AppColors,
   calculateWindowHeight,
@@ -12,7 +12,9 @@ import {
 import VideoPlayer from './VideoPlayer';
 import VideoBottomSection from './VideoBottomSection';
 import CommentsModal from './CommentsModal';
-import VideoHeaderSection from './VideoHeaderSection';
+// import VideoHeaderSection from './VideoHeaderSection';
+import CommonDataManager from '../../../../Utils/CommonManager';
+import ProgressModal from '../../../Components/CustomModal/ProgressModal';
 
 interface Props {
   item: singleVideoItemType;
@@ -23,6 +25,27 @@ interface Props {
 const SingleVideoComponent = (props: Props) => {
   const [commentsList, setCommentsList] = useState(commentsConstants.reverse());
   const [showCommentsModal, setShowComments] = useState(false);
+  const [showProgressBar, setShowProgressBar] = useState(false)
+  const [shareProgressValues, setShareProgressValues] = useState<{
+    totalValue: number,
+    currentValue: number
+  }>({
+    totalValue: 0,
+    currentValue: 0
+  })
+  const optionClicked = (val: string) => {
+    if (val == 'comment') {
+      setShowComments(true);
+    } else if (val == 'share') {
+      CommonDataManager.getSharedInstance().shareVideo(props.item.videoUrl,
+        progressObj => {
+          console.log("progressObj: ", progressObj);
+          setShareProgressValues({ currentValue: progressObj.bytesWritten, totalValue: progressObj.contentLength })
+          setShowProgressBar(true);
+        }
+      )
+    }
+  }
   return (
     <View style={styles.mainContainer}>
       <View style={styles.innerContainer}>
@@ -33,11 +56,7 @@ const SingleVideoComponent = (props: Props) => {
         />
         <VideoBottomSection
           item={props.item}
-          onOptionClick={(val: string) => {
-            if (val == 'comment') {
-              setShowComments(true);
-            }
-          }}
+          onOptionClick={optionClicked}
         />
       </View>
       {showCommentsModal && (
@@ -57,6 +76,12 @@ const SingleVideoComponent = (props: Props) => {
           }}
         />
       )}
+      {
+        showProgressBar && shareProgressValues.currentValue !== 0 && shareProgressValues.totalValue !== 0 &&
+        <ProgressModal
+          onClose={() => setShowProgressBar(false)}
+          progressValues={shareProgressValues} />
+      }
     </View>
   );
 };

@@ -1,7 +1,7 @@
-import {StackScreenProps} from '@react-navigation/stack';
-import {Dimensions, Platform, PixelRatio, StatusBar} from 'react-native';
+import { StackScreenProps } from '@react-navigation/stack';
+import { Dimensions, Platform, PixelRatio, StatusBar } from 'react-native';
 import moment from 'moment';
-import {AppStrings} from './Strings';
+import { AppStrings } from './Strings';
 export const platformVersion = Platform.Version;
 export type ScreenProps = StackScreenProps<any, any>;
 export const ScreenSize = Dimensions.get('screen');
@@ -42,10 +42,14 @@ export const AppImages = {
   },
   bottomBar: {
     Home: require('../Ui/assets/images/BottomBar/Home.png'),
+    HomeFilled: require('../Ui/assets/images/BottomBar/HomeFilled.png'),
     followerIcon: require('../Ui/assets/images/BottomBar/followerIcon.png'),
+    FollowersFilled: require('../Ui/assets/images/BottomBar/FollowersFilled.png'),
     Message: require('../Ui/assets/images/BottomBar/Message.png'),
+    MessageFilled: require('../Ui/assets/images/BottomBar/MessageFilled.png'),
     PlusIcon: require('../Ui/assets/images/BottomBar/PlusIcon.png'),
     Profile: require('../Ui/assets/images/BottomBar/Profile.png'),
+    ProfileFilled: require('../Ui/assets/images/BottomBar/ProfileFilled.png'),
   },
   Chat: {
     SendIcon: require('../Ui/assets/images/Chat/SendIcon.png'),
@@ -160,10 +164,12 @@ export const AppColors = {
 export const BottomBarList = [
   {
     icon: AppImages.bottomBar.Home,
+    selectedIcon: AppImages.bottomBar.HomeFilled,
     title: AppStrings.bottomBar.home,
   },
   {
     icon: AppImages.bottomBar.followerIcon,
+    selectedIcon: AppImages.bottomBar.FollowersFilled,
     title: AppStrings.bottomBar.followers,
   },
   {
@@ -172,10 +178,12 @@ export const BottomBarList = [
   },
   {
     icon: AppImages.bottomBar.Message,
+    selectedIcon: AppImages.bottomBar.MessageFilled,
     title: AppStrings.bottomBar.notification,
   },
   {
     icon: AppImages.bottomBar.Profile,
+    selectedIcon: AppImages.bottomBar.ProfileFilled,
     title: AppStrings.bottomBar.profile,
   },
 ];

@@ -1,13 +1,15 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Alert, Keyboard, Linking, Platform} from 'react-native';
-import {normalized, ScreenProps} from './AppConstants';
-import {AppStrings} from './Strings';
+import { Alert, Keyboard, Linking, Platform } from 'react-native';
+import { normalized, ScreenProps } from './AppConstants';
+import { AppStrings } from './Strings';
 import { SocialTypeStrings } from './AppEnums';
 import { appleLoginRequest, facebookLoginRequest, gmailLoginRequest } from './Social.d';
 import { setIsAlertShow, setIsLoader, setUserData } from '../Redux/reducers/AppReducer';
 import { loginRequest, userSignupRequest } from '../Network/Services/AuthServices';
 import { saveUserData } from './AsyncStorage';
 import { Routes } from './Routes';
+import RNFS, { DownloadBeginCallbackResult, DownloadProgressCallbackResult } from "react-native-fs";
+import Share from "react-native-share";
 
 export default class CommonDataManager {
   static shared: CommonDataManager;
@@ -44,71 +46,11 @@ export default class CommonDataManager {
       this._translations = [];
       const localTranslaionsData = require('../Utils/translation.json');
       this._translations = localTranslaionsData;
-    } catch (e) {}
+    } catch (e) { }
   };
   setReduxReducer = (select: any, dispatch: any) => {
     this.selector = select;
     this.dispatch = dispatch;
-  };
-
-  showPopUp = (title: string, message: string) => {
-    Alert.alert(
-      title,
-      message,
-      [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-      {cancelable: true},
-    );
-  };
-  showPopUpWithOk = (title: string, message: string, onClick: () => void) => {
-    Alert.alert(title, message, [{text: 'OK', onPress: () => onClick()}], {
-      cancelable: false,
-    });
-  };
-  showPopUpWithOkCancel = (
-    title: string,
-    message: string,
-    onClick: () => void,
-  ) => {
-    Alert.alert(
-      title,
-      message,
-      [
-        {text: 'Cancel', onPress: () => console.log('OK Pressed')},
-        {text: 'OK', onPress: () => onClick()},
-      ],
-      {cancelable: true},
-    );
-  };
-  showPopUpWithOkCancel1 = (
-    title: string,
-    message: string,
-    ok: string = '',
-    cancel: string = '',
-    onClick: () => void,
-  ) => {
-    Alert.alert(
-      title,
-      message,
-      [
-        {
-          text: cancel == '' ? 'Cancel' : cancel,
-          onPress: () => console.log('OK Pressed'),
-        },
-        {text: ok == '' ? 'OK' : ok, onPress: () => onClick()},
-      ],
-      {cancelable: true},
-    );
-  };
-  showPopUpReset = (title: string, message: string, resetPress: () => void) => {
-    Alert.alert(
-      title,
-      message,
-      [
-        {text: 'Reset', onPress: () => resetPress()},
-        {text: 'OK', onPress: () => console.log('OK Pressed')},
-      ],
-      {cancelable: true},
-    );
   };
   isEmailValid = (email: string) => {
     if (!email) {
@@ -236,13 +178,13 @@ export default class CommonDataManager {
           token: response.data?.id,
           first_name: response.data?.first_name
             ? this.truncateString(
-                response.data?.first_name,
-              )
+              response.data?.first_name,
+            )
             : '',
           last_name: response.data?.last_name
             ? this.truncateString(
-                response.data?.last_name,
-              )
+              response.data?.last_name,
+            )
             : '',
           email: response.data?.email ? response.data?.email : '',
         };
@@ -441,12 +383,12 @@ export default class CommonDataManager {
     return str.length < 25
       ? normalized(22)
       : str.length < 35
-      ? normalized(20)
-      : str.length < 40
-      ? normalized(18)
-      : str.length < 45
-      ? normalized(16)
-      : normalized(14);
+        ? normalized(20)
+        : str.length < 40
+          ? normalized(18)
+          : str.length < 45
+            ? normalized(16)
+            : normalized(14);
   };
 
   openNativeMaps = (loc: any, addressLabel: string) => {
@@ -492,19 +434,19 @@ export default class CommonDataManager {
       obj['uri'] = image?.uri
         ? image?.uri
         : image?.sourceURL
-        ? image?.sourceURL
-        : image?.path;
+          ? image?.sourceURL
+          : image?.path;
       obj['name'] = image?.filename
         ? image?.filename
         : image?.fileName
-        ? image?.fileName
-        : image?.name
-        ? image?.name
-        : image?.path
-        ? image?.path?.split('/')[image?.path?.split('/')?.length - 1]
-        : image?.sourceURL?.split('/')[
-            image?.sourceURL?.split('/')?.length - 1
-          ];
+          ? image?.fileName
+          : image?.name
+            ? image?.name
+            : image?.path
+              ? image?.path?.split('/')[image?.path?.split('/')?.length - 1]
+              : image?.sourceURL?.split('/')[
+              image?.sourceURL?.split('/')?.length - 1
+              ];
       obj['type'] = image?.type ? image?.type : image.mime;
     }
     return obj;
@@ -563,5 +505,66 @@ export default class CommonDataManager {
       console.log('Some problem getting social data');
     }
   };
+
+  convertRemoteVideoToBase64 = async (videoUrl: string, onProgress: (obj: DownloadProgressCallbackResult) => void, onResponse: (url: string | null) => void) => {
+    const downloadDest = `${RNFS.DocumentDirectoryPath}/video.mp4`;
+    try {
+      const options = {
+        fromUrl: videoUrl,
+        toFile: downloadDest,
+        discretionary: true,
+        begin: () => { }, // onBegin: (res: DownloadBeginCallbackResult) => void,
+        progress: onProgress,
+      };
+
+      const response = RNFS.downloadFile(options);
+      console.log("response: ", response);
+
+      response.promise.then(async result => {
+        console.log("result: ", result);
+        if (result.statusCode === 200) {
+          console.log('Video downloaded successfully:', downloadDest);
+          // const base64String = await RNFS.readFile(downloadDest, "base64");
+          onResponse(downloadDest);
+        } else {
+          console.error('Error downloading video:', result.statusCode);
+          onResponse(null);
+        }
+      }).catch(error => {
+        console.error('Error while downloading video:', error);
+        onResponse(null);
+      });
+    } catch (error) {
+      console.error('Error in downloadVideo function:', error);
+      onResponse(null);
+    }
+  }
+
+
+  shareVideo = async (videoUrl: string, onProgress: (obj: DownloadProgressCallbackResult) => void) => {
+    try {
+      await this.convertRemoteVideoToBase64(videoUrl, (val) => onProgress(val), async (url: any) => {
+        // if (!url) {
+        //   console.log('url not found');
+        //   return;
+        // }
+        let shareOptions = {
+          title: "Check out my video",
+          message: "Check out my video!",
+          url: url,
+          type: 'video/mp4',
+          subject: "Check out my video!"
+        };
+        setTimeout(() => {
+          Share.open(shareOptions)
+            .then((res: any) => console.log('res:', res))
+            .catch((err: any) => console.log('err', err));
+        }, 1500);
+        // };
+      })
+    } catch (e) {
+      console.log('Error sharing video ', e)
+    }
+  }
 
 }

@@ -1,11 +1,11 @@
 import React from 'react';
-import {Image, StyleSheet, TouchableWithoutFeedback, View} from 'react-native';
+import { Image, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {AppStyles} from '../../../../Utils/AppStyles';
+import { AppStyles } from '../../../../Utils/AppStyles';
 import {
   AppColors,
   AppImages,
@@ -60,6 +60,7 @@ const SocialBox = (props: Props) => {
       </TouchableWithoutFeedback>
       <Animated.View style={[styles.listBox, optionsHeightStyles]}>
         {shareOptionsList.map((item, index) => {
+          const isMoreIcon = item.id == 4;
           return (
             <TouchableWithoutFeedback
               key={index}
@@ -68,7 +69,11 @@ const SocialBox = (props: Props) => {
                 <Image
                   source={item.image}
                   resizeMode="contain"
-                  style={styles.singleShareIcon}
+                  style={[styles.singleShareIcon, isMoreIcon && {
+                    transform: [{
+                      rotateZ: '90deg'
+                    }]
+                  }]}
                 />
               </View>
             </TouchableWithoutFeedback>

@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import React, { useState } from 'react';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import SocialBox from './SocialBox';
 import {
   AppColors,
@@ -8,7 +8,7 @@ import {
   normalized,
   singleVideoItemType,
 } from '../../../../Utils/AppConstants';
-import {AppStyles} from '../../../../Utils/AppStyles';
+import { AppStyles } from '../../../../Utils/AppStyles';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import LoadingImage from '../../../Components/LoadingImage';
 
@@ -53,7 +53,7 @@ const VideoBottomSection = (props: Props) => {
               onPress={() => setShowMore(!showMore)}
               style={[
                 styles.linkText,
-                {color: AppColors.blue.seeMoreBlue},
+                { color: AppColors.blue.seeMoreBlue },
               ]}>{` Show ${showMore ? 'Less' : 'More'}`}</Text>
           )}
           <Text
@@ -72,7 +72,7 @@ const VideoBottomSection = (props: Props) => {
         <View style={styles.profileImgBox}>
           {profileImg ? (
             <LoadingImage
-              source={{uri: profileImg}}
+              source={{ uri: profileImg }}
               viewStyle={{
                 ...styles.profileImgBox,
                 backgroundColor: AppColors.white.bgWhite,

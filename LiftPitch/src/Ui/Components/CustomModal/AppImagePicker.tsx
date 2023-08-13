@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {request, PERMISSIONS} from 'react-native-permissions';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { request, PERMISSIONS } from 'react-native-permissions';
 import {
   AppColors,
   ScreenSize,
@@ -22,8 +22,8 @@ import {
   maxImageSizeInBytes,
   normalized,
 } from '../../../Utils/AppConstants';
-import {AppStrings} from '../../../Utils/Strings';
-import {uploadMedia} from '../../../Network/Services/GeneralServices';
+import { AppStrings } from '../../../Utils/Strings';
+import { uploadMedia } from '../../../Network/Services/GeneralServices';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -32,6 +32,8 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
+import { useDispatch } from 'react-redux';
+import { setIsAlertShow } from '../../../Redux/reducers/AppReducer';
 
 interface Props {
   onClose: () => void;
@@ -41,6 +43,7 @@ interface Props {
 }
 
 const AppImagePicker = (props: Props) => {
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const pickImage = async (index: number) => {
     if (index == 1) {
@@ -57,7 +60,12 @@ const AppImagePicker = (props: Props) => {
         }).then((result: any) => {
           if (result.assets) {
             if (result.assets[0].fileSize > maxImageSizeInBytes) {
-              Alert.alert('Error', AppStrings.Validation.maxImageSizeError);
+              dispatch(
+                setIsAlertShow({
+                  value: true,
+                  message: AppStrings.Validation.maxImageSizeError
+                }),
+              );
               return;
             }
             uploadImageToFirebase(result?.assets[0]?.uri);
@@ -70,7 +78,12 @@ const AppImagePicker = (props: Props) => {
           }).then((result: any) => {
             if (result.assets) {
               if (result.assets[0].fileSize > maxImageSizeInBytes) {
-                Alert.alert('Error', AppStrings.Validation.maxImageSizeError);
+                dispatch(
+                  setIsAlertShow({
+                    value: true,
+                    message: AppStrings.Validation.maxImageSizeError
+                  }),
+                );
                 return;
               }
               uploadImageToFirebase(result?.assets[0]?.uri);
@@ -223,7 +236,7 @@ const LoadingLine = () => {
   const offsetX = useSharedValue(0);
   useEffect(() => {
     offsetX.value = withRepeat(
-      withTiming(lineFullWidth - innerLineWidth, {duration: 1000}),
+      withTiming(lineFullWidth - innerLineWidth, { duration: 1000 }),
       -1,
       true,
     );
