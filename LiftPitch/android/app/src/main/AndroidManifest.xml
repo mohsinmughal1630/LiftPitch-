@@ -30,6 +30,18 @@
         android:usesCleartextTraffic="true"
         >
 
+                <!-- Add this to your AndroidManifest.xml inside the <application> section -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.liftpitch.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+
         <!-- <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBQyEE67gM0AvoJAzwp7fSdDlPqKwqKTxU" /> -->

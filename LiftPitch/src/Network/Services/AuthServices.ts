@@ -1,6 +1,6 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import {AppStrings, Collections} from '../../Utils/Strings';
+import { AppStrings, Collections } from '../../Utils/Strings';
 // import { notifications } from "react-native-firebase-push-notifications";
 
 export const userSignupRequest = async (
@@ -31,11 +31,11 @@ export const userSignupRequest = async (
               ...userInput,
               userId: userId,
             };
-            getResponse({status: true, data: loginObj});
+            getResponse({ status: true, data: loginObj });
           })
           .catch(error => {
             console.log('Error at adding user ', error);
-            getResponse({status: false, message: ''});
+            getResponse({ status: false, message: '' });
           });
       })
       .catch(error => {
@@ -47,11 +47,11 @@ export const userSignupRequest = async (
         } else if (error.code === 'auth/user-not-found') {
           errorMsg = AppStrings.Network.userNotFound;
         }
-        getResponse({status: false, message: errorMsg});
+        getResponse({ status: false, message: errorMsg });
       });
   } catch (e) {
     console.log(e);
-    getResponse({status: false, message: e});
+    getResponse({ status: false, message: e });
   }
 };
 
@@ -74,13 +74,13 @@ export const loginRequest = async (
                 userId: doc.id,
               };
               console.log(loginObj);
-              complete({status: true, data: loginObj});
+              complete({ status: true, data: loginObj });
               console.log('here 7');
             });
           })
           .catch(error => {
             console.log('Error while getting data', error);
-            complete({status: false, message: ''});
+            complete({ status: false, message: '' });
           });
       });
   } catch (error: any) {
@@ -93,7 +93,7 @@ export const loginRequest = async (
       errorMsg = AppStrings.Network.invalidPassword;
     }
     console.log('here 10');
-    complete({status: false, message: errorMsg});
+    complete({ status: false, message: errorMsg });
   }
 };
 
@@ -121,5 +121,24 @@ export const getUserFromFirebaseRequest = async (email: string) => {
   } catch (e) {
     console.log('Error:', e);
     return null;
+  }
+};
+
+export const getAllUsers = async (userId: string) => {
+  try {
+    const querySnapshot = await firestore()
+      .collection(Collections.Users)
+      .get();
+
+    let usersList: Array<any> = [];
+
+    querySnapshot.forEach((doc) => {
+      usersList.push(doc.data());
+    });
+
+    return usersList.filter(el => el.userId !== userId);
+  } catch (e) {
+    console.log("An error occurred while retrieving getAllUsers: ", e);
+    return [];
   }
 };

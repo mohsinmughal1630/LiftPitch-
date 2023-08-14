@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
-import { Image, LayoutAnimation, Modal, StyleSheet, Text, View } from "react-native";
+import { Modal, Text, View } from "react-native";
 import { AppStyles } from "../../../Utils/AppStyles";
-import { AppColors, AppImages, normalized } from "../../../Utils/AppConstants";
+import { AppColors, normalized } from "../../../Utils/AppConstants";
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 interface Props {
     onClose: () => void;
@@ -13,14 +14,20 @@ interface Props {
 
 const ProgressModal = (props: Props) => {
     const getPercentage = Math.round((props.progressValues.currentValue / props.progressValues.totalValue) * 100);
+    const boxBgHeight = useSharedValue(0);
     useEffect(() => {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+        boxBgHeight.value = withTiming(getPercentage);
         if (getPercentage == 100) {
             setTimeout(() => {
                 props.onClose();
             }, 1000);
         }
     }, [getPercentage])
+    const boxBgStyles = useAnimatedStyle(() => {
+        return {
+            height: `${boxBgHeight.value}%`,
+        }
+    })
     return (
         <Modal
             transparent
@@ -38,20 +45,22 @@ const ProgressModal = (props: Props) => {
                     backgroundColor: AppColors.white.white,
                     ...AppStyles.centeredCommon,
                     ...AppStyles.shadowCommon,
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+
                 }}>
-                    <View style={{
+                    <Animated.View style={[{
                         position: 'absolute',
                         bottom: 0,
-                        height: `${getPercentage}%`,
                         width: '100%',
-                        zIndex: 0,
+                        zIndex: 1,
                         backgroundColor: AppColors.grey.midGray
-                    }} /><Text style={{
+                    }, boxBgStyles]} />
+                    <Text style={{
                         color: AppColors.primaryPurple,
                         fontWeight: '600',
                         fontSize: normalized(20),
-                        marginRight: -10
+                        marginRight: -10,
+                        zIndex: 2
                     }}>{`${getPercentage}%`}</Text>
                 </View>
             </View>

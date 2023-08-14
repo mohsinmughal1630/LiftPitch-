@@ -93,6 +93,11 @@ export const AppImages = {
     LeftArrowIcon: require('../Ui/assets/images/Common/LeftArrowIcon.png'),
     CrossFilled: require('../Ui/assets/images/Common/CrossIconFilled.png'),
   },
+  Followers: {
+    ContactsInvite: require('../Ui/assets/images/Followers/ContactsInvite.png'),
+    Facebookinvite: require('../Ui/assets/images/Followers/Facebookinvite.png'),
+    MailInvite: require('../Ui/assets/images/Followers/MailInvite.png'),
+  },
 };
 export const AppFonts = {};
 
@@ -569,6 +574,81 @@ export const commentsConstants = [
     date: new Date().setHours(6),
     message:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ',
+  },
+];
+
+
+export const followersListConstant = [
+  {
+    id: 1,
+    name: 'Kabir Khan',
+    image:
+      'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
+    date: new Date().setHours(0),
+    message: 'This is my profile description. Its for testing purposes for now.',
+  },
+  {
+    id: 2,
+    name: 'Salman Khan',
+    image:
+      'https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_1280.jpg',
+    date: new Date().setHours(1),
+    message: 'This is my profile description. Its for testing purposes for now.',
+  },
+  {
+    id: 3,
+    name: 'Kabir Khan',
+    image:
+      'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
+    date: new Date().setHours(2),
+    message: 'This is my profile description. Its for testing purposes for now.',
+  },
+  {
+    id: 4,
+    name: 'Salman Khan',
+    image:
+      'https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_1280.jpg',
+    date: new Date().setHours(3),
+    message: 'This is my profile description. Its for testing purposes for now.',
+  },
+  {
+    id: 5,
+    name: 'Kabir Khan',
+    image:
+      'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
+    date: new Date().setHours(4),
+    message: 'This is my profile description. Its for testing purposes for now.',
+  },
+  {
+    id: 6,
+    name: 'Salman Khan',
+    image: null,
+    date: new Date().setHours(6),
+    message:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ',
+  },
+];
+
+export type socialInviteType = 'facebook' | 'email' | 'contacts';
+
+export const socialInviteList = [
+  {
+    id: 1,
+    name: 'Invite by Email',
+    type: 'email',
+    image: AppImages.Followers.MailInvite
+  },
+  {
+    id: 2,
+    name: 'Import contacts',
+    type: 'contacts',
+    image: AppImages.Followers.ContactsInvite,
+  },
+  {
+    id: 3,
+    name: 'Import Facebook friends',
+    type: 'facebook',
+    image: AppImages.Followers.Facebookinvite
   },
 ];
 

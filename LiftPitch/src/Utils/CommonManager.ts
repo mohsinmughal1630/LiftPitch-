@@ -1,15 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert, Keyboard, Linking, Platform } from 'react-native';
+import { Alert, Keyboard, Linking, PermissionsAndroid, Platform } from 'react-native';
 import { normalized, ScreenProps } from './AppConstants';
 import { AppStrings } from './Strings';
 import { SocialTypeStrings } from './AppEnums';
 import { appleLoginRequest, facebookLoginRequest, gmailLoginRequest } from './Social.d';
 import { setIsAlertShow, setIsLoader, setUserData } from '../Redux/reducers/AppReducer';
-import { loginRequest, userSignupRequest } from '../Network/Services/AuthServices';
+import { getAllUsers, loginRequest, userSignupRequest } from '../Network/Services/AuthServices';
 import { saveUserData } from './AsyncStorage';
 import { Routes } from './Routes';
 import RNFS, { DownloadBeginCallbackResult, DownloadProgressCallbackResult } from "react-native-fs";
 import Share from "react-native-share";
+import Contacts from 'react-native-contacts';
 
 export default class CommonDataManager {
   static shared: CommonDataManager;
@@ -506,7 +507,7 @@ export default class CommonDataManager {
     }
   };
 
-  convertRemoteVideoToBase64 = async (videoUrl: string, onProgress: (obj: DownloadProgressCallbackResult) => void, onResponse: (url: string | null) => void) => {
+  convertRemoteVideoToBase64 = async (videoUrl: string, onProgress: (obj: DownloadProgressCallbackResult) => void, onComplete: (url: string) => void) => {
     const downloadDest = `${RNFS.DocumentDirectoryPath}/video.mp4`;
     try {
       const options = {
@@ -525,46 +526,130 @@ export default class CommonDataManager {
         if (result.statusCode === 200) {
           console.log('Video downloaded successfully:', downloadDest);
           // const base64String = await RNFS.readFile(downloadDest, "base64");
-          onResponse(downloadDest);
+          onComplete(downloadDest);
         } else {
           console.error('Error downloading video:', result.statusCode);
-          onResponse(null);
         }
       }).catch(error => {
         console.error('Error while downloading video:', error);
-        onResponse(null);
       });
     } catch (error) {
       console.error('Error in downloadVideo function:', error);
-      onResponse(null);
     }
   }
 
 
-  shareVideo = async (videoUrl: string, onProgress: (obj: DownloadProgressCallbackResult) => void) => {
+  shareVideo = async (videoUrl: string) => {
     try {
-      await this.convertRemoteVideoToBase64(videoUrl, (val) => onProgress(val), async (url: any) => {
-        // if (!url) {
-        //   console.log('url not found');
-        //   return;
-        // }
-        let shareOptions = {
-          title: "Check out my video",
-          message: "Check out my video!",
-          url: url,
-          type: 'video/mp4',
-          subject: "Check out my video!"
-        };
-        setTimeout(() => {
-          Share.open(shareOptions)
-            .then((res: any) => console.log('res:', res))
-            .catch((err: any) => console.log('err', err));
-        }, 1500);
-        // };
-      })
+      const filePath = Platform.OS == 'ios' ? videoUrl : `content://${videoUrl}`;
+      let shareOptions = {
+        title: "Check out my video",
+        message: "Check out my video!",
+        url: filePath,
+        type: 'video/mp4',
+        subject: "Check out my video!"
+      };
+      setTimeout(() => {
+        Share.open(shareOptions)
+          .then((res: any) => console.log('res:', res))
+          .catch((err: any) => console.log('err', err));
+      }, 1500);
+      // };
+      // })
     } catch (e) {
       console.log('Error sharing video ', e)
     }
   }
+
+
+  fetchDeviceContacts = async (userId: string, onErr: () => void, onSuccess: (list: Array<any>) => void) => {
+    try {
+      if (Platform.OS == 'android') {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_CONTACTS,
+        );
+        console.log('granted ', granted);
+        if (granted == 'granted') {
+          const result = await this.fetchContacts(userId);
+          onSuccess(result);
+        } else if (granted === 'never_ask_again') {
+          onErr();
+        } else {
+          console.log('Some error ');
+        }
+      } else {
+        // IOS
+        Contacts.checkPermission().then(async permission => {
+          if (permission === 'undefined') {
+            await Contacts.requestPermission().then(async permission => {
+              if (permission == 'authorized') {
+                const result = await this.fetchContacts(userId);
+                onSuccess(result);
+              }
+            });
+          }
+          if (permission === 'authorized') {
+            const result = await this.fetchContacts(userId);
+            onSuccess(result);
+          }
+          if (permission === 'denied') {
+            onErr();
+          }
+        });
+      }
+    } catch (e) {
+      console.log('Some er ', e);
+    }
+  };
+
+  // normalizePhoneNumber(phoneNumber: any) {
+  //   const number = typeof phoneNumber == 'string' ? phoneNumber : phoneNumber.number;
+  //   const numericPhoneNumber = number.replace(/\D/g, '');
+  //   return numericPhoneNumber;
+  // }
+
+  // isMatchingContact = (contactsList: Array<any>, userPhone: string) => {
+  //   const result = contactsList.find(contact => {
+  //     for (const phoneNumber of contact.phoneNumbers) {
+  //       const normalizedPhoneNumber = this.normalizePhoneNumber(phoneNumber);
+  //       const normalizedUserPhoneNumber = this.normalizePhoneNumber(userPhone).slice(3);
+  //       if (normalizedPhoneNumber.includes(normalizedUserPhoneNumber)) {
+  //         return true;
+  //       }
+  //     }
+  //     return false;
+  //   })
+  //   return result ? true : false;
+  // };
+
+  fetchContacts = async (userId: string) => {
+    try {
+      const allContacts: Array<any> = await Contacts.getAll()
+      if (allContacts) {
+        const filteredContacts = allContacts.filter(
+          (el: any) =>
+            (el.givenName || el.displayName) && el.phoneNumbers?.length > 0,
+        );
+        return filteredContacts;
+        // const sortedList = filteredContacts.sort((a, b) => {
+        //   const getName = (obj: any) => {
+        //     return obj?.givenName ? obj.givenName : obj.displayName;
+        //   };
+        //   const getFirstChar = (name: string) => {
+        //     return name.charAt(0);
+        //   };
+        //   return getFirstChar(getName(a)) > getFirstChar(getName(b));
+        // });
+        // const allFirebaseUsers = await getAllUsers(userId);
+        // let filteredUsersList = allFirebaseUsers.filter(user => this.isMatchingContact(allContacts, user.phone))
+        // return filteredUsersList;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      console.log('error reading contacts ', e);
+      return [];
+    }
+  };
 
 }

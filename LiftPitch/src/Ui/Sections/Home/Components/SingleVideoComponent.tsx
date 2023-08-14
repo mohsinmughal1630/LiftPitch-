@@ -37,13 +37,24 @@ const SingleVideoComponent = (props: Props) => {
     if (val == 'comment') {
       setShowComments(true);
     } else if (val == 'share') {
-      CommonDataManager.getSharedInstance().shareVideo(props.item.videoUrl,
-        progressObj => {
-          console.log("progressObj: ", progressObj);
-          setShareProgressValues({ currentValue: progressObj.bytesWritten, totalValue: progressObj.contentLength })
-          setShowProgressBar(true);
-        }
-      )
+      try {
+        CommonDataManager.getSharedInstance().convertRemoteVideoToBase64(props.item.videoUrl,
+          progressObj => {
+            console.log("progressObj: ", progressObj);
+            setShareProgressValues({ currentValue: progressObj.bytesWritten, totalValue: progressObj.contentLength })
+            setShowProgressBar(true);
+          },
+          async (url: any) => {
+            setShareProgressValues({
+              ...shareProgressValues,
+              currentValue: shareProgressValues.totalValue,
+            })
+            setShowProgressBar(false);
+            CommonDataManager.getSharedInstance().shareVideo(url);
+          })
+      } catch (e) {
+        console.log('Error sharing video ', e)
+      }
     }
   }
   return (
