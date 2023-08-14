@@ -151,3 +151,17 @@ export const checkUserFollowState = async (
       }
     });
 };
+
+export const fetchFollowingList = async (id: any, onComplete: any) => {
+  await firestore()
+    .collection(Collections.FOLLOW_N_FOLLOWING_COLLECTION)
+    .doc(id)
+    .get()
+    .then((snapDoc: any) => {
+      let obj: any = {};
+      if (snapDoc?._data?.userId) {
+        obj = snapDoc?._data;
+      }
+      onComplete(obj);
+    });
+};

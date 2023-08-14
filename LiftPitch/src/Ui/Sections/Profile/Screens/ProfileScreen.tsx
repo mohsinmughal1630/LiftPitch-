@@ -151,8 +151,11 @@ const ProfileScreen = (props: ScreenProps) => {
       followerObj,
       isFollow ? 'remove' : 'add',
       (response: any) => {
-        dispatch(setIsLoader(false));
-        setIsFollow(!isFollow);
+        console.log('response:------>', response);
+        setTimeout(() => {
+          dispatch(setIsLoader(false));
+          setIsFollow(!isFollow);
+        }, 3000);
       },
     );
   };

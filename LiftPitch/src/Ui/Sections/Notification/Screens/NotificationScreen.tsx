@@ -140,7 +140,17 @@ const NotificationScreen = (props: ScreenProps) => {
                               thread: item,
                             });
                           }}
-                          onPressProfile={() => {}}
+                          onPressProfile={() => {
+                            if (item?.participants[otherUserIndex]?.user) {
+                              props?.navigation.navigate(
+                                Routes.ProfileTab.ProfileScreen,
+                                {
+                                  userId:
+                                    item?.participants[otherUserIndex]?.user,
+                                },
+                              );
+                            }
+                          }}
                         />
                         {index !== chatList.length - 1 ? (
                           <View style={styles.bottomLine} />

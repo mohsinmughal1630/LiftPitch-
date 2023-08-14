@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   AppColors,
   AppImages,
@@ -22,12 +22,32 @@ import {
 import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import HeaderTab from '../../../Components/CustomTab/HeaderTab';
 import CustomSearchBar from '../../../Components/CustomSearchBar/CustomSearchBar';
-import LoadingImage from '../../../Components/LoadingImage';
 import {Routes} from '../../../../Utils/Routes';
+import {fetchFollowingList} from '../../../../Network/Services/ProfileServices';
+import {useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
+import AppImageViewer from '../../../Components/ProfileView/AppImageView';
+import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlaceHolderComp';
 const FollowerScreen = (props: ScreenProps) => {
+  const selector = useSelector((AppState: any) => AppState.AppReducer);
   const [selectTab, setSelectedTab] = useState(0);
   const [searchTxt, setSearchTxt] = useState('');
+  const [followerData, setFollowerData] = useState([]);
+  const [followingData, setFollowingData] = useState([]);
+  const isFocused = useIsFocused();
 
+  useEffect(() => {
+    if (isFocused) {
+      fetchFollowingList(selector?.userData?.userId, (response: any) => {
+        if (response?.follower) {
+          setFollowerData(response?.follower);
+        }
+        if (response?.following) {
+          setFollowingData(response?.following);
+        }
+      });
+    }
+  }, [isFocused]);
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
@@ -55,75 +75,94 @@ const FollowerScreen = (props: ScreenProps) => {
             }}
             mainStyle={{marginVertical: normalized(30)}}
           />
-          <FlatList
-            keyExtractor={(item, index) => `${index}`}
-            showsVerticalScrollIndicator={false}
-            data={commentsConstants}
-            renderItem={({item, index}) => {
-              return (
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  style={styles.singleCommentContainer}
-                  key={index}
-                  onPress={() => {
-                    if (item?.userId) {
-                      props?.navigation.navigate(
-                        Routes.ProfileTab.ProfileScreen,
-                        {
-                          userId: item?.userId,
-                        },
-                      );
-                    }
-                  }}>
-                  <View style={styles.profileImgBox}>
-                    {item.image ? (
-                      <LoadingImage
-                        source={{uri: item.image}}
-                        viewStyle={{
-                          ...styles.profileImgBox,
-                          backgroundColor: AppColors.white.bgWhite,
-                        }}
-                        resizeMode="cover"
-                      />
-                    ) : (
-                      <Image
-                        source={AppImages.bottomBar.Profile}
-                        resizeMode="contain"
-                        style={styles.placeholderImg}
-                      />
-                    )}
-                  </View>
-                  <View style={styles.contentBox}>
-                    <View
-                      style={[
-                        AppStyles.horiCommon,
-                        {justifyContent: 'space-between'},
-                      ]}>
-                      <Text
-                        style={[
-                          styles.description,
-                          {color: AppColors.black.black, marginTop: 0},
-                        ]}>
-                        {item.name}
-                      </Text>
-                    </View>
-                    <Text style={styles.msgTxt}>{item.message}</Text>
-                  </View>
-
+          {(selectTab == 0 && followingData?.length > 0) ||
+          (selectTab == 1 && followerData?.length > 0) ? (
+            <FlatList
+              keyExtractor={(item, index) => `${index}`}
+              showsVerticalScrollIndicator={false}
+              // data={commentsConstants}
+              data={selectTab == 0 ? followingData : followerData}
+              renderItem={({item, index}) => {
+                return (
                   <TouchableOpacity
-                    style={{
-                      alignSelf: 'center',
-                      padding: normalized(5),
+                    activeOpacity={0.7}
+                    style={styles.singleCommentContainer}
+                    key={index}
+                    onPress={() => {
+                      let userId = item?.userId
+                        ? item?.userId
+                        : item?.id
+                        ? item?.id
+                        : null;
+                      if (userId) {
+                        props?.navigation.navigate(
+                          Routes.ProfileTab.ProfileScreen,
+                          {
+                            userId: userId,
+                          },
+                        );
+                      }
                     }}>
-                    <Image
-                      source={AppImages.Common.LeftArrowIcon}
-                      resizeMode="contain"
-                    />
+                    <View style={styles.profileImgBox}>
+                      {item?.profile ? (
+                        <AppImageViewer
+                          source={{uri: item?.profile}}
+                          placeHolder={AppImages.bottomBar.Profile}
+                          style={{
+                            ...styles.profileImgBox,
+                            backgroundColor: AppColors.white.bgWhite,
+                          }}
+                        />
+                      ) : (
+                        <ProfilePlaceHolderComp
+                          index={index}
+                          name={item?.userName ? item?.userName : 'Testing'}
+                          mainStyles={styles.profileImgBox}
+                          nameStyles={{
+                            fontSize: normalized(16),
+                            fontWeight: '500',
+                          }}
+                        />
+                      )}
+                    </View>
+                    <View style={styles.contentBox}>
+                      <View
+                        style={[
+                          AppStyles.horiCommon,
+                          {justifyContent: 'space-between'},
+                        ]}>
+                        <Text
+                          style={[
+                            styles.description,
+                            {color: AppColors.black.black, marginTop: 0},
+                          ]}>
+                          {item.userName}
+                        </Text>
+                      </View>
+                      <Text style={styles.msgTxt}>{item?.description}</Text>
+                    </View>
+
+                    <TouchableOpacity
+                      style={{
+                        alignSelf: 'center',
+                        padding: normalized(5),
+                      }}>
+                      <Image
+                        source={AppImages.Common.LeftArrowIcon}
+                        resizeMode="contain"
+                      />
+                    </TouchableOpacity>
                   </TouchableOpacity>
-                </TouchableOpacity>
-              );
-            }}
-          />
+                );
+              }}
+            />
+          ) : (
+            <View style={styles.emptyCont}>
+              <Text style={styles.emptyTxt}>
+                {`No ${selectTab == 0 ? 'Following' : 'Followers'} Found`}
+              </Text>
+            </View>
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
@@ -211,6 +250,16 @@ const styles = StyleSheet.create({
     color: AppColors.black.black,
     fontSize: normalized(12),
     fontWeight: '400',
+  },
+  emptyCont: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyTxt: {
+    fontSize: normalized(14),
+    color: AppColors.black.black,
+    fontWeight: '500',
   },
 });
 export default FollowerScreen;

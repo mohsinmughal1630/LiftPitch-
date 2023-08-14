@@ -48,7 +48,6 @@ export default function SingleMessageComponent(props: any) {
       onPress={props.onPress}
       style={styles.container}
       activeOpacity={1}>
-      {/* Online */}
       <Pressable onPress={props.onPressProfile}>
         {props?.profileImage?.length > 0 ? (
           <AppImageViewer
