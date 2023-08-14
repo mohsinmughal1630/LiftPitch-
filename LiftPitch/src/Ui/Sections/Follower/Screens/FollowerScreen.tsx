@@ -23,6 +23,7 @@ import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import HeaderTab from '../../../Components/CustomTab/HeaderTab';
 import CustomSearchBar from '../../../Components/CustomSearchBar/CustomSearchBar';
 import LoadingImage from '../../../Components/LoadingImage';
+import {Routes} from '../../../../Utils/Routes';
 const FollowerScreen = (props: ScreenProps) => {
   const [selectTab, setSelectedTab] = useState(0);
   const [searchTxt, setSearchTxt] = useState('');
@@ -60,7 +61,20 @@ const FollowerScreen = (props: ScreenProps) => {
             data={commentsConstants}
             renderItem={({item, index}) => {
               return (
-                <View style={styles.singleCommentContainer} key={index}>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={styles.singleCommentContainer}
+                  key={index}
+                  onPress={() => {
+                    if (item?.userId) {
+                      props?.navigation.navigate(
+                        Routes.ProfileTab.ProfileScreen,
+                        {
+                          userId: item?.userId,
+                        },
+                      );
+                    }
+                  }}>
                   <View style={styles.profileImgBox}>
                     {item.image ? (
                       <LoadingImage
@@ -106,7 +120,7 @@ const FollowerScreen = (props: ScreenProps) => {
                       resizeMode="contain"
                     />
                   </TouchableOpacity>
-                </View>
+                </TouchableOpacity>
               );
             }}
           />

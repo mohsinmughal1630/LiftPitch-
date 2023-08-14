@@ -1,9 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Alert, Linking, Platform} from 'react-native';
-import {normalized, ScreenProps} from './AppConstants';
+import {AppColors, normalized, ScreenProps} from './AppConstants';
 import {AppStrings} from './Strings';
-import { SocialTypeStrings } from './AppEnums';
-import { appleLoginRequest, facebookLoginRequest, gmailLoginRequest } from './Social.d';
+import {SocialTypeStrings} from './AppEnums';
+import {
+  appleLoginRequest,
+  facebookLoginRequest,
+  gmailLoginRequest,
+} from './Social.d';
 
 export default class CommonDataManager {
   static shared: CommonDataManager;
@@ -212,16 +216,12 @@ export default class CommonDataManager {
         );
         socialParams = {
           token: response.data?.user?.id,
-          first_name: this.truncateString(
-            response.data?.user?.givenName,
-          ),
-          last_name: this.truncateString(
-            response.data?.user?.familyName,
-          ),
+          first_name: this.truncateString(response.data?.user?.givenName),
+          last_name: this.truncateString(response.data?.user?.familyName),
           email: response.data?.user?.email,
         };
       } else if (response.message !== AppStrings.Permissions.cancelled) {
-        Alert.alert('Error', response?.message)
+        Alert.alert('Error', response?.message);
       }
     }
 
@@ -243,7 +243,7 @@ export default class CommonDataManager {
           email: response.data?.email ? response.data?.email : '',
         };
       } else if (response.message !== AppStrings.Permissions.cancelled) {
-        Alert.alert('Error', response?.message)
+        Alert.alert('Error', response?.message);
       }
     }
 
@@ -265,7 +265,7 @@ export default class CommonDataManager {
           email: response.data?.email ? response.data?.email : '',
         };
       } else {
-        Alert.alert('Error', response?.message)
+        Alert.alert('Error', response?.message);
       }
     }
 
@@ -480,6 +480,37 @@ export default class CommonDataManager {
       ? fullObj?.name
       : `${fullObj?.first_name + ' ' || ''}${fullObj?.last_name + ' ' || ''}`;
     return this.getCapitalizedNameInitials(fullname);
+  };
+  // remove empty lines at the end and start of a string
+  removeEmptyLines = (str: any) => {
+    if (!str) return '';
+    str = str.trim();
+    return str.replace(/^\s+|\s+$/g, '');
+  };
+
+  generateRandomColor = (index: any) => {
+    const colorIndex = index % 5;
+    const allColors = [
+      AppColors.primaryPurple,
+      AppColors.red.warning,
+      AppColors.red.mainColor,
+      AppColors.black.simpleLight,
+      AppColors.black.brown,
+    ];
+    return allColors[colorIndex];
+  };
+
+  capitalizeFirstLetterFromSentence = (txt = '') => {
+    if (txt?.length > 0) {
+      const arr = txt.split(' ');
+      return arr.length == 0
+        ? '-'
+        : arr.length == 1
+        ? txt.charAt(0).toUpperCase()
+        : arr[0].charAt(0).toUpperCase() + arr[1].charAt(0).toUpperCase();
+    } else {
+      return '';
+    }
   };
 
   makeImageObj = (image: any) => {

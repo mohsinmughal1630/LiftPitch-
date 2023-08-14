@@ -10,6 +10,10 @@ export const Routes = {
   GetStarting: {
     onBoarding: 'onBoarding',
   },
+  Chat: {
+    chatScreen: 'ChatScreen',
+    messageListing: 'MessageListing',
+  },
   HomeTab: {
     homeScreen: 'home',
   },
@@ -22,12 +26,11 @@ export const Routes = {
   NotificationTab: {
     NotificationScreen: 'NotificationScreen',
   },
- ProfileTab: {
+  ProfileTab: {
     ProfileScreen: 'ProfileScreen',
   },
- 
-  Container:{
-    Container:'Container'
-  }
- 
+
+  Container: {
+    Container: 'Container',
+  },
 };

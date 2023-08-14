@@ -8,10 +8,10 @@ export const AppStrings = {
     noNfcError: 'No NFC connected yet.',
     recordNotFound: 'Record Not Found',
     notLoggedIn: 'User not logged in yet',
-    emailAlreadyUse: "That email address is already in use!",
-    invalidEmail: "That email address is invalid!",
-    invalidPassword: "The password is invalid!",
-    userNotFound: "User not found against this Email.",
+    emailAlreadyUse: 'That email address is already in use!',
+    invalidEmail: 'That email address is invalid!',
+    invalidPassword: 'The password is invalid!',
+    userNotFound: 'User not found against this Email.',
   },
   Validation: {
     fieldsEmptyError: 'Please fill the fields properly',
@@ -23,7 +23,7 @@ export const AppStrings = {
     maxImageSizeError:
       'The selected image size exceeds the maximum limit of 10MB.',
   },
-  
+
   Permissions: {
     contactPermission:
       'The app wants to access contacts. Go to Settings and enable it!',
@@ -33,13 +33,13 @@ export const AppStrings = {
     cancelled: 'Cancelled',
     success: 'Success',
   },
-  bottomBar:{
-    home:'Home',
-    followers:'Followers',
-    createVideo:'CreateVideo',
-    notification:'Notification',
-    profile:'Profile'
-  }
+  bottomBar: {
+    home: 'Home',
+    followers: 'Followers',
+    createVideo: 'CreateVideo',
+    notification: 'Notification',
+    profile: 'Profile',
+  },
 };
 
 export const AsyncKeyStrings = {
@@ -47,11 +47,16 @@ export const AsyncKeyStrings = {
     userToken: 'user_token',
     userdata: 'user_data',
   },
-  
+};
+export const USER_TYPE = {
+  owner: 'Owner',
+  otherUser: 'OtherUser',
+  guest: 'Guest',
 };
 
 export const Collections = {
-  Users: "Users",
+  Users: 'Users',
+  FOLLOW_N_FOLLOWING_COLLECTION: 'follow_&_follower',
 };
 
-export const GOOGLE_API_KEY = "AIzaSyBQyEE67gM0AvoJAzwp7fSdDlPqKwqKTxU";
+export const GOOGLE_API_KEY = 'AIzaSyBQyEE67gM0AvoJAzwp7fSdDlPqKwqKTxU';

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   AppColors,
   ScreenProps,
   hv,
   normalized,
+  profileTabArr,
+  profileTabArrForOtherUser,
 } from '../../../../Utils/AppConstants';
 import {
   KeyboardAvoidingView,
@@ -12,10 +14,10 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
-import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import {useDispatch, useSelector} from 'react-redux';
 import {logoutRequest} from '../../../../Network/Services/AuthServices';
 import {AppRootStore} from '../../../../Redux/store/AppStore';
@@ -25,9 +27,27 @@ import {
   setUserData,
 } from '../../../../Redux/reducers/AppReducer';
 import {saveUserData} from '../../../../Utils/AsyncStorage';
+import ProfileHeader from '../../../Components/CustomHeader/ProfileHeader';
+import {USER_TYPE} from '../../../../Utils/Strings';
+import ProfileCustomTab from '../../../Components/CustomTab/ProfileCustomTab';
+import {
+  checkUserFollowState,
+  followNFollowingUser,
+  getOtherUserProfile,
+} from '../../../../Network/Services/ProfileServices';
+import ThreadManager from '../../../../ChatModule/ThreadManger';
+import {Routes} from '../../../../Utils/Routes';
+import {makeObjForChat} from '../../../../Utils/Helper';
 const ProfileScreen = (props: ScreenProps) => {
+  const selector = useSelector((AppState: any) => AppState.AppReducer);
+  const params = props?.route?.params;
+  const threadRef = useRef(null);
+  const [profifleType, setProfileType] = useState('');
   const dispatch = useDispatch();
+  const [isFollow, setIsFollow] = useState(false);
+  const [data, setData] = useState<any>(null);
   const {userData} = useSelector((state: AppRootStore) => state.AppReducer);
+  const [selectedTab, setSelectedTab] = useState('Feed');
   const logoutClicked = async () => {
     dispatch(setIsLoader(true));
     dispatch(setUserData(null));
@@ -37,10 +57,119 @@ const ProfileScreen = (props: ScreenProps) => {
       dispatch(setIsLoader(false)),
     );
   };
+  useEffect(() => {
+    if (params?.userId && params?.userId != userData?.userId) {
+      dispatch(setIsLoader(true));
+      getOtherUserProfile(props?.route?.params?.userId, (response: any) => {
+        dispatch(setIsLoader(false));
+        setData(response);
+      });
+      checkUserFollowState(
+        userData?.userId,
+        props?.route?.params?.userId,
+        (result: any) => {
+          setIsFollow(result);
+        },
+      );
+      setProfileType(USER_TYPE.otherUser);
+    } else {
+      setData(userData);
+      setProfileType(USER_TYPE.owner);
+    }
+  }, []);
+
+  const goToChat = async () => {
+    let threadObj = null;
+    ThreadManager.instance.checkIsConnectionExist(
+      userData?.userId,
+      props?.route?.params?.userId,
+      (threadData: any) => {
+        threadObj = threadData;
+      },
+    );
+
+    if (threadObj) {
+      props?.navigation.navigate(Routes.Chat.chatScreen, {
+        thread: threadObj,
+      });
+    } else {
+      let senderObj: any = {};
+      let reciverObj: any = {};
+      senderObj = makeObjForChat(selector?.userData);
+      reciverObj = makeObjForChat(data);
+      console.log('senderObj before------>', senderObj);
+      console.log('reciverobj before------>', reciverObj);
+
+      ThreadManager.instance.setupRedux(selector, dispatch);
+      dispatch(setIsLoader(true));
+      let msg = '';
+      let docId = ThreadManager.instance.makeid(7);
+      await ThreadManager.instance.onSendCall(
+        senderObj,
+        reciverObj,
+        docId,
+        msg,
+        async (data: any) => {
+          dispatch(setIsLoader(false));
+          if (data != 'error') {
+            threadRef.current = data;
+            dispatch(setIsLoader(true));
+            ThreadManager.instance.acceptParticipation(
+              docId,
+              reciverObj?.id,
+              (obj: any) => {
+                dispatch(setIsLoader(false));
+                props?.navigation.push(Routes.Chat.chatScreen, {
+                  thread: obj,
+                });
+              },
+            );
+          } else {
+            alert(JSON.stringify(data));
+          }
+        },
+      );
+    }
+  };
+
+  const followNfollowerFun = async () => {
+    dispatch(setIsLoader(true));
+    let followingObj = {
+      id: userData?.userId,
+      userName: userData?.userName,
+      description: userData?.companyType,
+      profile: userData?.companyLogo,
+    };
+    let followerObj = {
+      id: data?.userId,
+      userName: data?.userName,
+      description: data?.companyType,
+      profile: data?.companyLogo,
+    };
+    await followNFollowingUser(
+      followingObj,
+      followerObj,
+      isFollow ? 'remove' : 'add',
+      (response: any) => {
+        dispatch(setIsLoader(false));
+        setIsFollow(!isFollow);
+      },
+    );
+  };
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
-      <CustomHeader title={'Profile Screen'} />
+      <ProfileHeader
+        profileType={profifleType}
+        data={data}
+        isFollow={isFollow}
+        atRightBtn={() => {
+          if (profifleType == USER_TYPE.owner) {
+          } else {
+            followNfollowerFun();
+          }
+        }}
+      />
       <KeyboardAvoidingView
         style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -49,11 +178,39 @@ const ProfileScreen = (props: ScreenProps) => {
           contentContainerStyle={styles.containerStyle}
           showsVerticalScrollIndicator={false}>
           <View style={styles.mainContainer}>
-            <Text style={styles.dummyTxt} onPress={logoutClicked}>
-              Logout from here
-            </Text>
+            <ProfileCustomTab
+              mainStyle={{marginVertical: normalized(20)}}
+              list={
+                profifleType == USER_TYPE.owner
+                  ? profileTabArr
+                  : profileTabArrForOtherUser
+              }
+              selectTab={selectedTab}
+              atSelectTab={(el: any) => {
+                setSelectedTab(el?.txt);
+              }}
+            />
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <Text>{selectedTab}</Text>
+            </View>
           </View>
         </ScrollView>
+
+        <TouchableOpacity
+          style={styles.bottomBtn}
+          onPress={() => {
+            if (profifleType == USER_TYPE.owner) {
+              logoutClicked();
+            } else {
+              goToChat();
+            }
+          }}>
+          <Text style={styles.bottomBtnTxt}>
+            {profifleType == USER_TYPE.owner
+              ? 'LogOut'
+              : `Chat with ${data?.userName}`}
+          </Text>
+        </TouchableOpacity>
       </KeyboardAvoidingView>
     </View>
   );
@@ -61,7 +218,6 @@ const ProfileScreen = (props: ScreenProps) => {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   containerStyle: {
@@ -74,6 +230,23 @@ const styles = StyleSheet.create({
     fontSize: normalized(14),
     fontWeight: '500',
     color: AppColors.red.mainColor,
+  },
+  bottomBtn: {
+    backgroundColor: AppColors.red.mainColor,
+    borderColor: AppColors.grey.gray,
+    borderWidth: 1,
+    height: normalized(35),
+    borderRadius: normalized(5),
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: normalized(5),
+    alignSelf: 'center',
+    paddingHorizontal: normalized(10),
+  },
+  bottomBtnTxt: {
+    color: AppColors.white.white,
+    fontSize: normalized(13),
+    fontWeight: '500',
   },
 });
 export default ProfileScreen;

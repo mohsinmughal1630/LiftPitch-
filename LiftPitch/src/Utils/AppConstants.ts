@@ -9,7 +9,7 @@ const templateWidth = 375;
 const templateHeight = 812;
 const widthRatio = ScreenSize.width / templateWidth;
 const heightRatio = ScreenSize.height / templateHeight;
-
+export const isLargeWidth = Dimensions.get('window').width > 390;
 export const normalized = (value: number) =>
   PixelRatio.roundToNearestPixel(value * widthRatio);
 export const hv = (value: number) =>
@@ -27,6 +27,7 @@ export const deviceHeightwithOutBar =
   Dimensions.get('window').height - normalized(70);
 
 export const AppImages = {
+  AppIcon: require('../Ui/assets/images/AppIcon.png'),
   Auth: {
     Camera: require('../Ui/assets/images/Auth/Camera.png'),
     closeEye: require('../Ui/assets/images/Auth/closeEye.png'),
@@ -67,6 +68,8 @@ export const AppImages = {
   },
   Common: {
     DropDownIcon: require('../Ui/assets/images/Common/DropDownIcon.png'),
+    Setting: require('../Ui/assets/images/Common/Setting.png'),
+
     WarningIcon: require('../Ui/assets/images/Common/WarningIcon.png'),
     MorningIcon: require('../Ui/assets/images/Common/MorningIcon.png'),
     TickIcon: require('../Ui/assets/images/Common/TickIcon.png'),
@@ -90,7 +93,18 @@ export const AppImages = {
   },
 };
 export const AppFonts = {};
-
+export const mediaSelectionConstants = [
+  {
+    id: 1,
+    image: AppImages.Chat.Gallery,
+    text: 'upload image',
+  },
+  {
+    id: 2,
+    image: AppImages.Chat.Document,
+    text: 'Upload document',
+  },
+];
 export const AppColors = {
   dark: {
     darkLevel1: '#535F79',
@@ -188,6 +202,32 @@ export const imagePickerConstants = [
     id: 1,
     image: AppImages.Auth.CameraPicker,
     text: 'Take a photo from Camera',
+  },
+];
+
+export const profileTabArr = [
+  {
+    id: 1,
+    isSelected: false,
+    txt: 'Feed',
+  },
+  {
+    id: 2,
+    isSelected: false,
+    txt: 'Analytics',
+  },
+  {
+    id: 1,
+    isSelected: false,
+    txt: 'Info',
+  },
+];
+
+export const profileTabArrForOtherUser = [
+  {
+    id: 1,
+    isSelected: false,
+    txt: 'Feed',
   },
 ];
 
@@ -520,6 +560,7 @@ export const commentsConstants = [
       'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
     date: new Date().setHours(0),
     message: 'This is a simple comment. Its for simple testing purposes. ',
+    userId: 'ORpWZBRC',
   },
   {
     id: 2,
@@ -528,6 +569,7 @@ export const commentsConstants = [
       'https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_1280.jpg',
     date: new Date().setHours(1),
     message: 'This is a simple comment. Its for simple testing purposes. ',
+    userId: 'noM34k2q',
   },
   {
     id: 3,

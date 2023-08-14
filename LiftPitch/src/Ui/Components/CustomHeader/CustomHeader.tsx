@@ -41,7 +41,7 @@ const CustomHeader = (props: any) => {
               {props?.rightTxt ? (
                 <Text style={styles.rightTxt}>{props?.rightTxt}</Text>
               ) : (
-                <Image />
+                <></>
               )}
             </TouchableOpacity>
           ) : (

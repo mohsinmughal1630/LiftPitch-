@@ -6,6 +6,7 @@ import {
 import {Routes} from '../Utils/Routes';
 import LoginScreen from '../Ui/Sections/Auth/Screens/Login';
 import SignUp from '../Ui/Sections/Auth/Screens/SignUp';
+import ProfileScreen from '../Ui/Sections/Profile/Screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 const AuthStack = () => {
