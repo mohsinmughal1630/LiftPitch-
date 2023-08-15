@@ -686,13 +686,13 @@ export interface ILocation {
 //   }
 //   return Dimensions.get('window').height;
 // };
-export const calculateWindowHeight = () => {
+export const calculateWindowHeight = (type: 'status' | 'diff') => {
   const diff =
     Dimensions.get('screen').height - Dimensions.get('window').height;
   const isPoco = Platform?.constants?.Brand?.toLowerCase() == 'poco';
   const isRedmi = Platform?.constants?.Brand?.toLowerCase() == 'redmi';
   const statusHeight = StatusBar?.currentHeight || 0;
-  return Dimensions.get('screen').height - statusHeight;
+  return Dimensions.get('screen').height - (type == 'diff' ? diff : statusHeight)
 };
 
 export const makeid = (length: number) => {

@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     backgroundColor: AppColors.black.black,
     height:
       Platform.OS == 'android'
-        ? calculateWindowHeight() - normalized(80)
+        ? calculateWindowHeight('status') - normalized(80)
         : deviceHeight - normalized(80),
   },
   innerContainer: {

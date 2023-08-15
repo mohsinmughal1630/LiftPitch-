@@ -1,5 +1,5 @@
-import React, {useReducer} from 'react';
-import {Dimensions, Platform, StatusBar, View} from 'react-native';
+import React, { useReducer } from 'react';
+import { Dimensions, Platform, StatusBar, View } from 'react-native';
 import {
   containerInitialState,
   containerReducer,
@@ -11,11 +11,16 @@ import {
   ScreenSize,
   calculateWindowHeight,
 } from '../../../Utils/AppConstants';
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import BottomBar from '../../Components/BottomBar/BottomBar';
-const Container = ({navigation}) => {
+const Container = ({ navigation }) => {
   const [state, dispatch] = useReducer(containerReducer, containerInitialState);
   const selector = useSelector((AppState: any) => AppState.AppReducer);
+
+  const statusBarHeight = StatusBar.currentHeight || 0;
+
+  const diff =
+    Dimensions.get('screen').height - Dimensions.get('window').height;
 
   return (
     <View
@@ -26,12 +31,13 @@ const Container = ({navigation}) => {
       }}>
       <View
         style={[
-          {borderRadius: 20},
+          { borderRadius: 20 },
           Platform.OS == 'android'
             ? {
-                height: calculateWindowHeight() - selector.bottomBarHeight,
-              }
-            : {flex: 1},
+              // height: Dimensions.get('screen').height - (state.selectedTab !== 0 ? diff : statusBarHeight) - selector.bottomBarHeight,
+              height: Dimensions.get('screen').height - diff - selector.bottomBarHeight,
+            }
+            : { flex: 1 },
         ]}>
         {setContainerStack(state.selectedTab)}
       </View>
