@@ -14,6 +14,21 @@ const ProfileHeader = (props: any) => {
   return (
     <View style={styles.maincontainer}>
       <View style={styles.childCont}>
+        {props?.profileType !== USER_TYPE.owner ? (
+          <TouchableOpacity
+            onPress={() => {
+              props?.atBackPress();
+            }}>
+            <Image
+              source={AppImages.Auth.backIcon}
+              style={{
+                tintColor: AppColors.white.white,
+                marginEnd: normalized(10),
+              }}
+            />
+          </TouchableOpacity>
+        ) : null}
+
         {props?.data?.companyLogo?.length > 0 ? (
           <AppImageViewer
             source={{uri: props?.data?.companyLogo}}

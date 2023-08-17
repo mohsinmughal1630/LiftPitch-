@@ -1,6 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
 import {Alert, Platform} from 'react-native';
-import moment from 'moment';
 import storage from '@react-native-firebase/storage';
 import {setThreadList} from '../Redux/reducers/AppReducer';
 import {sendPushNotification} from '../Network/Services/GeneralServices';
@@ -611,7 +610,6 @@ class ThreadManager {
         token: token,
       })
       .then(() => {
-        console.log('token updated in firebase');
       })
       .catch(err => {
         console.log('updateUserToken====>', err);
@@ -698,12 +696,19 @@ class ThreadManager {
       });
   };
 
-  // Uploading File
-  uploadMedia = async (uri: any, onComplete: any) => {
-    const filename = this.makeid(6) + uri.substring(uri.lastIndexOf('/') + 1);
-    console.log('filename === ', filename);
-    const uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
-    console.log('uploadUri =====> ', uploadUri);
+  // IMAGE MESSAGE
+  uploadMedia = async (uri: any, videoType: boolean, onComplete: any) => {
+    let filename = this.makeid(6) + uri.substring(uri.lastIndexOf('/') + 1);
+    let uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
+    console.log('before fileName----->', filename);
+    if (videoType && uploadUri.includes('mov')) {
+      let fileArr = filename.split('.');
+      const ext = fileArr[fileArr.length - 1];
+      if (ext.toLowerCase() == 'mov') {
+        filename = filename.replace(/mov/g, 'mp4');
+      }
+    }
+    console.log('after fileName----->', filename);
     const ref = storage().ref(filename);
     const task = ref.putFile(uploadUri);
     // set progress state
@@ -714,7 +719,6 @@ class ThreadManager {
       await task
         .then(item => {
           ref.getDownloadURL().then(url => {
-            console.log('url is ', url);
             onComplete(url);
           });
         })
@@ -726,6 +730,7 @@ class ThreadManager {
       onComplete('error');
     }
   };
+
 
   //Check is Already Connection or Not
 

@@ -1,10 +1,6 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {AppStrings, Collections} from '../../Utils/Strings';
-// import { notifications } from "react-native-firebase-push-notifications";
-
-import {Alert} from 'react-native';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import ThreadManager from '../../ChatModule/ThreadManger';
 
 export const userSignupRequest = async (
@@ -34,10 +30,8 @@ export const userSignupRequest = async (
           .then(docRef => {
             let loginObj = {
               ...userInput,
-              // userId: userId,
               userId: id,
             };
-            console.log('getResponse------->', userInput);
 
             getResponse({status: true, data: loginObj});
           })

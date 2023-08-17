@@ -36,7 +36,7 @@ export const uploadMedia = async (
 
 export const sendPushNotification = async (params: any, onComplete: any) => {
   const urlForApiCall = PUSH_NOTIFICATION_URL;
-  const authToken = `Bearer AAAA875doQE:APA91bGhsaO3JE2A_PzT3vZVgl2B358wDjgIEr42bzCRTzy7k1ipKWnsL9tKrrSPpdyb7rFM2o4YjkQCpKrN5bH5dVSKsAo1DoMVoe8cLsXXdxN3rVUc5P72YnfRPtNBDj67nYJ3R0Z_`;
+  const authToken = `Bearer AAAA33VLu_0:APA91bFPpo1OTkBCTbX4eukwnycqmSqe4NSlEzSuz-2UGF2s1nt788gNQgTmpimvzoQNOPAJxfq3GVZbqNWz5fe19Zp89L8wQ6OzGqTJwqtjX0tCs8kZ_1BGYybFSZOtJxM2Q4tVCMw8`;
   console.log('push Params=====>', params);
   await axios({
     method: 'post',

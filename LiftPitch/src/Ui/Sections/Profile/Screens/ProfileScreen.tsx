@@ -151,7 +151,6 @@ const ProfileScreen = (props: ScreenProps) => {
       followerObj,
       isFollow ? 'remove' : 'add',
       (response: any) => {
-        console.log('response:------>', response);
         setTimeout(() => {
           dispatch(setIsLoader(false));
           setIsFollow(!isFollow);
@@ -163,11 +162,15 @@ const ProfileScreen = (props: ScreenProps) => {
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
       <ProfileHeader
+        atBackPress={() => {
+          props?.navigation?.goBack();
+        }}
         profileType={profifleType}
         data={data}
         isFollow={isFollow}
         atRightBtn={() => {
           if (profifleType == USER_TYPE.owner) {
+            console.log('go to setting Screen');
           } else {
             followNfollowerFun();
           }

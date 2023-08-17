@@ -29,12 +29,14 @@ export const followNFollowingUser = async (
   let senderPromise = new Promise((resolve, reject) => {
     getfollowPreviousList(sender?.id, (senderResult: any) => {
       if (senderResult?.userId && senderResult?.following?.length > 0) {
+        console.log('take Action for following----->',action);
         let newArr = followingActionObj(
           action,
           reciver,
           senderResult?.following,
         );
         new Promise((resolve: any, reject) => {
+
           firestore()
             .collection(Collections.FOLLOW_N_FOLLOWING_COLLECTION)
             .doc(sender?.id)
@@ -49,7 +51,7 @@ export const followNFollowingUser = async (
             });
         });
       } else {
-        console.log('add new----->');
+        console.log('create new Doc----->');
         let newObj = {
           userId: reciver?.id,
           follower: [],
@@ -72,6 +74,7 @@ export const followNFollowingUser = async (
   let receiverPromise = new Promise((resolve, reject) => {
     getfollowPreviousList(reciver?.id, (receiverResult: any) => {
       if (receiverResult?.userId && receiverResult?.follower?.length > 0) {
+        console.log('take Action for follower----->',action);
         let newArr = followingActionObj(
           action,
           sender,
@@ -92,6 +95,7 @@ export const followNFollowingUser = async (
             });
         });
       } else {
+        console.log('create new Doc----->');
         let newObj = {
           userId: sender?.id,
           follower: [sender],

@@ -56,8 +56,6 @@ export const AppSlice = createSlice({
       state.showNoti = action.payload;
     },
     setThreadList: (state, action) => {
-      console.log('action.payload----->', action.payload);
-
       state.threadList = action.payload;
     },
     logOut: (state, action) => {

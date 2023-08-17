@@ -7,6 +7,7 @@ import {Routes} from '../Utils/Routes';
 import Container from '../Ui/Sections/Container/Container';
 import ProfileScreen from '../Ui/Sections/Profile/Screens/ProfileScreen';
 import ChatScreen from '../Ui/Sections/Chat/Screens/ChatScreen';
+import NotificationScreen from '../Ui/Sections/Notification/Screens/NotificationScreen';
 const MainStack = createStackNavigator();
 
 interface AppStackProps {
@@ -29,6 +30,10 @@ export default function MainNavigation() {
       <MainStack.Screen
         name={Routes.ProfileTab.ProfileScreen}
         component={ProfileScreen}
+      />
+      <MainStack.Screen
+        name={Routes.Chat.messageListing}
+        component={NotificationScreen}
       />
       <MainStack.Screen name={Routes.Chat.chatScreen} component={ChatScreen} />
     </MainStack.Navigator>

@@ -1,6 +1,7 @@
 import {
   createNavigationContainerRef,
   useIsFocused,
+  useNavigation,
 } from '@react-navigation/native';
 import React, {useEffect} from 'react';
 import {Platform, SafeAreaView, StyleSheet, View} from 'react-native';
@@ -21,15 +22,15 @@ import ThreadManager from './ChatModule/ThreadManger';
 import {getUserData} from './Utils/AsyncStorage';
 import {setUpChat} from './Utils/Helper';
 import LocalNotification from './Ui/Components/LocalNotification';
+import {Routes} from './Utils/Routes';
 export const navigationRef = createNavigationContainerRef();
 export const navRef = React.createRef();
-export function refNavigation(name: any, params: any) {
-  navRef.current?.navigate(name, params);
-}
+
 function AppContainer() {
   const selector = useSelector((AppState: any) => AppState.AppReducer);
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const navigation = useNavigation<any>();
 
   useEffect(() => {
     if (isFocused && selector?.userData) {
@@ -117,7 +118,6 @@ function AppContainer() {
   };
 
   const getInitialNotification = async () => {
-    console.log('getInitialNotification====');
     const notification = await notifications
       .getInitialNotification()
       .then(async (remoteMessage: any) => {
@@ -131,12 +131,12 @@ function AppContainer() {
     return notification;
   };
   const openDetail = () => {
-    let type = ThreadManager.instance.pushObj._data.type;
+    let type = ThreadManager?.instance?.pushObj?._data?.type;
     if (Platform.OS == 'android') {
       setBadge(0);
     }
     if (type == 2) {
-      refNavigation('ChatScreen', {
+      navigation?.navigate(Routes.Chat.chatScreen, {
         thread: ThreadManager.instance.pushObj._data,
       });
     }

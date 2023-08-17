@@ -6,15 +6,22 @@ import {
   Image,
   Modal,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import {AppImages, hv, isSmallDevice} from '../../../../Utils/AppConstants';
+import {
+  AppImages,
+  hv,
+  isSmallDevice,
+  normalized,
+} from '../../../../Utils/AppConstants';
 const ChatImageView = ({showImageView, url, onClose}) => {
   return (
     <Modal
       visible={showImageView}
       presentationStyle="fullScreen"
       onRequestClose={onClose}>
+      <SafeAreaView />
       <View
         style={{
           ...style.mainView,
@@ -22,16 +29,13 @@ const ChatImageView = ({showImageView, url, onClose}) => {
         <TouchableOpacity
           onPress={() => onClose()}
           style={{
-            marginTop: isSmallDevice ? hv(25) : hv(50),
+            marginTop: normalized(35),
             position: 'absolute',
             width: '100%',
             zIndex: 200,
             justifyContent: 'center',
           }}>
-          <Image
-            style={style.backButton}
-            source={AppImages.Common.LeftArrowIcon}
-          />
+          <Image style={style.backButton} source={AppImages.Auth.backIcon} />
         </TouchableOpacity>
         <View
           style={{

@@ -19,7 +19,6 @@ export const setUpChat = async (onComplete: any) => {
   let newId = userId.toString();
   if (newId?.length > 0) {
     await ThreadManager.instance.getUserThread(newId, async (list: any) => {
-      console.log('list-0000----->', list?.length);
       await ThreadManager.instance.setupParticipantListener(newId);
       await ThreadManager.instance.setupThreadListener(newId);
       ThreadManager.instance.setupUserListener();

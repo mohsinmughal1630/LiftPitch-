@@ -10,6 +10,7 @@ import {
   Alert,
   Modal,
   PermissionsAndroid,
+  Text,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -42,27 +43,21 @@ const ChatScreen = (props: ScreenProps) => {
   const thread = props?.route?.params?.thread
     ? props?.route?.params?.thread
     : [];
-  const [marked, setMarked] = useState(false);
   var selectedUrl: any = useRef();
-  const [openUrgentModal, setOpenUrgentModal] = useState(false);
   const [openSelectionMediaModal, setOpenSelectionMediaModal] = useState(false);
-
-  const [reply, setReply] = useState(null);
+  const [reply, setReply] = useState<any>(null);
   const [obj, setObj] = useState(null);
   const dispatch = useDispatch();
   const scrollToBottomRef: any = useRef(null);
   const [message, setMessage] = useState('');
   const currentlyVisibleMessages = useRef([]);
-  const [isKeyboardVisible, setKeyboardVisible] = useState(true);
-  const userData = selector.userData?.user
-    ? selector.userData?.user
-    : selector.userData;
-  const userId = selector?.userData?.userId;
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+  const userId = selector?.userData?.userId.toString();
   const threadSelector = useSelector(
     (AppState: any) => AppState.AppReducer.threadList,
   );
   const [currentUserData, setcurrentUserData] = useState(
-    selector.userData?.user ? selector.userData?.user : selector.userData,
+    selector?.userData?.user ? selector?.userData?.user : selector?.userData,
   );
   const [visibleMessages, setVisibleMessage] = useState([]);
   const [showPdf, setShowPdf] = useState(false);
@@ -74,32 +69,65 @@ const ChatScreen = (props: ScreenProps) => {
   var initialCall: any = useRef();
   useEffect(() => {
     if (props?.route?.params?.thread) {
-      setOtherUserProfileImg();
+      getOtherUpdatedData();
     }
   }, [props?.route?.params?.thread]);
 
-  const setOtherUserProfileImg = async () => {
-    try {
-      let foundObj = props?.route?.params?.thread.participants.find(
-        (el: any) => el.user !== userId,
-      );
-      if (foundObj) {
-        console.log('This is other user id ', foundObj?.user);
-      }
-    } catch (e) {
-      console.log('err ', e);
-    }
+  const getOtherUpdatedData = async () => {
+    // try {
+    //   let findedIndex = props?.route?.params?.thread?.participants.findIndex(
+    //     (value: any) => value.user == userId,
+    //   );
+    //   let otherIndex = props?.route?.params?.thread?.participants.findIndex(
+    //     (value: any) => value.user != userId,
+    //   );
+    //   if (otherIndex != -1) {
+    //     await ThreadManager.instance.getUpdateUserData(
+    //       props?.route?.params?.thread?.participants[otherIndex],
+    //       (response: any) => {
+    //         let obj = {};
+    //         if (response) {
+    //           let otherUser = {
+    //             ...props?.route?.params?.thread?.participants[otherIndex],
+    //             userName: response?.name
+    //               ? response?.name
+    //               : props?.route?.params?.thread?.participants[otherIndex]
+    //                   .userName,
+    //             userProfileImageUrl: response?.image
+    //               ? response?.image
+    //               : response?.cover_image
+    //               ? response?.cover_image
+    //               : props?.route?.params?.thread?.participants[otherIndex]
+    //                   .userProfileImageUrl,
+    //           };
+    //           obj = {
+    //             ...props?.route?.params?.thread,
+    //             participants: [
+    //               props?.route?.params?.thread?.participants[findedIndex],
+    //               otherUser,
+    //             ],
+    //           };
+    //         } else {
+    //           obj = {
+    //             ...props?.route?.params?.thread,
+    //           };
+    //         }
+    //         threadRef.current = obj;
+    //         setThreadIsUpdated(true);
+    //       },
+    //     );
+    //   }
+    // } catch (e) {
+    //   console.log('err ', e);
+    // }
   };
 
   useEffect(() => {
-    // dispatch(setIsShowNoti(false));
     threadRef.current = thread;
     initialMessageRef.current = 50;
     getInitialMessageList();
     clearCount();
     return () => {
-      // dispatch(setPushNotiObj(null));
-      // dispatch(setIsShowNoti(true));
       ThreadManager.instance.removeMessageListener();
     };
   }, []);
@@ -108,7 +136,7 @@ const ChatScreen = (props: ScreenProps) => {
       (item: any) => item.channelID == threadRef.current.channelID,
     );
     if (index == -1) {
-      // navigation.goBack();
+      // props?.navigation.goBack();
     } else {
       let count = 0;
       let findedThread = threadSelector[index];
@@ -117,15 +145,9 @@ const ChatScreen = (props: ScreenProps) => {
         count = threadRef.current[`${userId}$$`];
       }
       if (count > 0) {
-        console.log('count is greater than zero');
         clearCount();
       }
     }
-    // dispatch(setIsShowNoti(false));
-    return () => {
-      // dispatch(setIsShowNoti(true));
-      // dispatch(setPushNotiObj(null));
-    };
   }, [threadSelector]);
   const clearCount = () => {
     ThreadManager.instance.clearUnreadCount(threadRef.current, userId);
@@ -171,7 +193,7 @@ const ChatScreen = (props: ScreenProps) => {
         );
         let newItem = {
           ...item,
-          type: currentUserData?.userId == item?.senderID ? 'Owner' : 'guest',
+          type: userId == item?.senderID ? 'Owner' : 'guest',
           time: timeDate,
         };
 
@@ -190,6 +212,7 @@ const ChatScreen = (props: ScreenProps) => {
         }
       });
     }
+
     currentlyVisibleMessages.current = data;
     setVisibleMessage(data);
     if (data?.length > 0) {
@@ -269,11 +292,7 @@ const ChatScreen = (props: ScreenProps) => {
         setKeyboardVisible(true);
       },
     );
-    // dispatch(setIsShowNoti(false));
-    setName();
     return () => {
-      // dispatch(setIsShowNoti(true));
-      // dispatch(setPushNotiObj(null));
       keyboardDidHideListener.remove();
       keyboardDidShowListener.remove();
     };
@@ -282,23 +301,27 @@ const ChatScreen = (props: ScreenProps) => {
   const setName = () => {
     let name = '';
     let participants = threadRef.current
-      ? threadRef.current.participants
+      ? typeof threadRef.current.participants == 'string'
+        ? JSON.parse(threadRef.current.participants)
+        : threadRef.current.participants
+      : typeof thread.participants == 'string'
+      ? JSON.parse(thread.participants)
       : thread.participants;
-    if (participants) {
-      for (let i = 0; i < participants.length; i++) {
-        let item = participants[i];
-        if (item.user != userId) {
-          name = item?.userName;
-          otherUserRef.current = item;
-          break;
-        }
+    if (participants?.length > 0) {
+      let otherUserIndex = participants.findIndex(
+        (value: any) => value.user != userId,
+      );
+      if (otherUserIndex != -1) {
+        otherUserRef.current = participants[otherUserIndex];
+        name = participants[otherUserIndex]?.userName;
       }
-    }
-    return name;
-  };
 
+      return name;
+    }
+  };
   const onSendMessage = (params: any) => {
     let messageId = ThreadManager.instance.makeid(8);
+
     let currentDate = moment
       .utc(new Date())
       .format(ThreadManager.instance.dateFormater.fullDate);
@@ -306,15 +329,13 @@ const ChatScreen = (props: ScreenProps) => {
       ? currentUserData?.image
       : currentUserData?.profile_image
       ? currentUserData.profile_image
-      : currentUserData?.companyLogo
-      ? currentUserData?.companyLogo
       : '';
     let data: any = {
       created: currentDate,
       createdAt: currentDate,
-      senderID: currentUserData?.userId,
-      senderName: currentUserData?.userName
-        ? currentUserData.userName
+      senderID: userId,
+      senderName: currentUserData?.company_name
+        ? currentUserData.company_name
         : currentUserData.full_name
         ? currentUserData.full_name
         : '',
@@ -358,8 +379,6 @@ const ChatScreen = (props: ScreenProps) => {
       send: false,
     };
 
-    console.log('data-------->,', data);
-
     allMessages.current.push(newParams);
     initialMessageRef.current = initialMessageRef.current + 1;
     createSectionData();
@@ -383,24 +402,21 @@ const ChatScreen = (props: ScreenProps) => {
             data?.messageId,
             (response: any) => {
               if (response?.length == 0) {
-                let currentUData: any = null;
+                let fullName = currentUserData?.company_name
+                  ? currentUserData?.company_name
+                  : currentUserData?.full_name
+                  ? currentUserData?.full_name
+                  : '';
 
-                let index = threadRef?.current?.participants.findIndex(
-                  (item: any) => item.user == selector?.userData?.id,
+                ThreadManager.instance.generatePushNotification(
+                  threadRef.current,
+                  {
+                    userName: fullName,
+                  },
+                  otherUserRef.current,
+                  lastMessage,
+                  2,
                 );
-                if (index != -1) {
-                  currentUData = threadRef?.current?.participants[index];
-                }
-
-                // ThreadManager.instance.generatePushNotification(
-                //   threadRef.current,
-                //   {
-                //     userName: currentUData?.userName,
-                //   },
-                //   otherUserRef.current,
-                //   lastMessage,
-                //   2,
-                // );
               }
             },
           );
@@ -410,6 +426,29 @@ const ChatScreen = (props: ScreenProps) => {
         console.log('error==---=>', error);
       });
   };
+
+  // const onVoiceMessageSend = async (filePath: any, duration: any) => {
+  //   dispatch(setIsLoader(true));
+  //   ThreadManager.instance.uploadMedia(filePath, false, (url: any) => {
+  //     setTimeout(() => {
+  //       dispatch(setIsLoader(false));
+  //     }, 200);
+  //     if (url == 'error') {
+  //       return;
+  //     }
+  //     console.log('This is firebase uploaded url ', url);
+  //     let params: any = {
+  //       audioUrl: url,
+  //       audioDuration: duration,
+  //     };
+  //     if (reply) {
+  //       params['reply'] = reply.content;
+  //     }
+
+  //     onSendMessage(params);
+  //   });
+  // };
+
   const mediaSelection = (option?: any) => {
     ImagePicker.openPicker({
       multiple: false,
@@ -519,14 +558,15 @@ const ChatScreen = (props: ScreenProps) => {
       return data.path;
     }
   };
+
   return (
     <>
       <SafeAreaView style={{backgroundColor: AppColors.white.white}} />
       <View style={styles.container}>
         <CustomHeader
-          title={'Chat'}
+          title={setName()}
           atBackPress={() => {
-            props.navigation.goBack();
+            props?.navigation?.goBack();
           }}
           showBorder={true}
         />
@@ -583,6 +623,29 @@ const ChatScreen = (props: ScreenProps) => {
                 </View>
               );
             }}
+            renderSectionFooter={({section}) => {
+              return (
+                <View
+                  style={{
+                    flex: 1,
+                    paddingTop: 10,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: normalized(14),
+                      paddingVertical: hv(4),
+                      color: AppColors.black.lightBlack,
+                      textAlign: 'center',
+                    }}>{`${section.title} (${moment(
+                    section.title,
+                    'YYYY-MM-DD',
+                  ).format('ddd')})`}</Text>
+                </View>
+              );
+            }}
+            renderSectionHeader={({section}) => {
+              return null;
+            }}
           />
         </View>
 
@@ -625,7 +688,6 @@ const ChatScreen = (props: ScreenProps) => {
                 setObj(null);
                 setReply(null);
                 setMessage('');
-                setMarked(false);
               }}
               smileBtnPress={() => {
                 console.log('smileBtnPress=====>');

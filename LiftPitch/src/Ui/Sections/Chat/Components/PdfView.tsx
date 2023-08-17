@@ -23,10 +23,7 @@ const PdfView = (props: any) => {
         }}
       />
       <TouchableWithoutFeedback onPress={() => props?.onClose()}>
-        <Image
-          style={style.backButton}
-          source={AppImages.Common.LeftArrowIcon}
-        />
+        <Image style={style.backButton} source={AppImages.Auth.backIcon} />
       </TouchableWithoutFeedback>
       <View
         style={{
