@@ -8,14 +8,7 @@ import SingleImageItem from './SingleImageItem';
 import SingleDocItem from './SingleDocItem';
 import {AppColors, hv, normalized} from '../../../../Utils/AppConstants';
 
-const MyMessage = ({
-  item,
-  onPdf,
-  onImage,
-  atProfilePress,
-  navigation,
-  playVideo,
-}: any) => {
+const MyMessage = ({item, onPdf, onImage, playVideo}: any) => {
   const selector = useSelector((AppState: any) => AppState.SliceReducer);
   const [messageRead, setMessageRead] = useState(false);
   useEffect(() => {
@@ -119,14 +112,14 @@ const styles = StyleSheet.create({
   messageCon: {
     // width: rwp(240),
     marginEnd: normalized(4),
-    backgroundColor: AppColors.red.mainColor,
+    backgroundColor: AppColors.white.creamy,
     padding: normalized(15),
     borderRadius: normalized(12),
     borderTopRightRadius: 0,
   },
   message: {
     fontSize: normalized(16),
-    color: AppColors.white.white,
+    color: AppColors.black.black,
   },
   timeTextCon: {
     alignSelf: 'flex-end',

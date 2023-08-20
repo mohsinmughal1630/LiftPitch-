@@ -83,7 +83,7 @@ function AppContainer() {
       console.log('FCM token------->', token);
       await ThreadManager.instance.updateUserToken(
         token,
-        user?.userId.toString(),
+        user?.userId?.toString(),
       );
       onNotificationListener();
       onNotificationOpenedListener();

@@ -38,6 +38,7 @@ import {
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import MediaSelectionModal from '../../../Components/CustomModal/MediaSelectionModal';
+import ChatHeader from '../Components/ChatHeader';
 const ChatScreen = (props: ScreenProps) => {
   const selector = useSelector((AppState: any) => AppState.AppReducer);
   const thread = props?.route?.params?.thread
@@ -52,7 +53,7 @@ const ChatScreen = (props: ScreenProps) => {
   const [message, setMessage] = useState('');
   const currentlyVisibleMessages = useRef([]);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
-  const userId = selector?.userData?.userId.toString();
+  const userId = selector?.userData?.userId?.toString();
   const threadSelector = useSelector(
     (AppState: any) => AppState.AppReducer.threadList,
   );
@@ -427,28 +428,6 @@ const ChatScreen = (props: ScreenProps) => {
       });
   };
 
-  // const onVoiceMessageSend = async (filePath: any, duration: any) => {
-  //   dispatch(setIsLoader(true));
-  //   ThreadManager.instance.uploadMedia(filePath, false, (url: any) => {
-  //     setTimeout(() => {
-  //       dispatch(setIsLoader(false));
-  //     }, 200);
-  //     if (url == 'error') {
-  //       return;
-  //     }
-  //     console.log('This is firebase uploaded url ', url);
-  //     let params: any = {
-  //       audioUrl: url,
-  //       audioDuration: duration,
-  //     };
-  //     if (reply) {
-  //       params['reply'] = reply.content;
-  //     }
-
-  //     onSendMessage(params);
-  //   });
-  // };
-
   const mediaSelection = (option?: any) => {
     ImagePicker.openPicker({
       multiple: false,
@@ -563,8 +542,9 @@ const ChatScreen = (props: ScreenProps) => {
     <>
       <SafeAreaView style={{backgroundColor: AppColors.white.white}} />
       <View style={styles.container}>
-        <CustomHeader
+        <ChatHeader
           title={setName()}
+          profile={otherUserRef?.current?.userProfileImageUrl}
           atBackPress={() => {
             props?.navigation?.goBack();
           }}
@@ -629,9 +609,14 @@ const ChatScreen = (props: ScreenProps) => {
                   style={{
                     flex: 1,
                     paddingTop: 10,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                   }}>
+                  <View style={styles.simpleLine} />
                   <Text
                     style={{
+                      marginHorizontal: normalized(8),
                       fontSize: normalized(14),
                       paddingVertical: hv(4),
                       color: AppColors.black.lightBlack,
@@ -640,6 +625,7 @@ const ChatScreen = (props: ScreenProps) => {
                     section.title,
                     'YYYY-MM-DD',
                   ).format('ddd')})`}</Text>
+                  <View style={styles.simpleLine} />
                 </View>
               );
             }}
@@ -758,6 +744,11 @@ const styles = StyleSheet.create({
   sectionListCon: {
     paddingHorizontal: normalized(8),
     paddingTop: hv(15),
+  },
+  simpleLine: {
+    height: normalized(1),
+    width: normalized(80),
+    backgroundColor: '#E8E6EA',
   },
 });
 

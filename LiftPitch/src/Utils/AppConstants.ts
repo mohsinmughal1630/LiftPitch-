@@ -129,6 +129,7 @@ export const AppColors = {
     whiteOp: '#E8E8E8',
     bgWhite: '#F7FBF9',
     silverWhite: '#EBE4D9',
+    creamy: '#FBF5F4',
   },
   black: {
     black: '#000000',
@@ -161,6 +162,7 @@ export const AppColors = {
     mainColor: '#7E2A70',
   },
   green: {
+    lightGreen: '#EFF3F2',
     primaryLight: '#76E2C6',
     primaryLightButton: '#57dbba',
   },

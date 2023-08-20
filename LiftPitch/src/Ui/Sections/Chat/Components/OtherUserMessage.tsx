@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   },
   messageCon: {
     marginStart: normalized(4),
-    backgroundColor: AppColors.white.whiteOp,
+    backgroundColor: AppColors.green.lightGreen,
     padding: normalized(8),
     borderRadius: normalized(12),
     borderTopLeftRadius: 0,

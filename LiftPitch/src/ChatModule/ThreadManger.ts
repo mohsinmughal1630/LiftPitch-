@@ -8,6 +8,7 @@ let CHANNEL_COLLECTION = 'channels';
 let PARTICIPATION_COLLECTION = 'channel_participation';
 let THREAD_COLLECITON = 'thread';
 let USER_COLLECITON = 'Users_FCM_Token';
+let POST_COLLECTION = 'videos';
 
 class ThreadManager {
   static instance = new ThreadManager();
@@ -455,7 +456,7 @@ class ThreadManager {
     console.log('sender.userName====>', sender.userName, '====', receiver.user);
     let title = sender.userName;
     let findedUserIndex = this.userList.findIndex(
-      (item: any) => item.userId == receiver.user.toString(),
+      (item: any) => item.userId == receiver?.user?.toString(),
     );
     if (findedUserIndex != -1) {
       let finededUserToken = this.userList[findedUserIndex].token;
@@ -609,8 +610,7 @@ class ThreadManager {
         userId: userId,
         token: token,
       })
-      .then(() => {
-      })
+      .then(() => {})
       .catch(err => {
         console.log('updateUserToken====>', err);
       });
@@ -731,7 +731,6 @@ class ThreadManager {
     }
   };
 
-
   //Check is Already Connection or Not
 
   checkIsConnectionExist = async (
@@ -783,6 +782,22 @@ class ThreadManager {
       onComplete('error');
     }
   };
+
+  createPost = async (params: any, onComplete: any) => {
+    await firestore()
+      .collection(POST_COLLECTION)
+      .doc(params?.videoId)
+      .set(params)
+      .then(() => {})
+      .then(() => {
+        onComplete('created Successfully');
+      })
+      .catch(err => {
+        onComplete('error!');
+        console.log('update====>', err);
+      });
+  };
+
   ////////////////////
 }
 export default ThreadManager;

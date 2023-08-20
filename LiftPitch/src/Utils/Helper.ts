@@ -15,8 +15,9 @@ export const makeObjForChat = (data: any) => {
 export const setUpChat = async (onComplete: any) => {
   const user = await getUserData();
   let userId: any = '';
+
   userId = user?.user ? user?.user?.userId : user?.userId;
-  let newId = userId.toString();
+  let newId = userId?.toString();
   if (newId?.length > 0) {
     await ThreadManager.instance.getUserThread(newId, async (list: any) => {
       await ThreadManager.instance.setupParticipantListener(newId);
