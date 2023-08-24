@@ -143,7 +143,6 @@ const VideoCreateScreen = (props: ScreenProps) => {
       cameraRef?.current?.startRecording({
         flash: 'on',
         onRecordingFinished: (video: any) => {
-          console.log('video------>', video);
           setVideoPath(video?.path);
           ThreadManager.instance.uploadMedia(video.path, true, (url: any) => {
             if (url != 'error') {
