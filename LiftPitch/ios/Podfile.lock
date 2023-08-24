@@ -790,9 +790,9 @@ PODS:
     - React-Core
   - react-native-camera/RN (4.2.1):
     - React-Core
-  - react-native-contacts (7.0.6):
+  - react-native-contacts (7.0.7):
     - React-Core
-  - react-native-date-picker (4.2.13):
+  - react-native-date-picker (4.2.14):
     - React-Core
   - react-native-fbsdk (3.0.0):
     - React
@@ -890,7 +890,7 @@ PODS:
     - React-perflogger (= 0.68.2)
   - RNAppleAuthentication (2.2.2):
     - React-Core
-  - RNCAsyncStorage (1.19.1):
+  - RNCAsyncStorage (1.19.2):
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
@@ -921,7 +921,7 @@ PODS:
   - RNGoogleSignin (6.0.1):
     - GoogleSignIn (~> 5.0.0)
     - React-Core
-  - RNIap (12.10.5):
+  - RNIap (12.3.0):
     - React-Core
   - RNPermissions (3.8.4):
     - React-Core
@@ -964,6 +964,10 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.6.1)
+  - VisionCamera (2.15.6):
+    - React
+    - React-callinvoker
+    - React-Core
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -1059,6 +1063,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNShare (from `../node_modules/react-native-share`)
+  - VisionCamera (from `../node_modules/react-native-vision-camera`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1226,6 +1231,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNShare:
     :path: "../node_modules/react-native-share"
+  VisionCamera:
+    :path: "../node_modules/react-native-vision-camera"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -1290,8 +1297,8 @@ SPEC CHECKSUMS:
   React-jsinspector: c5989c77cb89ae6a69561095a61cce56a44ae8e8
   React-logger: a0833912d93b36b791b7a521672d8ee89107aff1
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
-  react-native-contacts: e31c3c29f317dd79d5f5b0b73658cb0577127ed4
-  react-native-date-picker: 04e866ba4e7857f83abd504ad42e787f0f02ae00
+  react-native-contacts: 61971364bf9f11a846587eeb736a4e65632815d4
+  react-native-date-picker: 8847cb359cf259ddae5ed165217e15573a654519
   react-native-fbsdk: 8e92c7a334fd8d9c2b5d8b8fcd7ae2c314161099
   react-native-image-picker: 60f4246eb5bb7187fc15638a8c1f13abd3820695
   react-native-netinfo: 3d3769f0d65de15c83a9bf1346f8be71de5a24bf
@@ -1312,7 +1319,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: b960b687d2dfef0d3761fbb187e01812ebab8b23
   ReactCommon: 095366164a276d91ea704ce53cb03825c487a3f2
   RNAppleAuthentication: 0571c08da8c327ae2afc0261b48b4a515b0286a6
-  RNCAsyncStorage: f47fe18526970a69c34b548883e1aeceb115e3e1
+  RNCAsyncStorage: f57e929cd7757f2cb3dd8186d123c09e8281a1ad
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFBApp: b20db101b153a290d493fb0058c957e59690f17a
@@ -1322,7 +1329,7 @@ SPEC CHECKSUMS:
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: e64616a4080cf7d83f4b292fad82d174587444e2
-  RNIap: c397f49db45af3b10dca64b2325f21bb8078ad21
+  RNIap: b23550f659d4fb63d37e27fd7faf3991f4eb61aa
   RNPermissions: f1b49dd05fa9b83993cd05a9ee115247944d8f1a
   RNReanimated: 1f117be601c59177816351a965bc57320b766c15
   RNScreens: b21dc57dfa2b710c30ec600786a3fc223b1b92e7
@@ -1330,6 +1337,7 @@ SPEC CHECKSUMS:
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  VisionCamera: bba0d9e344a4ac5d3336585bbbf16f1f14be43d1
   Yoga: 99652481fcd320aefa4a7ef90095b95acd181952
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
