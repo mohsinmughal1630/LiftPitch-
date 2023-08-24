@@ -68,3 +68,17 @@ export const followingActionObj = (action: any, obj: any, arr: any) => {
   }
   return newArr;
 };
+
+export const getVideoCreateObj = (userData: any) => {
+  let obj: any = {
+    userName: userData?.userName,
+    email: userData?.email,
+    phone: userData?.phone,
+    companyLogo: userData?.companyLogo,
+    companyName: userData?.companyName,
+  };
+  if (userData?.userId) {
+    obj['userId'] = userData?.userId;
+  }
+  return obj;
+};

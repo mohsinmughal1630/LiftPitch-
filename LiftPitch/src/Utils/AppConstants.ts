@@ -57,6 +57,18 @@ export const AppImages = {
     Video: require('../Ui/assets/images/Chat/Video.png'),
     Document: require('../Ui/assets/images/Chat/Document.png'),
   },
+  createVideo: {
+    galleryIcon: require('../Ui/assets/images/CreateVideo/galleryIcon.png'),
+    smileIcon: require('../Ui/assets/images/CreateVideo/smileIcon.png'),
+    CloseIcon: require('../Ui/assets/images/CreateVideo/CloseIcon.png'),
+    FiltersIcon: require('../Ui/assets/images/CreateVideo/FiltersIcon.png'),
+    flash: require('../Ui/assets/images/CreateVideo/flash.png'),
+    MagicPenIcon: require('../Ui/assets/images/CreateVideo/MagicPenIcon.png'),
+    FlipIcon: require('../Ui/assets/images/CreateVideo/FlipIcon.png'),
+    musicIcon: require('../Ui/assets/images/CreateVideo/musicIcon.png'),
+    SpeedIcon: require('../Ui/assets/images/CreateVideo/SpeedIcon.png'),
+    TimerIcon: require('../Ui/assets/images/CreateVideo/TimerIcon.png'),
+  },
   Videos: {
     Play: require('../Ui/assets/images/Videos/Play.png'),
     Comment: require('../Ui/assets/images/Videos/Comment.png'),
@@ -160,6 +172,8 @@ export const AppColors = {
   red: {
     warning: '#E35252',
     mainColor: '#7E2A70',
+    darkRed: '#EA4359',
+    lightRed: '#902b38',
   },
   green: {
     lightGreen: '#EFF3F2',
