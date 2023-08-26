@@ -11,7 +11,7 @@ interface Props {
 }
 export default function AlertModal(props: Props) {
   return (
-    <Modal animationType="fade" visible={props.visible} transparent={true}>
+    <Modal animationType="fade" visible={props?.visible} transparent={true}>
       <AppStatusBar
         backgroundColor={
           props.indigo ? 'rgba(13, 13, 46,0.92)' : 'rgba(0,0,0,0.3)'
