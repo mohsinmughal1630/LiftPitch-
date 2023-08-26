@@ -236,8 +236,8 @@ const SignUp = (props: ScreenProps) => {
           () => {
             dispatch(setUserData(response?.data));
             if (isPersisterUser) {
-              dispatch(setUpdateFBToken(true));
               saveUserData(response?.data);
+              dispatch(setUpdateFBToken(true));
             }
           },
         );
@@ -287,8 +287,8 @@ const SignUp = (props: ScreenProps) => {
         if (response?.status) {
           dispatch(setUserData(response?.data));
           if (isPersisterUser) {
-            dispatch(setUpdateFBToken(true));
             saveUserData(response?.data);
+            dispatch(setUpdateFBToken(true));
           }
         } else {
           let errorMessage = response?.message

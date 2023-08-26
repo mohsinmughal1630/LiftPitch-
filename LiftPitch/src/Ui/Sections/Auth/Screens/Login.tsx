@@ -70,7 +70,6 @@ const LoginScreen = (props: ScreenProps) => {
           message: 'Please enter an Email',
         }),
       );
-      // Alert.alert('Error', 'Please enter an Email');
       return;
     }
     if (!CommonDataManager.getSharedInstance().isEmailValid(email)) {
@@ -80,7 +79,6 @@ const LoginScreen = (props: ScreenProps) => {
           message: AppStrings.Validation.invalidEmailError,
         }),
       );
-      // Alert.alert('Error', AppStrings.Validation.invalidEmailError);
       return;
     }
     if (!password) {
@@ -90,7 +88,6 @@ const LoginScreen = (props: ScreenProps) => {
           message: 'Please enter Password',
         }),
       );
-      // Alert.alert('Error', 'Please enter Password');
       return;
     }
     if (!isNetConnected) {
@@ -100,7 +97,6 @@ const LoginScreen = (props: ScreenProps) => {
           message: AppStrings.Network.internetError,
         }),
       );
-      // Alert.alert('Error', AppStrings.Network.internetError);
       return;
     }
     const paramsObj = {email, password};
@@ -110,8 +106,8 @@ const LoginScreen = (props: ScreenProps) => {
       if (response?.status) {
         dispatch(setUserData(response?.data));
         if (isPersisterUser) {
-          dispatch(setUpdateFBToken(true));
           saveUserData(response?.data);
+          dispatch(setUpdateFBToken(true));
         }
       } else {
         let errorMessage = response?.message
@@ -123,7 +119,6 @@ const LoginScreen = (props: ScreenProps) => {
             message: errorMessage,
           }),
         );
-        // Alert.alert('Error', errorMessage);
       }
     }).catch(() => {
       dispatch(setIsLoader(false));
@@ -148,8 +143,8 @@ const LoginScreen = (props: ScreenProps) => {
         if (response?.status) {
           dispatch(setUserData(response?.data));
           if (isPersisterUser) {
-            dispatch(setUpdateFBToken(true));
             await saveUserData(response?.data);
+            dispatch(setUpdateFBToken(true));
           }
         } else {
           let errorMessage = response?.message
@@ -175,8 +170,8 @@ const LoginScreen = (props: ScreenProps) => {
               if (response?.status) {
                 dispatch(setUserData(response?.data));
                 if (isPersisterUser) {
-                  dispatch(setUpdateFBToken(true));
                   saveUserData(response?.data);
+                  dispatch(setUpdateFBToken(true));
                 }
               } else {
                 let errorMessage = response?.message

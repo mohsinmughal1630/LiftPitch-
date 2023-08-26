@@ -150,21 +150,17 @@ export const AppColors = {
     lightBlack: '#767D90',
     shadow: 'rgba(0,0,0, 0.7)',
     simpleLight: '#333333',
-    blackRGBA: 'rgba(30, 30, 31, 1)',
     mid: '#1E1E1F',
     brown: '#333333',
   },
   grey: {
     towerGrey: '#afb8bb',
     bgGrey: '#BDBDBD',
-    greyLevel1: '#E8E8E8',
+    greyLevel1: '#777777',
     grey: '#E4E7EB',
     switchGrey: '#E4E4E4',
     dimGrey: '#ACACAC',
     gray: 'rgba(118, 125, 144, 1)',
-    gray2: 'rgba(215, 215, 215, 1)',
-    grayLight: 'rgba(226, 227, 228, 1)',
-    grayExtraLight: 'rgba(234, 236, 237, 1)',
     midGray: 'rgba(146, 148, 151, 1)',
     simple: '#DDDDDD',
     placeholderGrey: '#c5c5c7',
@@ -683,5 +679,460 @@ export const videoHeaderOptions = [
   {
     id: 2,
     name: 'For Business',
+  },
+];
+
+export const PITCH_IDEAS_LIST = [
+  {
+    id: 1,
+    name: 'Day in the Life of an Employee',
+    description:
+      'Showcase the daily routine of an employee within your company.',
+    hero_image_url: 'https://unsplash.com/photos/_h7aBovKia4',
+    steps: [
+      {
+        step_number: 1,
+        description:
+          'Select an employee who is willing to share their daily work routine.',
+        image_url: 'https://unsplash.com/photos/_h7aBovKia4',
+      },
+      {
+        step_number: 2,
+        description:
+          'Film the employee performing various tasks throughout the day.',
+        image_url: 'https://unsplash.com/photos/_h7aBovKia4',
+      },
+      {
+        step_number: 3,
+        description: 'Edit the footage to fit within the 1-minute limit.',
+        image_url: 'https://unsplash.com/photos/_h7aBovKia4',
+      },
+      {
+        step_number: 4,
+        description:
+          'Post the video with a catchy caption and relevant hashtags.',
+        image_url: 'https://unsplash.com/photos/_h7aBovKia4',
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: 'Product Showcase',
+    description: 'Highlight the features and benefits of one of your products.',
+    hero_image_url: 'https://unsplash.com/photos/f0KBLNDUtDY',
+    steps: [
+      {
+        step_number: 1,
+        description: 'Choose a product to showcase.',
+        image_url: 'https://unsplash.com/photos/f0KBLNDUtDY',
+      },
+      {
+        step_number: 2,
+        description: 'Set up a clean and well-lit background.',
+        image_url: 'https://unsplash.com/photos/f0KBLNDUtDY',
+      },
+      {
+        step_number: 3,
+        description: 'Film the product, highlighting its features.',
+        image_url: 'https://unsplash.com/photos/f0KBLNDUtDY',
+      },
+      {
+        step_number: 4,
+        description:
+          'Edit the video, adding captions or voiceover to explain features.',
+        image_url: 'https://unsplash.com/photos/f0KBLNDUtDY',
+      },
+      {
+        step_number: 5,
+        description: 'Post the video with a brief description of the product.',
+        image_url: 'https://unsplash.com/photos/f0KBLNDUtDY',
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: 'Behind-the-Scenes',
+    description:
+      'Provide a peek into the interesting processes or tasks within your company.',
+    hero_image_url: 'https://unsplash.com/photos/p2TQ-3Bh3Oo',
+    steps: [
+      {
+        step_number: 1,
+        description:
+          'Identify an interesting process or task within the company.',
+        image_url: 'https://unsplash.com/photos/p2TQ-3Bh3Oo',
+      },
+      {
+        step_number: 2,
+        description: 'Capture the process or task on video.',
+        image_url: 'https://unsplash.com/photos/p2TQ-3Bh3Oo',
+      },
+      {
+        step_number: 3,
+        description: 'Edit the video to highlight key moments.',
+        image_url: 'https://unsplash.com/photos/p2TQ-3Bh3Oo',
+      },
+      {
+        step_number: 4,
+        description:
+          'Post the video with a caption explaining what viewers are seeing.',
+        image_url: 'https://unsplash.com/photos/p2TQ-3Bh3Oo',
+      },
+    ],
+  },
+  {
+    id: 4,
+    name: 'Customer Testimonial',
+    description:
+      'Showcase the positive experiences of your satisfied customers.',
+    hero_image_url: 'https://unsplash.com/photos/VRB1LJoTZ6w',
+    steps: [
+      {
+        step_number: 1,
+        description: 'Request a satisfied customer for a video testimonial.',
+        image_url: 'https://unsplash.com/photos/VRB1LJoTZ6w',
+      },
+      {
+        step_number: 2,
+        description:
+          'Record the customer talking about their positive experience.',
+        image_url: 'https://unsplash.com/photos/VRB1LJoTZ6w',
+      },
+      {
+        step_number: 3,
+        description: 'Edit the video, including text overlays with key quotes.',
+        image_url: 'https://unsplash.com/photos/VRB1LJoTZ6w',
+      },
+      {
+        step_number: 4,
+        description:
+          'Post the video with a caption expressing gratitude to the customer.',
+        image_url: 'https://unsplash.com/photos/VRB1LJoTZ6w',
+      },
+    ],
+  },
+  {
+    id: 5,
+    name: 'Product Unboxing',
+    description:
+      'Highlight the product and its packaging through an unboxing video.',
+    hero_image_url: 'https://unsplash.com/photos/8manzosDSGM',
+    steps: [
+      {
+        step_number: 1,
+        description: 'Get a box containing the product you want to showcase.',
+        image_url: 'https://unsplash.com/photos/8manzosDSGM',
+      },
+      {
+        step_number: 2,
+        description:
+          'Film the unboxing process, highlighting the product and packaging.',
+        image_url: 'https://unsplash.com/photos/8manzosDSGM',
+      },
+      {
+        step_number: 3,
+        description: 'Edit the video to show the most exciting moments.',
+        image_url: 'https://unsplash.com/photos/8manzosDSGM',
+      },
+      {
+        step_number: 4,
+        description:
+          'Post the video with a caption explaining what the product is.',
+        image_url: 'https://unsplash.com/photos/8manzosDSGM',
+      },
+    ],
+  },
+  {
+    id: 6,
+    name: "How It's Made",
+    description: 'Show the production process of a product your company makes.',
+    hero_image_url: 'https://unsplash.com/photos/WQJvWU_HZFo',
+    steps: [
+      {
+        step_number: 1,
+        description: 'Choose a product that the company makes.',
+        image_url: 'https://unsplash.com/photos/WQJvWU_HZFo',
+      },
+      {
+        step_number: 2,
+        description:
+          'Record the production process, showcasing the different stages.',
+        image_url: 'https://unsplash.com/photos/WQJvWU_HZFo',
+      },
+      {
+        step_number: 3,
+        description:
+          'Edit the video, adding captions or voiceover to explain the process.',
+        image_url: 'https://unsplash.com/photos/WQJvWU_HZFo',
+      },
+      {
+        step_number: 4,
+        description: 'Post the video with a caption describing the product.',
+        image_url: 'https://unsplash.com/photos/WQJvWU_HZFo',
+      },
+    ],
+  },
+  {
+    id: 7,
+    name: 'Weekly Tips',
+    description: 'Share valuable tips or advice on a relevant industry topic.',
+    hero_image_url: 'https://unsplash.com/photos/Itj1aZOnX5E',
+    steps: [
+      {
+        step_number: 1,
+        description: 'Choose a relevant topic for your industry.',
+        image_url: 'https://unsplash.com/photos/Itj1aZOnX5E',
+      },
+      {
+        step_number: 2,
+        description: 'Film a short video giving a tip or advice on that topic.',
+        image_url: 'https://unsplash.com/photos/Itj1aZOnX5E',
+      },
+      {
+        step_number: 3,
+        description: 'Edit the video, adding text overlays if necessary.',
+        image_url: 'https://unsplash.com/photos/Itj1aZOnX5E',
+      },
+      {
+        step_number: 4,
+        description:
+          'Post the video with a catchy caption and relevant hashtags.',
+        image_url: 'https://unsplash.com/photos/Itj1aZOnX5E',
+      },
+    ],
+  },
+  {
+    id: 8,
+    name: 'Meet the Team',
+    description: 'Introduce your team or department to your audience.',
+    hero_image_url: 'https://unsplash.com/photos/1JNukrENwsw',
+    steps: [
+      {
+        step_number: 1,
+        description: 'Select a team or department in the company.',
+        image_url: 'https://unsplash.com/photos/1JNukrENwsw',
+      },
+      {
+        step_number: 2,
+        description:
+          'Interview team members, asking them to introduce themselves.',
+        image_url: 'https://unsplash.com/photos/1JNukrENwsw',
+      },
+      {
+        step_number: 3,
+        description:
+          'Edit the video to feature key moments from each interview.',
+        image_url: 'https://unsplash.com/photos/1JNukrENwsw',
+      },
+      {
+        step_number: 4,
+        description: 'Post the video with a caption introducing the team.',
+        image_url: 'https://unsplash.com/photos/1JNukrENwsw',
+      },
+    ],
+  },
+  {
+    id: 9,
+    name: 'Industry News and Updates',
+    description: 'Share recent news and updates from your industry.',
+    hero_image_url: 'https://unsplash.com/photos/8OyKWQgJv5c',
+    steps: [
+      {
+        step_number: 1,
+        description: 'Research recent industry news and updates.',
+        image_url: 'https://unsplash.com/photos/8OyKWQgJv5c',
+      },
+      {
+        step_number: 2,
+        description: 'Record a video summarizing the news.',
+        image_url: 'https://unsplash.com/photos/8OyKWQgJv5c',
+      },
+      {
+        step_number: 3,
+        description:
+          'Edit the video, adding text overlays or images to support the content.',
+        image_url: 'https://unsplash.com/photos/8OyKWQgJv5c',
+      },
+      {
+        step_number: 4,
+        description: 'Post the video with a caption and relevant hashtags.',
+        image_url: 'https://unsplash.com/photos/8OyKWQgJv5c',
+      },
+    ],
+  },
+  {
+    id: 10,
+    name: 'Q&A Session',
+    description: 'Answer questions from your followers or customers.',
+    hero_image_url: 'https://unsplash.com/photos/Lu2pfy_8VKg',
+    steps: [
+      {
+        step_number: 1,
+        description: 'Collect questions from followers or customers.',
+        image_url: 'https://unsplash.com/photos/Lu2pfy_8VKg',
+      },
+      {
+        step_number: 2,
+        description: 'Record a video answering the most interesting questions.',
+        image_url: 'https://unsplash.com/photos/Lu2pfy_8VKg',
+      },
+      {
+        step_number: 3,
+        description: 'Edit the video to fit within the 1-minute limit.',
+        image_url: 'https://unsplash.com/photos/Lu2pfy_8VKg',
+      },
+      {
+        step_number: 4,
+        description:
+          'Post the video with a caption encouraging further questions.',
+        image_url: 'https://unsplash.com/photos/Lu2pfy_8VKg',
+      },
+    ],
+  },
+  {
+    id: 11,
+    name: 'Event Recap',
+    description:
+      'Share highlights from a relevant industry event or conference.',
+    hero_image_url: 'https://unsplash.com/photos/U5rMrSI7Pn4',
+    steps: [
+      {
+        step_number: 1,
+        description: 'Attend a relevant industry event or conference.',
+        image_url: 'https://unsplash.com/photos/U5rMrSI7Pn4',
+      },
+      {
+        step_number: 2,
+        description:
+          'Capture footage of key moments and interesting happenings.',
+        image_url: 'https://unsplash.com/photos/U5rMrSI7Pn4',
+      },
+      {
+        step_number: 3,
+        description: 'Edit the video to showcase the highlights.',
+        image_url: 'https://unsplash.com/photos/U5rMrSI7Pn4',
+      },
+      {
+        step_number: 4,
+        description: 'Post the video with a caption summarizing the event.',
+        image_url: 'https://unsplash.com/photos/U5rMrSI7Pn4',
+      },
+    ],
+  },
+  {
+    id: 12,
+    name: 'Success Story',
+    description: 'Celebrate a successful project or collaboration.',
+    hero_image_url: 'https://unsplash.com/photos/Kgjx2DYSpmU',
+    steps: [
+      {
+        step_number: 1,
+        description: 'Identify a successful project or collaboration.',
+        image_url: 'https://unsplash.com/photos/Kgjx2DYSpmU',
+      },
+      {
+        step_number: 2,
+        description: 'Record a video talking about the process and results.',
+        image_url: 'https://unsplash.com/photos/Kgjx2DYSpmU',
+      },
+      {
+        step_number: 3,
+        description: 'Edit the video, adding images or text overlays.',
+        image_url: 'https://unsplash.com/photos/Kgjx2DYSpmU',
+      },
+      {
+        step_number: 4,
+        description: 'Post the video with a caption celebrating the success.',
+        image_url: 'https://unsplash.com/photos/Kgjx2DYSpmU',
+      },
+    ],
+  },
+  {
+    id: 13,
+    name: 'Office Tour',
+    description: 'Showcase your office space to your audience.',
+    hero_image_url: 'https://unsplash.com/photos/vlMzUxmY4zI',
+    steps: [
+      {
+        step_number: 1,
+        description: 'Plan the route for your office tour.',
+        image_url: 'https://unsplash.com/photos/vlMzUxmY4zI',
+      },
+      {
+        step_number: 2,
+        description:
+          'Film a walkthrough of the office, highlighting key areas.',
+        image_url: 'https://unsplash.com/photos/vlMzUxmY4zI',
+      },
+      {
+        step_number: 3,
+        description: 'Edit the video to fit within the 1-minute limit.',
+        image_url: 'https://unsplash.com/photos/vlMzUxmY4zI',
+      },
+      {
+        step_number: 4,
+        description:
+          'Post the video with a caption welcoming viewers into your office.',
+        image_url: 'https://unsplash.com/photos/vlMzUxmY4zI',
+      },
+    ],
+  },
+  {
+    id: 14,
+    name: 'New Feature Announcement',
+    description: 'Announce a new feature or product and explain its benefits.',
+    hero_image_url: 'https://unsplash.com/photos/pTCcjsIACWk',
+    steps: [
+      {
+        step_number: 1,
+        description: 'Choose a new feature or product to announce.',
+        image_url: 'https://unsplash.com/photos/pTCcjsIACWk',
+      },
+      {
+        step_number: 2,
+        description: 'Record a video explaining the feature and its benefits.',
+        image_url: 'https://unsplash.com/photos/pTCcjsIACWk',
+      },
+      {
+        step_number: 3,
+        description: 'Edit the video, adding text overlays or images.',
+        image_url: 'https://unsplash.com/photos/pTCcjsIACWk',
+      },
+      {
+        step_number: 4,
+        description:
+          'Post the video with a caption announcing the new feature.',
+        image_url: 'https://unsplash.com/photos/pTCcjsIACWk',
+      },
+    ],
+  },
+  {
+    id: 15,
+    name: 'Throwback Thursday',
+    description: 'Reminisce about a past achievement, event, or project.',
+    hero_image_url: 'https://unsplash.com/photos/vNqmeYPN0ek',
+    steps: [
+      {
+        step_number: 1,
+        description: 'Select a past achievement, event, or project.',
+        image_url: 'https://unsplash.com/photos/vNqmeYPN0ek',
+      },
+      {
+        step_number: 2,
+        description: 'Compile images and video clips from that time.',
+        image_url: 'https://unsplash.com/photos/vNqmeYPN0ek',
+      },
+      {
+        step_number: 3,
+        description: 'Edit the video to showcase the highlights.',
+        image_url: 'https://unsplash.com/photos/vNqmeYPN0ek',
+      },
+      {
+        step_number: 4,
+        description:
+          'Post the video with a caption reminiscing about the moment.',
+        image_url: 'https://unsplash.com/photos/vNqmeYPN0ek',
+      },
+    ],
   },
 ];
