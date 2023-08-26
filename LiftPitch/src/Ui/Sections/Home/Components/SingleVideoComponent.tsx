@@ -12,7 +12,18 @@ import {
 import VideoPlayer from './VideoPlayer';
 import VideoBottomSection from './VideoBottomSection';
 import CommentsModal from './CommentsModal';
-import VideoHeaderSection from './VideoHeaderSection';
+import ThreadManager from '../../../../ChatModule/ThreadManger';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  addNUpdateCommentReq,
+  getCommentListingAgainstVideo,
+} from '../../../../Network/Services/VideoListingServices';
+import {AppStrings, CommentActionType} from '../../../../Utils/Strings';
+import {
+  setIsAlertShow,
+  setIsLoader,
+} from '../../../../Redux/reducers/AppReducer';
+import moment from 'moment';
 
 interface Props {
   item: singleVideoItemType;
@@ -21,8 +32,73 @@ interface Props {
 }
 
 const SingleVideoComponent = (props: Props) => {
-  const [commentsList, setCommentsList] = useState(commentsConstants.reverse());
+  const dispatch = useDispatch();
+  const selector = useSelector((AppState: any) => AppState.AppReducer);
+  const [commentsList, setCommentsList] = useState([]);
   const [showCommentsModal, setShowComments] = useState(false);
+  const getCommentList = async () => {
+    if (!selector.isNetConnected) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.internetError,
+        }),
+      );
+      return;
+    }
+    dispatch(setIsLoader(true));
+    await getCommentListingAgainstVideo('0MIZNeas', (response: any) => {
+      if (response != 'error!') {
+        dispatch(setIsLoader(false));
+        setCommentsList(response);
+      } else {
+        dispatch(setIsLoader(false));
+      }
+    });
+  };
+  const addNupdateComment = async (obj: any, actionType: any) => {
+    if (!selector?.isNetConnected) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.internetError,
+        }),
+      );
+      return;
+    }
+    // dispatch(setIsLoader(true));
+    let currentDate = moment
+      .utc(new Date())
+      .format(ThreadManager.instance.dateFormater.fullDate);
+    let newObj: any = {
+      ...obj,
+      createdAt: currentDate,
+      commentId: ThreadManager.instance.makeid(4),
+      creatorId: selector?.userData?.userId,
+      creatorName: selector?.userData?.userName
+        ? selector?.userData?.userName
+        : selector?.userData?.companyName,
+      createProfile: selector?.userData?.companyLogo
+        ? selector?.userData?.companyLogo
+        : '',
+    };
+
+    await addNUpdateCommentReq(
+      newObj,
+      actionType,
+      '0MIZNeas',
+      (response: any) => {
+        if (response != 'error!') {
+          dispatch(setIsLoader(false));
+          // commentsList.unshift(newObj);
+          setCommentsList(response);
+        } else {
+          dispatch(setIsLoader(false));
+          dispatch(setIsAlertShow({value: true, message: response}));
+        }
+      },
+    );
+  };
   return (
     <View style={styles.mainContainer}>
       <View style={styles.innerContainer}>
@@ -35,6 +111,7 @@ const SingleVideoComponent = (props: Props) => {
           item={props.item}
           onOptionClick={(val: string) => {
             if (val == 'comment') {
+              getCommentList();
               setShowComments(true);
             }
           }}
@@ -47,13 +124,22 @@ const SingleVideoComponent = (props: Props) => {
           }}
           commentsList={commentsList}
           onNewComment={val => {
-            commentsList.unshift({
-              id: Math.random(),
-              name: 'Salman Khan',
-              image: null,
-              date: new Date().setHours(0),
-              message: val,
-            });
+            if (val?.isReply?.commentId) {
+              addNupdateComment(
+                {
+                  message: val?.message,
+                  PCommentId: val?.isReply?.commentId,
+                },
+                CommentActionType.reply,
+              );
+            } else {
+              addNupdateComment(
+                {
+                  message: val?.message,
+                },
+                CommentActionType.addComment,
+              );
+            }
           }}
         />
       )}

@@ -25,18 +25,17 @@ import {
 interface Props {
   onClose: () => void;
   commentsList: Array<any>;
-  onNewComment: (val: string) => void;
+  onNewComment: (val: any) => void;
 }
 
 const CommentsModal = (props: Props) => {
+  const [isReply, setIsReply] = useState<any>(null);
   const [commentTxt, setCommentTxt] = useState('');
   return (
     <Modal onRequestClose={props.onClose} transparent animationType="slide">
       <View style={styles.outerMainContainer}>
         <TouchableWithoutFeedback onPress={props.onClose}>
-          <View
-          // style={styles.bgContainer}
-          />
+          <View />
         </TouchableWithoutFeedback>
         <KeyboardAvoidingView
           behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
@@ -56,73 +55,177 @@ const CommentsModal = (props: Props) => {
                 <Image source={AppImages.Common.CloseIcon} />
               </TouchableOpacity>
             </View>
-
-            <FlatList
-              inverted
-              keyExtractor={(item, index) => `${index}`}
-              showsVerticalScrollIndicator={false}
-              data={props.commentsList}
-              renderItem={({item, index}) => {
-                return (
-                  <View style={styles.singleCommentContainer} key={index}>
-                    <View style={styles.profileImgBox}>
-                      {item.image ? (
-                        <LoadingImage
-                          source={{uri: item.image}}
-                          viewStyle={{
-                            ...styles.profileImgBox,
-                            backgroundColor: AppColors.white.bgWhite,
-                          }}
-                          resizeMode="cover"
-                        />
-                      ) : (
-                        <Image
-                          source={AppImages.bottomBar.Profile}
-                          resizeMode="contain"
-                          style={styles.placeholderImg}
-                        />
-                      )}
-                    </View>
-                    <View style={styles.contentBox}>
-                      <View
-                        style={[
-                          AppStyles.horiCommon,
-                          {justifyContent: 'space-between'},
-                        ]}>
-                        <Text
-                          style={[
-                            styles.description,
-                            {color: AppColors.grey.towerGrey, marginTop: 0},
-                          ]}>
-                          {item.name}
-                        </Text>
+            {props?.commentsList?.length > 0 ? (
+              <FlatList
+                // inverted
+                keyExtractor={(item, index) => `${index}`}
+                showsVerticalScrollIndicator={false}
+                data={props?.commentsList}
+                renderItem={({item, index}) => {
+                  return (
+                    <>
+                      <View style={styles.singleCommentContainer} key={index}>
+                        <View style={styles.profileImgBox}>
+                          {item?.createProfile ? (
+                            <LoadingImage
+                              source={{uri: item?.createProfile}}
+                              viewStyle={{
+                                ...styles.profileImgBox,
+                                backgroundColor: AppColors.white.bgWhite,
+                              }}
+                              resizeMode="cover"
+                            />
+                          ) : (
+                            <Image
+                              source={AppImages.bottomBar.Profile}
+                              resizeMode="contain"
+                              style={styles.placeholderImg}
+                            />
+                          )}
+                        </View>
+                        <View style={styles.contentBox}>
+                          <View
+                            style={[
+                              AppStyles.horiCommon,
+                              {justifyContent: 'space-between'},
+                            ]}>
+                            <Text
+                              style={[
+                                styles.description,
+                                {color: AppColors.grey.towerGrey, marginTop: 0},
+                              ]}>
+                              {item?.creatorName}
+                            </Text>
+                          </View>
+                          <Text style={styles.msgTxt}>{item?.message}</Text>
+                        </View>
+                        <View style={{alignItems: 'center'}}>
+                          <TouchableOpacity
+                            style={{
+                              padding: normalized(5),
+                            }}>
+                            <Image
+                              source={AppImages.Common.menuIcon}
+                              resizeMode="contain"
+                            />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={{padding: normalized(5)}}
+                            onPress={() => {
+                              setIsReply({
+                                creatorName: item?.creatorName,
+                                commentId: item?.commentId,
+                                message: item?.message,
+                              });
+                            }}>
+                            <Image source={AppImages?.Videos?.Share} />
+                          </TouchableOpacity>
+                        </View>
                       </View>
-                      <Text style={styles.msgTxt}>{item.message}</Text>
-                    </View>
-                    <View style={{alignItems: 'center'}}>
-                      <TouchableOpacity
-                        style={{
-                          padding: normalized(5),
-                        }}>
-                        <Image
-                          source={AppImages.Common.menuIcon}
-                          resizeMode="contain"
-                        />
-                      </TouchableOpacity>
-                      <TouchableOpacity style={{padding: normalized(5)}}>
-                        <Image source={AppImages.Videos.Share} />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                );
-              }}
-            />
+                      {item?.reply?.length > 0
+                        ? item?.reply.map((el: any, childIndex: any) => {
+                            return (
+                              <View
+                                style={{
+                                  flex: 1,
+                                  flexDirection: 'row',
+                                  marginVertical: 5,
+                                  marginStart: normalized(50),
+                                  marginEnd: normalized(20),
+                                }}
+                                key={childIndex}>
+                                <View style={styles.profileImgBox}>
+                                  {el?.createProfile ? (
+                                    <LoadingImage
+                                      source={{uri: el?.createProfile}}
+                                      viewStyle={{
+                                        ...styles.profileImgBox,
+                                        backgroundColor:
+                                          AppColors.white.bgWhite,
+                                      }}
+                                      resizeMode="cover"
+                                    />
+                                  ) : (
+                                    <Image
+                                      source={AppImages.bottomBar.Profile}
+                                      resizeMode="contain"
+                                      style={styles.placeholderImg}
+                                    />
+                                  )}
+                                </View>
+                                <View style={styles.contentBox}>
+                                  <View
+                                    style={[
+                                      AppStyles.horiCommon,
+                                      {justifyContent: 'space-between'},
+                                    ]}>
+                                    <Text
+                                      style={[
+                                        styles.description,
+                                        {
+                                          color: AppColors.grey.towerGrey,
+                                          marginTop: 0,
+                                        },
+                                      ]}>
+                                      {el?.creatorName}
+                                    </Text>
+                                  </View>
+                                  <Text style={styles.msgTxt}>
+                                    {el?.message}
+                                  </Text>
+                                </View>
+                                <View style={{alignItems: 'center'}}>
+                                  <TouchableOpacity
+                                    style={{
+                                      padding: normalized(5),
+                                    }}>
+                                    <Image
+                                      source={AppImages.Common.menuIcon}
+                                      resizeMode="contain"
+                                    />
+                                  </TouchableOpacity>
+                                </View>
+                              </View>
+                            );
+                          })
+                        : null}
+                    </>
+                  );
+                }}
+              />
+            ) : (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={{
+                    fontSize: normalized(14),
+                    color: AppColors.black.black,
+                    fontWeight: '400',
+                  }}>
+                  No Comment Found!
+                </Text>
+              </View>
+            )}
+
             <CommentInput
+              isReply={isReply}
               messageTxt={commentTxt}
               onChangeMessage={setCommentTxt}
               onSendPress={() => {
-                props.onNewComment(commentTxt);
+                if (isReply) {
+                  props?.onNewComment({message: commentTxt, isReply: isReply});
+                } else {
+                  props?.onNewComment({message: commentTxt, isReply: null});
+                }
+                setIsReply(null);
                 setCommentTxt('');
+              }}
+              atCancelReply={() => {
+                setIsReply(null);
               }}
             />
           </View>
@@ -144,7 +247,7 @@ const styles = StyleSheet.create({
     backgroundColor: AppColors.transparentColor,
   },
   mainContainer: {
-    minHeight: 400,
+    minHeight: normalized(230),
     maxHeight: ScreenSize.height * 0.9,
     backgroundColor: AppColors.white.white,
     zIndex: 1,

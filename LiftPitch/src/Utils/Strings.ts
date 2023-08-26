@@ -61,6 +61,14 @@ export const USER_TYPE = {
 export const Collections = {
   Users: 'Users',
   FOLLOW_N_FOLLOWING_COLLECTION: 'follow_&_follower',
+  POST_COLLECTION: 'videos',
+};
+
+export const CommentActionType = {
+  addComment: 'AddNewComment',
+  reply: 'ReplyAtComment',
+  deleteComment: 'DeleteComment',
+  reportComment: 'ReportComment',
 };
 
 export const GOOGLE_API_KEY = 'AIzaSyBQyEE67gM0AvoJAzwp7fSdDlPqKwqKTxU';

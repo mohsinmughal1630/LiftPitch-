@@ -274,6 +274,7 @@ const CommentInput = (props: any) => {
   // };
 
   //////////----------->
+
   return (
     <View>
       {/* {usersList.length != 0 ? (
@@ -320,8 +321,49 @@ const CommentInput = (props: any) => {
           }}
         />
       ) : null} */}
-
-      <View style={styles.mainContainer}>
+      {props?.isReply ? (
+        <View
+          style={{
+            flexDirection: 'row',
+            backgroundColor: AppColors.white.white,
+            borderTopLeftRadius: normalized(10),
+            borderTopRightRadius: normalized(10),
+            padding: normalized(10),
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            ...AppStyles.shadowCommon,
+          }}>
+          <Text
+            style={{
+              color: AppColors.grey.towerGrey,
+              fontSize: normalized(13),
+              fontWeight: '300',
+            }}>
+            Replying to{' '}
+            <Text
+              style={{
+                color: AppColors.black.black,
+                fontSize: normalized(13),
+                fontWeight: '400',
+              }}>
+              {props?.isReply?.creatorName}
+            </Text>
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              props?.atCancelReply();
+            }}>
+            <Image
+              source={AppImages.createVideo.CloseIcon}
+              style={{tintColor: AppColors.black.black}}
+            />
+          </TouchableOpacity>
+        </View>
+      ) : null}
+      <View
+        style={
+          props?.isReply ? styles.mainContainerAtReply : styles.mainContainer
+        }>
         <TextInput
           placeholder="Add comment... "
           placeholderTextColor={AppColors.grey.dimGrey}
@@ -352,6 +394,13 @@ const CommentInput = (props: any) => {
 export default CommentInput;
 
 const styles = StyleSheet.create({
+  mainContainerAtReply: {
+    backgroundColor: AppColors.white.white,
+    height: normalized(60),
+    paddingHorizontal: normalized(10),
+    ...AppStyles.horiCommon,
+    width: '100%',
+  },
   mainContainer: {
     backgroundColor: AppColors.white.white,
     ...AppStyles.shadowCommon,
