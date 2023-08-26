@@ -6,7 +6,12 @@
 // #import <GoogleMaps/GoogleMaps.h>
 #import <React/RCTLinkingManager.h> // <- Add This Import
 #import "RNSplashScreen.h"
-#import <Firebase.h>
+// #import <Firebase.h>
+
+//Push Notification
+#import "Firebase.h"  
+#import "RNFirebaseMessaging.h" 
+#import "FirebasePushNotifications.h" 
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -29,11 +34,24 @@ static void InitializeFlipper(UIApplication *application) {
 
 @implementation AppDelegate
 
+//Push Notification
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo
+                                                    fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler{
+[[FirebasePushNotifications instance] didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+}
+
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+
+[[RNFirebaseMessaging instance] didRegisterUserNotificationSettings:notificationSettings];
+}
+
+//
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   
    [FIRApp configure];
-//  [FirebasePushNotifications configure];
+ [FirebasePushNotifications configure];
 #ifdef FB_SONARKIT_ENABLED
   InitializeFlipper(application);
 #endif
@@ -84,9 +102,10 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
 }
 
-//- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-//[[FirebasePushNotifications instance] didReceiveLocalNotification:notification];
-//}
+//Push Notification
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+[[FirebasePushNotifications instance] didReceiveLocalNotification:notification];
+}
 
 
 
@@ -95,8 +114,8 @@ static void InitializeFlipper(UIApplication *application) {
 restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {
 return [RCTLinkingManager application:application
-                 continueUserActivity:userActivity
-                   restorationHandler:restorationHandler];
+     continueUserActivity:userActivity
+    restorationHandler:restorationHandler];
 }
 
 @end

@@ -22,6 +22,8 @@ export const Routes = {
   },
   addVideoTab: {
     createVideoScreen: 'createVideoScreen',
+    pitchListScreen: 'PitchListScreen',
+    pitchIdeaScreen: 'PitchIdeaScreen',
   },
   NotificationTab: {
     NotificationScreen: 'NotificationScreen',

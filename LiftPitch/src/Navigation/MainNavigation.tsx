@@ -8,6 +8,8 @@ import Container from '../Ui/Sections/Container/Container';
 import ProfileScreen from '../Ui/Sections/Profile/Screens/ProfileScreen';
 import ChatScreen from '../Ui/Sections/Chat/Screens/ChatScreen';
 import NotificationScreen from '../Ui/Sections/Notification/Screens/NotificationScreen';
+import PitchIdeasListScreen from '../Ui/Sections/CreateVideo/Screens/PitchIdeasListScreen';
+import PitchIdeaStepScreen from '../Ui/Sections/CreateVideo/Screens/PitchIdeaStepScreen';
 const MainStack = createStackNavigator();
 
 interface AppStackProps {
@@ -36,6 +38,14 @@ export default function MainNavigation() {
         component={NotificationScreen}
       />
       <MainStack.Screen name={Routes.Chat.chatScreen} component={ChatScreen} />
+      <MainStack.Screen
+        name={Routes.addVideoTab.pitchListScreen}
+        component={PitchIdeasListScreen}
+      />
+      <MainStack.Screen
+        name={Routes.addVideoTab.pitchIdeaScreen}
+        component={PitchIdeaStepScreen}
+      />
     </MainStack.Navigator>
   );
 }

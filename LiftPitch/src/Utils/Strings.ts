@@ -40,6 +40,10 @@ export const AppStrings = {
     notification: 'Notification',
     profile: 'Profile',
   },
+  PitchIdeasFlow: {
+    listingDes: 'Scroll these ideas and templates for your next pitch video',
+    stepDes: 'Follow these steps to create a Day in the Life video',
+  },
 };
 
 export const AsyncKeyStrings = {
