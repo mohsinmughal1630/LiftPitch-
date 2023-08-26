@@ -1,12 +1,13 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { AppStrings, Collections } from '../../Utils/Strings';
-// import { notifications } from "react-native-firebase-push-notifications";
+import ThreadManager from '../../ChatModule/ThreadManger';
 
 export const userSignupRequest = async (
   userInput: any,
   getResponse: (userObj: any) => void,
 ) => {
+  let id = ThreadManager.instance.makeid(8);
   try {
     await auth()
       .createUserWithEmailAndPassword(userInput.email, userInput.password)
@@ -24,13 +25,14 @@ export const userSignupRequest = async (
             companyType: userInput?.companyType,
             companyLocation: userInput?.companyLocation,
             companyLogo: userInput?.companyLogo,
-            // fcmToken: tk,
+            userId: id,
           })
           .then(docRef => {
             let loginObj = {
               ...userInput,
-              userId: userId,
+              userId: id,
             };
+
             getResponse({ status: true, data: loginObj });
           })
           .catch(error => {
@@ -71,7 +73,6 @@ export const loginRequest = async (
             querySnapshot.forEach(async (doc: any) => {
               let loginObj = {
                 ...doc.data(),
-                userId: doc.id,
               };
               console.log(loginObj);
               complete({ status: true, data: loginObj });
@@ -121,24 +122,5 @@ export const getUserFromFirebaseRequest = async (email: string) => {
   } catch (e) {
     console.log('Error:', e);
     return null;
-  }
-};
-
-export const getAllUsers = async (userId: string) => {
-  try {
-    const querySnapshot = await firestore()
-      .collection(Collections.Users)
-      .get();
-
-    let usersList: Array<any> = [];
-
-    querySnapshot.forEach((doc) => {
-      usersList.push(doc.data());
-    });
-
-    return usersList.filter(el => el.userId !== userId);
-  } catch (e) {
-    console.log("An error occurred while retrieving getAllUsers: ", e);
-    return [];
   }
 };

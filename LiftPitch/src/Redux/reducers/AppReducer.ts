@@ -9,6 +9,9 @@ export interface IReduxState {
   isLoaderStart: boolean;
   isAlertShow: any;
   isPersisterUser: boolean;
+  threadList: any;
+  updateToken: boolean;
+  showNoti: any;
 }
 const initialState: IReduxState = {
   userData: null,
@@ -18,6 +21,9 @@ const initialState: IReduxState = {
   isLoaderStart: false,
   isAlertShow: {value: false, message: ''},
   isPersisterUser: false,
+  threadList: [],
+  updateToken: false,
+  showNoti: false,
 };
 
 export const AppSlice = createSlice({
@@ -40,9 +46,17 @@ export const AppSlice = createSlice({
     setIsLoader: (state, action) => {
       state.isLoaderStart = action.payload;
     },
-
+    setUpdateFBToken: (state, action) => {
+      state.updateToken = action.payload;
+    },
     setIsAlertShow: (state, action) => {
       state.isAlertShow = action.payload;
+    },
+    setIsShowNoti: (state, action) => {
+      state.showNoti = action.payload;
+    },
+    setThreadList: (state, action) => {
+      state.threadList = action.payload;
     },
     logOut: (state, action) => {
       state.userData = null;
@@ -60,7 +74,10 @@ export const {
   setNetState,
   setIsAlertShow,
   setIsLoader,
+  setThreadList,
+  setIsShowNoti,
   logOut,
+  setUpdateFBToken,
   setIsPersisterUser,
 } = AppSlice.actions;
 

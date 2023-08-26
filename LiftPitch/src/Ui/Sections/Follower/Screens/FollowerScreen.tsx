@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   AppColors,
   AppImages,
   ScreenProps,
-  followersListConstant,
+  commentsConstants,
   hv,
   normalized,
-  socialInviteType,
 } from '../../../../Utils/AppConstants';
 import {
   FlatList,
@@ -20,51 +19,35 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
+import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import HeaderTab from '../../../Components/CustomTab/HeaderTab';
 import CustomSearchBar from '../../../Components/CustomSearchBar/CustomSearchBar';
-import LoadingImage from '../../../Components/LoadingImage';
-import SocialInviteSection from '../Components/SocialInviteSection';
-import ConfirmationModal from '../../../Components/CustomModal/ConfirmationModal';
-import { openSettings } from 'react-native-permissions';
-import CommonDataManager from '../../../../Utils/CommonManager';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppRootStore } from '../../../../Redux/store/AppStore';
-import { setIsLoader } from '../../../../Redux/reducers/AppReducer';
-import DeviceContactsListModal from '../../../Components/CustomModal/DeviceContactsListModal';
-
+import {Routes} from '../../../../Utils/Routes';
+import {fetchFollowingList} from '../../../../Network/Services/ProfileServices';
+import {useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
+import AppImageViewer from '../../../Components/ProfileView/AppImageView';
+import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlaceHolderComp';
 const FollowerScreen = (props: ScreenProps) => {
-  const dispatch = useDispatch();
-  const { userData } = useSelector((state: AppRootStore) => state.AppReducer)
+  const selector = useSelector((AppState: any) => AppState.AppReducer);
   const [selectTab, setSelectedTab] = useState(0);
   const [searchTxt, setSearchTxt] = useState('');
-  const [deviceContactsList, setDeviceContactsList] = useState<Array<any>>([]);
-  const [showContactsListModal, setShowContactsListModal] = useState(false);
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [followerData, setFollowerData] = useState([]);
+  const [followingData, setFollowingData] = useState([]);
+  const isFocused = useIsFocused();
 
-  const inviteSelected = (type: socialInviteType) => {
-    console.log('On social invitation ', type);
-    if (type == 'contacts') {
-      if (deviceContactsList.length > 0) {
-        setShowContactsListModal(true);
-        return;
-      }
-      dispatch(setIsLoader(true));
-      CommonDataManager.getSharedInstance().fetchDeviceContacts(
-        userData?.userId,
-        () => {
-          dispatch(setIsLoader(false));
-          setShowConfirmationModal(true);
-        },
-        (list) => {
-          dispatch(setIsLoader(false))
-          setDeviceContactsList(list);
-          setShowContactsListModal(true);
-          console.log('All firebase users with your contacts here ', list.length);
-        })
+  useEffect(() => {
+    if (isFocused) {
+      fetchFollowingList(selector?.userData?.userId, (response: any) => {
+        if (response?.follower) {
+          setFollowerData(response?.follower);
+        }
+        if (response?.following) {
+          setFollowingData(response?.following);
+        }
+      });
     }
-  }
-
+  }, [isFocused]);
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
@@ -75,10 +58,10 @@ const FollowerScreen = (props: ScreenProps) => {
         atSelectTab={(val: any) => {
           setSelectedTab(val);
         }}
-        mainStyle={{ marginTop: normalized(10) }}
+        mainStyle={{marginTop: normalized(10)}}
       />
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
         <ScrollView
@@ -90,85 +73,98 @@ const FollowerScreen = (props: ScreenProps) => {
             atChangeTxt={(txt: any) => {
               setSearchTxt(txt);
             }}
-            mainStyle={{ marginVertical: normalized(30) }}
+            mainStyle={{marginVertical: normalized(30)}}
           />
-          <FlatList
-            keyExtractor={(item, index) => `${index}`}
-            showsVerticalScrollIndicator={false}
-            data={followersListConstant}
-            ListHeaderComponent={() => <SocialInviteSection onPress={inviteSelected} />}
-            renderItem={({ item, index }) => {
-              return (
-                <View style={styles.singleCommentContainer} key={index}>
-                  <View style={styles.profileImgBox}>
-                    {item.image ? (
-                      <LoadingImage
-                        source={{ uri: item.image }}
-                        viewStyle={{
-                          ...styles.profileImgBox,
-                          backgroundColor: AppColors.white.bgWhite,
-                        }}
-                        resizeMode="cover"
-                      />
-                    ) : (
-                      <Image
-                        source={AppImages.bottomBar.Profile}
-                        resizeMode="contain"
-                        style={styles.placeholderImg}
-                      />
-                    )}
-                  </View>
-                  <View style={styles.contentBox}>
-                    <View
-                      style={[
-                        AppStyles.horiCommon,
-                        { justifyContent: 'space-between' },
-                      ]}>
-                      <Text
-                        style={[
-                          styles.description,
-                          { color: AppColors.black.black, marginTop: 0 },
-                        ]}>
-                        {item.name}
-                      </Text>
-                    </View>
-                    <Text
-                      numberOfLines={2}
-                      style={styles.msgTxt}>{item.message}</Text>
-                  </View>
-
+          {(selectTab == 0 && followingData?.length > 0) ||
+          (selectTab == 1 && followerData?.length > 0) ? (
+            <FlatList
+              keyExtractor={(item, index) => `${index}`}
+              showsVerticalScrollIndicator={false}
+              // data={commentsConstants}
+              data={selectTab == 0 ? followingData : followerData}
+              renderItem={({item, index}) => {
+                return (
                   <TouchableOpacity
-                    style={{
-                      alignSelf: 'center',
-                      padding: normalized(5),
+                    activeOpacity={0.7}
+                    style={styles.singleCommentContainer}
+                    key={index}
+                    onPress={() => {
+                      let userId = item?.userId
+                        ? item?.userId
+                        : item?.id
+                        ? item?.id
+                        : null;
+                      if (userId) {
+                        props?.navigation.navigate(
+                          Routes.ProfileTab.ProfileScreen,
+                          {
+                            userId: userId,
+                          },
+                        );
+                      }
                     }}>
-                    <Image
-                      source={AppImages.Common.LeftArrowIcon}
-                      resizeMode="contain"
-                    />
+                    <View style={styles.profileImgBox}>
+                      {item?.profile ? (
+                        <AppImageViewer
+                          source={{uri: item?.profile}}
+                          placeHolder={AppImages.bottomBar.Profile}
+                          style={{
+                            ...styles.profileImgBox,
+                            backgroundColor: AppColors.white.bgWhite,
+                          }}
+                        />
+                      ) : (
+                        <ProfilePlaceHolderComp
+                          index={index}
+                          name={item?.userName ? item?.userName : 'Testing'}
+                          mainStyles={styles.profileImgBox}
+                          nameStyles={{
+                            fontSize: normalized(16),
+                            fontWeight: '500',
+                          }}
+                        />
+                      )}
+                    </View>
+                    <View style={styles.contentBox}>
+                      <View
+                        style={[
+                          AppStyles.horiCommon,
+                          {justifyContent: 'space-between'},
+                        ]}>
+                        <Text
+                          style={[
+                            styles.description,
+                            {color: AppColors.black.black, marginTop: 0},
+                          ]}>
+                          {item.userName}
+                        </Text>
+                      </View>
+                      <Text style={styles.msgTxt}>{item?.description}</Text>
+                    </View>
+
+                    <TouchableOpacity
+                      style={{
+                        alignSelf: 'center',
+                        padding: normalized(5),
+                      }}>
+                      <Image
+                        source={AppImages.Common.LeftArrowIcon}
+                        resizeMode="contain"
+                      />
+                    </TouchableOpacity>
                   </TouchableOpacity>
-                </View>
-              );
-            }}
-          />
+                );
+              }}
+            />
+          ) : (
+            <View style={styles.emptyCont}>
+              <Text style={styles.emptyTxt}>
+                {`No ${selectTab == 0 ? 'Following' : 'Followers'} Found`}
+              </Text>
+            </View>
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
-      {showConfirmationModal && (
-        <ConfirmationModal
-          content={'Kindly enable contacts access from the settings. Do you want to go to settings now?'}
-          onClose={() => setShowConfirmationModal(false)}
-          onConfirm={() => {
-            setShowConfirmationModal(false);
-            openSettings().catch(e => console.log('some problem ', e));
-          }}
-        />
-      )}
-      {showContactsListModal && (
-        <DeviceContactsListModal
-          onClose={() => setShowContactsListModal(false)}
-          list={deviceContactsList}
-        />
-      )}
     </View>
   );
 };
@@ -254,7 +250,16 @@ const styles = StyleSheet.create({
     color: AppColors.black.black,
     fontSize: normalized(12),
     fontWeight: '400',
-    marginRight: 5
+  },
+  emptyCont: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyTxt: {
+    fontSize: normalized(14),
+    color: AppColors.black.black,
+    fontWeight: '500',
   },
 });
 export default FollowerScreen;

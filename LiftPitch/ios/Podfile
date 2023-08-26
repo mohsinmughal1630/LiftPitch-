@@ -13,8 +13,6 @@ target 'Project' do
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
-  # pod 'GoogleUtilities', :modular_headers => true
-  # pod 'FirebaseCore', :modular_headers => true
   pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
   pod 'react-native-video', :path => '../node_modules/react-native-video'
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'

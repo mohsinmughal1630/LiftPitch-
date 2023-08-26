@@ -30,6 +30,7 @@ import {
   setIsAlertShow,
   setIsLoader,
   setIsPersisterUser,
+  setUpdateFBToken,
   setUserData,
 } from '../../../../Redux/reducers/AppReducer';
 import { Routes } from '../../../../Utils/Routes';
@@ -38,9 +39,11 @@ import { AppStrings } from '../../../../Utils/Strings';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import { AppRootStore } from '../../../../Redux/store/AppStore';
 import {
-  loginRequest, userSignupRequest,
+  loginRequest,
+  userSignupRequest,
 } from '../../../../Network/Services/AuthServices';
 import { SocialTypeStrings } from '../../../../Utils/AppEnums';
+import ThreadManager from '../../../../ChatModule/ThreadManger';
 const LoginScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
   const { isNetConnected, isPersisterUser } = useSelector(
@@ -104,6 +107,7 @@ const LoginScreen = (props: ScreenProps) => {
         dispatch(setUserData(response?.data));
         if (isPersisterUser) {
           saveUserData(response?.data);
+          dispatch(setUpdateFBToken(true));
         }
       } else {
         let errorMessage = response?.message
@@ -119,6 +123,84 @@ const LoginScreen = (props: ScreenProps) => {
     }).catch(() => {
       dispatch(setIsLoader(false));
     });
+  };
+
+  const socialBtnClicked = async (socialType: string) => {
+    Keyboard.dismiss();
+    dispatch(setIsLoader(true));
+    let socialParams = await CommonDataManager.getSharedInstance()
+      .socialCallRequest(isNetConnected, socialType)
+      .catch(e => {
+        dispatch(setIsLoader(false));
+        console.log('Er ', e);
+      });
+    if (socialParams) {
+      const paramsObj = {
+        email: socialParams.email,
+        password: socialParams.token,
+      };
+      await loginRequest(paramsObj, async response => {
+        if (response?.status) {
+          dispatch(setUserData(response?.data));
+          if (isPersisterUser) {
+            await saveUserData(response?.data);
+            dispatch(setUpdateFBToken(true));
+          }
+        } else {
+          let errorMessage = response?.message
+            ? response?.message
+            : 'Something went wrong';
+          if (errorMessage == 'User not found against this Email.') {
+            const fullname =
+              (socialParams?.first_name ? socialParams.first_name : '') +
+              (socialParams?.last_name ? ` ${socialParams.last_name}` : '');
+            const paramsObj = {
+              userName: fullname,
+              email: socialParams?.email,
+              password: socialParams?.token,
+              companyName: null,
+              companyRegNo: null,
+              companyType: null,
+              companyLocation: null,
+              companyLogo: '',
+            };
+            dispatch(setIsLoader(true));
+            await userSignupRequest(paramsObj, response => {
+              dispatch(setIsLoader(false));
+              if (response?.status) {
+                dispatch(setUserData(response?.data));
+                if (isPersisterUser) {
+                  saveUserData(response?.data);
+                  dispatch(setUpdateFBToken(true));
+                }
+              } else {
+                let errorMessage = response?.message
+                  ? response?.message
+                  : 'Something went wrong';
+                dispatch(
+                  setIsAlertShow({
+                    value: true,
+                    message: errorMessage,
+                  }),
+                );
+              }
+            }).catch(() => dispatch(setIsLoader(false)));
+            return;
+          }
+          dispatch(
+            setIsAlertShow({
+              value: true,
+              message: errorMessage,
+            }),
+          );
+        }
+        dispatch(setIsLoader(false));
+      }).catch(() => dispatch(setIsLoader(false)));
+      dispatch(setIsLoader(false));
+    } else {
+      dispatch(setIsLoader(false));
+      console.log('Some problem getting social data');
+    }
   };
 
   return (

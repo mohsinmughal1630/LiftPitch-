@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import {
   Image,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -27,6 +28,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   setIsAlertShow,
   setIsLoader,
+  setUpdateFBToken,
   setUserData,
 } from '../../../../Redux/reducers/AppReducer';
 import { Routes } from '../../../../Utils/Routes';
@@ -231,6 +233,58 @@ const SignUp = (props: ScreenProps) => {
     }).catch(() => dispatch(setIsLoader(false)));
   };
 
+  const socialBtnClicked = async (socialType: string) => {
+    Keyboard.dismiss();
+    dispatch(setIsLoader(true));
+    let socialParams = await CommonDataManager.getSharedInstance()
+      .socialCallRequest(isNetConnected, socialType)
+      .catch(e => {
+        dispatch(setIsLoader(false));
+        console.log('Er ', e);
+      });
+    if (socialParams) {
+      const fullname =
+        (socialParams?.first_name ? socialParams.first_name : '') +
+        (socialParams?.last_name ? ` ${socialParams.last_name}` : '');
+      const paramsObj = {
+        userName: fullname,
+        email: socialParams.email,
+        password: socialParams.token,
+        companyName: compName || null,
+        companyRegNo: compRNumber || null,
+        companyType: compType || null,
+        companyLocation: locationObj || null,
+        companyLogo: imgUrl || '',
+      };
+      console.log('paramsObj: ', paramsObj);
+      dispatch(setIsLoader(true));
+      await userSignupRequest(paramsObj, response => {
+        console.log('response - userSignupRequest: ', response);
+        dispatch(setIsLoader(false));
+        if (response?.status) {
+          dispatch(setUserData(response?.data));
+          if (isPersisterUser) {
+            saveUserData(response?.data);
+            dispatch(setUpdateFBToken(true));
+          }
+        } else {
+          let errorMessage = response?.message
+            ? response?.message
+            : 'Something went wrong';
+          dispatch(
+            setIsAlertShow({
+              value: true,
+              message: errorMessage,
+            }),
+          );
+        }
+      }).catch(() => dispatch(setIsLoader(false)));
+    } else {
+      dispatch(setIsLoader(false));
+      console.log('Some problem getting social data');
+    }
+  };
+
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
@@ -424,10 +478,9 @@ const SignUp = (props: ScreenProps) => {
             {/* <SocialBtn
               label={'FACEBOOK'}
               icon={AppImages.Auth.fbIcon}
-              atPress={() => {
-              }}
+              atPress={() => {}}
               containerStyle={{
-                width: normalized(150)
+                width: normalized(150),
               }}
             /> */}
             <SocialBtn
@@ -435,7 +488,7 @@ const SignUp = (props: ScreenProps) => {
               icon={AppImages.Auth.google}
               atPress={() => CommonDataManager.getSharedInstance().commonSocialLoginRequest(SocialTypeStrings.google, isNetConnected, isPersisterUser, props.navigation)}
               containerStyle={{
-                width: normalized(150)
+                width: normalized(150),
               }}
             />
           </View>

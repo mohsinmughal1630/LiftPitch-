@@ -6,7 +6,12 @@
 // #import <GoogleMaps/GoogleMaps.h>
 #import <React/RCTLinkingManager.h> // <- Add This Import
 #import "RNSplashScreen.h"
-#import <Firebase.h>
+// #import <Firebase.h>
+
+//Push Notification
+#import "Firebase.h"  
+#import "RNFirebaseMessaging.h" 
+#import "FirebasePushNotifications.h" 
 
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
@@ -29,11 +34,24 @@ static void InitializeFlipper(UIApplication *application) {
 
 @implementation AppDelegate
 
+//Push Notification
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo
+                                                    fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler{
+[[FirebasePushNotifications instance] didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+}
+
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+
+[[RNFirebaseMessaging instance] didRegisterUserNotificationSettings:notificationSettings];
+}
+
+//
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   
    [FIRApp configure];
-//  [FirebasePushNotifications configure];
+ [FirebasePushNotifications configure];
 #ifdef FB_SONARKIT_ENABLED
   InitializeFlipper(application);
 #endif
@@ -60,21 +78,19 @@ static void InitializeFlipper(UIApplication *application) {
 }
 
 ///faceBook Login:
-//
-//- (BOOL)application:(UIApplication *)app
-//            openURL:(NSURL *)url
-//            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
-//{
-//  if ([[FBSDKApplicationDelegate sharedInstance] application:app openURL:url options:options]) {
-//    return YES;
-//  }
-// 
-//  if ([RCTLinkingManager application:app openURL:url options:options]) {
-//    return YES;
-//  }
-// 
-//  return NO;
-//}
+
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+
+ 
+  if ([RCTLinkingManager application:app openURL:url options:options]) {
+    return YES;
+  }
+ 
+  return NO;
+}
 ///
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
@@ -86,25 +102,20 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
 }
 
-//- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-//[[FirebasePushNotifications instance] didReceiveLocalNotification:notification];
-//}
+//Push Notification
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+[[FirebasePushNotifications instance] didReceiveLocalNotification:notification];
+}
 
-//// Open url links
-//- (BOOL)application:(UIApplication *)application
-//  openURL:(NSURL *)url
-//  options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
-//{
-// return [RCTLinkingManager application:application openURL:url options:options];
-//}
-//
-//// Opening universal links
-//- (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity
-//restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
-//{
-//return [RCTLinkingManager application:application
-//                 continueUserActivity:userActivity
-//                   restorationHandler:restorationHandler];
-//}
+
+
+// Opening universal links
+- (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity
+restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
+{
+return [RCTLinkingManager application:application
+     continueUserActivity:userActivity
+    restorationHandler:restorationHandler];
+}
 
 @end
