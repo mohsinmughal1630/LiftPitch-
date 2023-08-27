@@ -464,7 +464,7 @@ class ThreadManager {
       (item: any) => item.userId == receiver?.user?.toString(),
     );
     if (findedUserIndex != -1) {
-      let finededUserToken = this.userList[findedUserIndex].token;
+      let finededUserToken = this.userList[findedUserIndex].FCM_Token;
       let notification = {
         title: title,
         body: message,

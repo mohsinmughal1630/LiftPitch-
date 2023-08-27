@@ -80,7 +80,6 @@ const FollowerScreen = (props: ScreenProps) => {
             <FlatList
               keyExtractor={(item, index) => `${index}`}
               showsVerticalScrollIndicator={false}
-              // data={commentsConstants}
               data={selectTab == 0 ? followingData : followerData}
               renderItem={({item, index}) => {
                 return (

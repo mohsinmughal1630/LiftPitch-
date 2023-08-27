@@ -34,6 +34,7 @@ const VideosHomeScreen = (props: ScreenProps) => {
         keyExtractor={(item, index) => `${item.id}`}
         renderItem={({item, index}) => (
           <SingleVideoComponent
+            navigation={props?.navigation}
             item={item}
             key={item.id}
             index={index}
