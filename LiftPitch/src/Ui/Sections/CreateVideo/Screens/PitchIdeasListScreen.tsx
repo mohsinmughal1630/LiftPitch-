@@ -33,11 +33,11 @@ const PitchIdeasListScreen = (props: ScreenProps) => {
   }, []);
   const getPitchIdeasList = async () => {
     await firestore()
-      .collection('pitch_Ideas')
+      .collection('Pitch_Ideas')
       .get()
       .then((snapDoc: any) => {
         let list = snapDoc?._docs[0]?.data();
-        if (list?.Idea_List?.length > 0) {
+        if (list?.Ideas_List?.length > 0) {
           setIdeasList(list?.Idea_List);
         }
       });

@@ -49,10 +49,16 @@ const ProfileScreen = (props: ScreenProps) => {
   const {userData} = useSelector((state: AppRootStore) => state.AppReducer);
   const [selectedTab, setSelectedTab] = useState('Feed');
   const logoutClicked = async () => {
+    await ThreadManager.instance.updateUserToken(
+      '',
+      selector?.userData?.userId?.toString(),
+    );
+
     dispatch(setIsLoader(true));
     dispatch(setUserData(null));
     dispatch(setIsPersisterUser(false));
     saveUserData(null);
+
     await logoutRequest(userData?.userId).finally(() =>
       dispatch(setIsLoader(false)),
     );
@@ -97,8 +103,6 @@ const ProfileScreen = (props: ScreenProps) => {
       let reciverObj: any = {};
       senderObj = makeObjForChat(selector?.userData);
       reciverObj = makeObjForChat(data);
-      console.log('senderObj before------>', senderObj);
-      console.log('reciverobj before------>', reciverObj);
 
       ThreadManager.instance.setupRedux(selector, dispatch);
       dispatch(setIsLoader(true));

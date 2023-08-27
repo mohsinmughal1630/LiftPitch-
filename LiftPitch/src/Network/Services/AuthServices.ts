@@ -12,10 +12,9 @@ export const userSignupRequest = async (
     await auth()
       .createUserWithEmailAndPassword(userInput.email, userInput.password)
       .then(() => {
-        let userId = auth()?.currentUser?.uid;
         firestore()
           .collection(Collections.Users)
-          .doc(userId)
+          .doc(id)
           .set({
             userName: userInput.userName,
             email: userInput.email,

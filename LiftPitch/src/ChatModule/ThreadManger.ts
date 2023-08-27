@@ -3,11 +3,11 @@ import {Alert, Platform} from 'react-native';
 import storage from '@react-native-firebase/storage';
 import {setThreadList} from '../Redux/reducers/AppReducer';
 import {sendPushNotification} from '../Network/Services/GeneralServices';
+import {Collections} from '../Utils/Strings';
 
 let CHANNEL_COLLECTION = 'channels';
 let PARTICIPATION_COLLECTION = 'channel_participation';
 let THREAD_COLLECITON = 'thread';
-let USER_COLLECITON = 'Users_FCM_Token';
 let POST_COLLECTION = 'videos';
 
 class ThreadManager {
@@ -453,7 +453,12 @@ class ThreadManager {
     message: any,
     type: any,
   ) => {
-    console.log('sender.userName====>', sender.userName, '====', receiver.user);
+    console.log(
+      'sender.userName====>',
+      sender?.userName,
+      '====',
+      receiver?.user,
+    );
     let title = sender.userName;
     let findedUserIndex = this.userList.findIndex(
       (item: any) => item.userId == receiver?.user?.toString(),
@@ -582,7 +587,6 @@ class ThreadManager {
         data[`${otherUser.user}$$`] = count;
       }
     }
-    console.log('data=======', data);
     firestore()
       .collection(CHANNEL_COLLECTION)
       .doc(thread.channelID)
@@ -593,7 +597,7 @@ class ThreadManager {
   };
   setupUserListener = () => {
     this.userSubscriber = firestore()
-      .collection(USER_COLLECITON)
+      .collection(Collections.Users)
       .onSnapshot(snapDocs => {
         this.userList = snapDocs.docs.map(doc => {
           return doc.data();
@@ -603,14 +607,17 @@ class ThreadManager {
 
   // SET FIREBASE TOKEN FOR FCM
   updateUserToken = async (token: any, userId: any) => {
+    console.log('token-------->', token, '====', userId);
+
     firestore()
-      .collection(USER_COLLECITON)
+      .collection(Collections.Users)
       .doc(userId)
-      .set({
-        userId: userId,
-        token: token,
+      .update({
+        FCM_Token: token,
       })
-      .then(() => {})
+      .then(() => {
+        console.log('Token Update at Firebase');
+      })
       .catch(err => {
         console.log('updateUserToken====>', err);
       });

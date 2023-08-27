@@ -34,6 +34,7 @@ interface Props {
 const SingleVideoComponent = (props: Props) => {
   const dispatch = useDispatch();
   const selector = useSelector((AppState: any) => AppState.AppReducer);
+  const [isLoading, setIsLoading] = useState(false);
   const [commentsList, setCommentsList] = useState([]);
   const [showCommentsModal, setShowComments] = useState(false);
   const getCommentList = async () => {
@@ -46,13 +47,13 @@ const SingleVideoComponent = (props: Props) => {
       );
       return;
     }
-    dispatch(setIsLoader(true));
+    setIsLoading(true);
     await getCommentListingAgainstVideo('0MIZNeas', (response: any) => {
       if (response != 'error!') {
-        dispatch(setIsLoader(false));
+        setIsLoading(false);
         setCommentsList(response);
       } else {
-        dispatch(setIsLoader(false));
+        setIsLoading(false);
       }
     });
   };
@@ -66,7 +67,7 @@ const SingleVideoComponent = (props: Props) => {
       );
       return;
     }
-    // dispatch(setIsLoader(true));
+    dispatch(setIsLoader(true));
     let currentDate = moment
       .utc(new Date())
       .format(ThreadManager.instance.dateFormater.fullDate);
@@ -82,7 +83,6 @@ const SingleVideoComponent = (props: Props) => {
         ? selector?.userData?.companyLogo
         : '',
     };
-
     await addNUpdateCommentReq(
       newObj,
       actionType,
@@ -98,6 +98,28 @@ const SingleVideoComponent = (props: Props) => {
         }
       },
     );
+  };
+  const deleteNReportReq = async (obj: any, actionType: any) => {
+    if (!selector?.isNetConnected) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.internetError,
+        }),
+      );
+      return;
+    }
+    // dispatch(setIsLoader(true));
+    await addNUpdateCommentReq(obj, actionType, '0MIZNeas', (response: any) => {
+      if (response != 'error!') {
+        dispatch(setIsLoader(false));
+
+        setCommentsList(response);
+      } else {
+        dispatch(setIsLoader(false));
+        dispatch(setIsAlertShow({value: true, message: response}));
+      }
+    });
   };
   return (
     <View style={styles.mainContainer}>
@@ -119,10 +141,17 @@ const SingleVideoComponent = (props: Props) => {
       </View>
       {showCommentsModal && (
         <CommentsModal
+          isLoador={isLoading}
           onClose={() => {
             setShowComments(false);
           }}
           commentsList={commentsList}
+          delNReportAction={async (obj: any) => {
+            if (obj?.actionType == CommentActionType.deleteComment) {
+              await deleteNReportReq(obj, obj?.actionType);
+            } else if (obj?.actionType == CommentActionType.reportComment) {
+            }
+          }}
           onNewComment={val => {
             if (val?.isReply?.commentId) {
               addNupdateComment(
@@ -136,6 +165,7 @@ const SingleVideoComponent = (props: Props) => {
               addNupdateComment(
                 {
                   message: val?.message,
+                  isDeleted: false,
                 },
                 CommentActionType.addComment,
               );
