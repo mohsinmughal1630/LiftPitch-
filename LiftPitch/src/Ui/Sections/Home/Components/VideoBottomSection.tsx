@@ -74,9 +74,9 @@ const VideoBottomSection = (props: Props) => {
         <TouchableOpacity
           style={styles.profileImgBox}
           onPress={() => {
-            props?.navigation?.navigate(Routes.ProfileTab.ProfileScreen, {
-              userId: 'GdPK1Rn1',
-            });
+            // props?.navigation?.navigate(Routes.ProfileTab.ProfileScreen, {
+            //   userId: 'GdPK1Rn1',
+            // });
           }}>
           {profileImg ? (
             <LoadingImage
