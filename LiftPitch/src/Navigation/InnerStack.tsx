@@ -1,10 +1,9 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Routes} from '../Utils/Routes';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Routes } from '../Utils/Routes';
 import FollowerScreen from '../Ui/Sections/Follower/Screens/FollowerScreen';
 import NotificationScreen from '../Ui/Sections/Notification/Screens/NotificationScreen';
 import ProfileScreen from '../Ui/Sections/Profile/Screens/ProfileScreen';
-import VideoCreateScreen from '../Ui/Sections/CreateVideo/Screens/VideoCreateScreen';
 import VideosHomeScreen from '../Ui/Sections/Home/Screens/VideosHomeScreen';
 const Stack = createNativeStackNavigator();
 export const HomeStack = () => {
@@ -33,20 +32,7 @@ export const FollowerStack = () => {
       />
     </Stack.Navigator>
   );
-};
-export const AddVideoStack = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}>
-      <Stack.Screen
-        name={Routes.addVideoTab.createVideoScreen}
-        component={VideoCreateScreen}
-      />
-    </Stack.Navigator>
-  );
-};
+}
 export const NotificationStack = () => {
   return (
     <Stack.Navigator
@@ -77,7 +63,6 @@ export const ProfileStack = () => {
 export default {
   HomeStack,
   FollowerStack,
-  AddVideoStack,
   NotificationStack,
   ProfileStack,
 };

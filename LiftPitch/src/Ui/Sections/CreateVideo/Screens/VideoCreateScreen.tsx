@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   AppColors,
   AppImages,
@@ -18,20 +18,24 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {useCameraDevices, Camera} from 'react-native-vision-camera';
+import { useCameraDevices, Camera } from 'react-native-vision-camera';
 import ImagePicker from 'react-native-image-crop-picker';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
-import {useDispatch, useSelector} from 'react-redux';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setIsAlertShow,
   setIsLoader,
 } from '../../../../Redux/reducers/AppReducer';
 import ThreadManager from '../../../../ChatModule/ThreadManger';
-import {createThumbnail} from 'react-native-create-thumbnail';
+import { createThumbnail } from 'react-native-create-thumbnail';
 import VideoCreateHeader from '../Components/VideoCreateHeader';
-import {getVideoCreateObj} from '../../../../Utils/Helper';
+import { getVideoCreateObj } from '../../../../Utils/Helper';
+import Permissions, { PERMISSIONS, RESULTS, openSettings } from 'react-native-permissions';
+import ConfirmationModal from '../../../Components/CustomModal/ConfirmationModal';
+import VideoRecorderBtn from '../Components/VideoRecorderBtn';
 
 const VideoCreateScreen = (props: ScreenProps) => {
   const selector = useSelector((AppState: any) => AppState.AppReducer);
@@ -42,37 +46,18 @@ const VideoCreateScreen = (props: ScreenProps) => {
   const [deviceDir, setDeviceDir] = useState('back');
   const device = devices[deviceDir];
   const [flashMode, setFlashMode] = useState('off');
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   useEffect(() => {
-    getpermissions();
+    getPermissions();
   }, []);
-  const getpermissions = async () => {
-    let cameraPermission: any = '';
-    let microphonePermission: any = '';
-    if (cameraPermission == '' || microphonePermission == '') {
-      cameraPermission = await Camera.getCameraPermissionStatus();
-      microphonePermission = await Camera.getMicrophonePermissionStatus();
-      console.log(
-        'cameraPermission------->',
-        cameraPermission,
-        '------',
-        microphonePermission,
-      );
 
-      if (cameraPermission == 'not-determined') {
-        cameraPermission = await Camera.requestCameraPermission();
-      }
-      if (microphonePermission == 'not-determined') {
-        microphonePermission = await Camera.requestMicrophonePermission();
-      }
-    }
-    console.log('cameraPermission------.', cameraPermission);
-    console.log('microphonePermission------.', microphonePermission);
-    if (
-      cameraPermission != 'authorized' ||
-      microphonePermission != 'authorized'
-    ) {
-      Linking.openSettings();
+  const getPermissions = async () => {
+    const Result = await Permissions.requestMultiple([PERMISSIONS.ANDROID.CAMERA, PERMISSIONS.ANDROID.RECORD_AUDIO])
+    const cameraResult = Result[PERMISSIONS.ANDROID.CAMERA];
+    const audioResult = Result[PERMISSIONS.ANDROID.RECORD_AUDIO];
+    if (cameraResult == RESULTS.BLOCKED || audioResult == RESULTS.BLOCKED) {
+      setShowConfirmationModal(true);
     }
   };
 
@@ -111,7 +96,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
     });
   };
   const uploadThumnail = async (path: any, payload: any) => {
-    let obj = {...payload};
+    let obj = { ...payload };
     await ThreadManager.instance
       .uploadMedia(path, false, async (url: any) => {
         console.log('url------>', url);
@@ -127,7 +112,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
           dispatch(setIsLoader(false));
           console.log('video final Obj---------->', obj);
           await ThreadManager.instance.createPost(obj, (response: any) => {
-            dispatch(setIsAlertShow({value: true, message: response}));
+            dispatch(setIsAlertShow({ value: true, message: response }));
           });
         } else {
           dispatch(setIsLoader(false));
@@ -193,13 +178,16 @@ const VideoCreateScreen = (props: ScreenProps) => {
     <View style={AppStyles.MainStyle}>
       {device != null ? (
         <KeyboardAvoidingView
-          style={{flex: 1}}
+          style={{ flex: 1 }}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
           <VideoCreateHeader
             cameraStatus={deviceDir}
             switchCamera={(val: any) => {
               setDeviceDir(val);
+            }}
+            onClose={() => {
+              props.navigation.goBack();
             }}
           />
           <ScrollView
@@ -213,7 +201,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
               <>
                 <Image
                   source={AppImages.createVideo.flash}
-                  style={{alignSelf: 'center'}}
+                  style={{ alignSelf: 'center' }}
                 />
                 <Text style={styles.flashTxt}>
                   {flashMode == 'on' ? 'ON' : 'OFF'}
@@ -236,7 +224,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
               <TouchableOpacity
                 onPress={() => {
                   dispatch(
-                    setIsAlertShow({value: true, message: 'Pending....'}),
+                    setIsAlertShow({ value: true, message: 'Pending....' }),
                   );
                 }}>
                 <>
@@ -244,7 +232,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
                   <Text style={styles.simpleDesTxt}>Pitch Ideas</Text>
                 </>
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 activeOpacity={1}
                 style={{}}
                 onPress={() => {
@@ -262,7 +250,10 @@ const VideoCreateScreen = (props: ScreenProps) => {
                 ) : (
                   <View style={styles.stopRecordCont} />
                 )}
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+              <VideoRecorderBtn
+                onSuccess={() => console.log('Should go to video preview screen')}
+              />
               <TouchableOpacity
                 activeOpacity={1}
                 onPress={() => {
@@ -287,6 +278,16 @@ const VideoCreateScreen = (props: ScreenProps) => {
           </Text>
           <ActivityIndicator size="large" color={AppColors.red.mainColor} />
         </View>
+      )}
+      {showConfirmationModal && (
+        <ConfirmationModal
+          content={'You need to enable camera and voice permissions first. Do you want to enable them from settings now?'}
+          onClose={() => setShowConfirmationModal(false)}
+          onConfirm={() => {
+            setShowConfirmationModal(false);
+            openSettings().catch(e => console.log('some problem ', e));
+          }}
+        />
       )}
     </View>
   );

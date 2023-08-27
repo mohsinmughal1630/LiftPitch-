@@ -11,13 +11,14 @@ import {
 } from 'react-native';
 import {
   AppColors,
+  AppFonts,
   AppImages,
   hv,
   isSmallDevice,
   normalized,
   ScreenSize,
 } from '../../../Utils/AppConstants';
-import {AppStyles} from '../../../Utils/AppStyles';
+import { AppStyles } from '../../../Utils/AppStyles';
 
 interface Props {
   content: string;
@@ -48,7 +49,7 @@ const ConfirmationModal = (props: Props) => {
           <TouchableWithoutFeedback onPress={props.onClose}>
             <View style={styles.crossView}>
               <Image
-                source={AppImages.Cards.CrossIcon}
+                source={AppImages.Common.CrossFilled}
                 resizeMode="contain"
                 style={styles.crossImg}
               />
@@ -76,7 +77,7 @@ const ConfirmationModal = (props: Props) => {
                   {
                     backgroundColor: props.confirmColor
                       ? props.confirmColor
-                      : AppColors.primaryGreen,
+                      : AppColors.primaryPurple,
                   },
                 ]}>
                 <Text style={styles.btnText}>Yes</Text>
@@ -92,7 +93,7 @@ export default ConfirmationModal;
 
 const styles = StyleSheet.create({
   rowTitle: {
-    ...AppStyles.textBold,
+    fontWeight: '800',
     color: AppColors.dark.darkLevel1,
     fontSize: normalized(18),
     alignSelf: 'center',
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
     maxWidth: '60%',
   },
   rowLabel: {
-    ...AppStyles.textSemiBold,
+    fontWeight: '600',
     color: AppColors.dark.darkLevel1,
     fontSize: normalized(18),
     alignSelf: 'center',
@@ -120,6 +121,7 @@ const styles = StyleSheet.create({
   crossImg: {
     height: normalized(22),
     width: normalized(22),
+    tintColor: 'red'
   },
   transparentContainer: {
     ...StyleSheet.absoluteFillObject,
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
     marginBottom: hv(30),
   },
   btnContainer: {
-    backgroundColor: AppColors.primaryGreen,
+    backgroundColor: AppColors.primaryPurple,
     justifyContent: 'center',
     alignItems: 'center',
     height: isSmallDevice ? hv(60) : hv(50),
@@ -148,7 +150,7 @@ const styles = StyleSheet.create({
     borderRadius: 35,
   },
   btnText: {
-    ...AppStyles.textSemiBold,
+    fontWeight: '600',
     fontSize: normalized(14),
     color: AppColors.white.white,
   },

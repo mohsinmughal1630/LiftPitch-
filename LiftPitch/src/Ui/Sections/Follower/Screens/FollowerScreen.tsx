@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AppColors,
   AppImages,
@@ -6,6 +6,7 @@ import {
   commentsConstants,
   hv,
   normalized,
+  socialInviteType,
 } from '../../../../Utils/AppConstants';
 import {
   FlatList,
@@ -19,22 +20,33 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 import HeaderTab from '../../../Components/CustomTab/HeaderTab';
 import CustomSearchBar from '../../../Components/CustomSearchBar/CustomSearchBar';
-import {Routes} from '../../../../Utils/Routes';
-import {fetchFollowingList} from '../../../../Network/Services/ProfileServices';
-import {useSelector} from 'react-redux';
-import {useIsFocused} from '@react-navigation/native';
+import { Routes } from '../../../../Utils/Routes';
+import { fetchFollowingList } from '../../../../Network/Services/ProfileServices';
+import { useDispatch, useSelector } from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
 import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlaceHolderComp';
+import { setIsLoader } from '../../../../Redux/reducers/AppReducer';
+import CommonDataManager from '../../../../Utils/CommonManager';
+import SocialInviteSection from '../Components/SocialInviteSection';
+import ConfirmationModal from '../../../Components/CustomModal/ConfirmationModal';
+import DeviceContactsListModal from '../../../Components/CustomModal/DeviceContactsListModal';
+import { openSettings } from 'react-native-permissions';
+
 const FollowerScreen = (props: ScreenProps) => {
+  const dispatch = useDispatch()
   const selector = useSelector((AppState: any) => AppState.AppReducer);
   const [selectTab, setSelectedTab] = useState(0);
   const [searchTxt, setSearchTxt] = useState('');
   const [followerData, setFollowerData] = useState([]);
   const [followingData, setFollowingData] = useState([]);
   const isFocused = useIsFocused();
+  const [deviceContactsList, setDeviceContactsList] = useState<Array<any>>([]);
+  const [showContactsListModal, setShowContactsListModal] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   useEffect(() => {
     if (isFocused) {
@@ -48,6 +60,31 @@ const FollowerScreen = (props: ScreenProps) => {
       });
     }
   }, [isFocused]);
+
+
+  const inviteSelected = (type: socialInviteType) => {
+    console.log('On social invitation ', type);
+    if (type == 'contacts') {
+      if (deviceContactsList.length > 0) {
+        setShowContactsListModal(true);
+        return;
+      }
+      dispatch(setIsLoader(true));
+      CommonDataManager.getSharedInstance().fetchDeviceContacts(
+        selector?.userData?.userId,
+        () => {
+          dispatch(setIsLoader(false));
+          setShowConfirmationModal(true);
+        },
+        (list) => {
+          dispatch(setIsLoader(false))
+          setDeviceContactsList(list);
+          setShowContactsListModal(true);
+          console.log('All firebase users with your contacts here ', list.length);
+        })
+    }
+  }
+
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
@@ -58,10 +95,10 @@ const FollowerScreen = (props: ScreenProps) => {
         atSelectTab={(val: any) => {
           setSelectedTab(val);
         }}
-        mainStyle={{marginTop: normalized(10)}}
+        mainStyle={{ marginTop: normalized(10) }}
       />
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
         <ScrollView
@@ -73,16 +110,17 @@ const FollowerScreen = (props: ScreenProps) => {
             atChangeTxt={(txt: any) => {
               setSearchTxt(txt);
             }}
-            mainStyle={{marginVertical: normalized(30)}}
+            mainStyle={{ marginVertical: normalized(30) }}
           />
+          <SocialInviteSection onPress={inviteSelected} />
           {(selectTab == 0 && followingData?.length > 0) ||
-          (selectTab == 1 && followerData?.length > 0) ? (
+            (selectTab == 1 && followerData?.length > 0) ? (
             <FlatList
               keyExtractor={(item, index) => `${index}`}
               showsVerticalScrollIndicator={false}
               // data={commentsConstants}
               data={selectTab == 0 ? followingData : followerData}
-              renderItem={({item, index}) => {
+              renderItem={({ item, index }) => {
                 return (
                   <TouchableOpacity
                     activeOpacity={0.7}
@@ -92,8 +130,8 @@ const FollowerScreen = (props: ScreenProps) => {
                       let userId = item?.userId
                         ? item?.userId
                         : item?.id
-                        ? item?.id
-                        : null;
+                          ? item?.id
+                          : null;
                       if (userId) {
                         props?.navigation.navigate(
                           Routes.ProfileTab.ProfileScreen,
@@ -106,7 +144,7 @@ const FollowerScreen = (props: ScreenProps) => {
                     <View style={styles.profileImgBox}>
                       {item?.profile ? (
                         <AppImageViewer
-                          source={{uri: item?.profile}}
+                          source={{ uri: item?.profile }}
                           placeHolder={AppImages.bottomBar.Profile}
                           style={{
                             ...styles.profileImgBox,
@@ -129,12 +167,12 @@ const FollowerScreen = (props: ScreenProps) => {
                       <View
                         style={[
                           AppStyles.horiCommon,
-                          {justifyContent: 'space-between'},
+                          { justifyContent: 'space-between' },
                         ]}>
                         <Text
                           style={[
                             styles.description,
-                            {color: AppColors.black.black, marginTop: 0},
+                            { color: AppColors.black.black, marginTop: 0 },
                           ]}>
                           {item.userName}
                         </Text>
@@ -165,6 +203,22 @@ const FollowerScreen = (props: ScreenProps) => {
           )}
         </ScrollView>
       </KeyboardAvoidingView>
+      {showConfirmationModal && (
+        <ConfirmationModal
+          content={'Kindly enable contacts access from the settings. Do you want to go to settings now?'}
+          onClose={() => setShowConfirmationModal(false)}
+          onConfirm={() => {
+            setShowConfirmationModal(false);
+            openSettings().catch(e => console.log('some problem ', e));
+          }}
+        />
+      )}
+      {showContactsListModal && (
+        <DeviceContactsListModal
+          onClose={() => setShowContactsListModal(false)}
+          list={deviceContactsList}
+        />
+      )}
     </View>
   );
 };

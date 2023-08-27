@@ -5,6 +5,7 @@ import Bar from './Bar';
 import { AppColors, normalized } from '../../../Utils/AppConstants';
 import { containerStateEnum } from '../../Sections/Container/State';
 import { setTab } from '../../../Redux/reducers/AppReducer';
+import { Routes } from '../../../Utils/Routes';
 const BottomBar = ({ bottomBarList, dispatch, navigation, tab }: any) => {
   const redux_Dispatch = useDispatch();
   const selector = useSelector((AppState: any) => AppState.AppReducer);
@@ -47,6 +48,10 @@ const BottomBar = ({ bottomBarList, dispatch, navigation, tab }: any) => {
               onPress={() => {
                 if (navigation.canGoBack()) {
                   navigation.popToTop();
+                }
+                if (index == 2) {
+                  navigation.push(Routes.addVideoTab.createVideoScreen);
+                  return;
                 }
                 dispatch({ type: containerStateEnum.changeTab, data: index });
                 redux_Dispatch(setTab(index));

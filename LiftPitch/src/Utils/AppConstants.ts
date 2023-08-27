@@ -698,12 +698,12 @@ export const socialInviteList = [
     type: 'contacts',
     image: AppImages.Followers.ContactsInvite,
   },
-  {
-    id: 3,
-    name: 'Import Facebook friends',
-    type: 'facebook',
-    image: AppImages.Followers.Facebookinvite
-  },
+  // {
+  //   id: 3,
+  //   name: 'Import Facebook friends',
+  //   type: 'facebook',
+  //   image: AppImages.Followers.Facebookinvite
+  // },
 ];
 
 export const shareOptionsList = [
