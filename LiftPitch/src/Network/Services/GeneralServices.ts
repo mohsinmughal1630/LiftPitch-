@@ -37,7 +37,7 @@ export const uploadMedia = async (
 export const sendPushNotification = async (params: any, onComplete: any) => {
   const urlForApiCall = PUSH_NOTIFICATION_URL;
   const authToken = `Bearer AAAA33VLu_0:APA91bFPpo1OTkBCTbX4eukwnycqmSqe4NSlEzSuz-2UGF2s1nt788gNQgTmpimvzoQNOPAJxfq3GVZbqNWz5fe19Zp89L8wQ6OzGqTJwqtjX0tCs8kZ_1BGYybFSZOtJxM2Q4tVCMw8`;
-  console.log('push Params=====>', params);
+
   await axios({
     method: 'post',
     url: urlForApiCall,
@@ -48,7 +48,6 @@ export const sendPushNotification = async (params: any, onComplete: any) => {
     },
   })
     .then(() => {
-      console.log('succesFully Send Notification====>');
       onComplete(true);
     })
     .catch(async error => {

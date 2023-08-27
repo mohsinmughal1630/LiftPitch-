@@ -260,7 +260,7 @@ const ChatScreen = (props: ScreenProps) => {
           ThreadManager.instance.updateMessageSeener(
             thread.channelID,
             lastSeenerMessageList,
-            user.id,
+            user.userId,
           );
         }
       },
@@ -405,8 +405,8 @@ const ChatScreen = (props: ScreenProps) => {
               if (response?.length == 0) {
                 let fullName = currentUserData?.company_name
                   ? currentUserData?.company_name
-                  : currentUserData?.full_name
-                  ? currentUserData?.full_name
+                  : currentUserData?.userName
+                  ? currentUserData?.userName
                   : '';
 
                 ThreadManager.instance.generatePushNotification(

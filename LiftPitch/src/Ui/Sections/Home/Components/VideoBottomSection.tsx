@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import SocialBox from './SocialBox';
 import {
   AppColors,
@@ -11,8 +11,10 @@ import {
 import {AppStyles} from '../../../../Utils/AppStyles';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import LoadingImage from '../../../Components/LoadingImage';
+import {Routes} from '../../../../Utils/Routes';
 
 interface Props {
+  navigation: any;
   item: singleVideoItemType;
   onOptionClick: (val: string) => void;
 }
@@ -69,7 +71,13 @@ const VideoBottomSection = (props: Props) => {
       </View>
       <View>
         {/* Start of Profile Image */}
-        <View style={styles.profileImgBox}>
+        <TouchableOpacity
+          style={styles.profileImgBox}
+          onPress={() => {
+            props?.navigation?.navigate(Routes.ProfileTab.ProfileScreen, {
+              userId: 'GdPK1Rn1',
+            });
+          }}>
           {profileImg ? (
             <LoadingImage
               source={{uri: profileImg}}
@@ -86,7 +94,7 @@ const VideoBottomSection = (props: Props) => {
               style={styles.placeholderImg}
             />
           )}
-        </View>
+        </TouchableOpacity>
         {/* End of Profile Image */}
         <SocialBox onOptionClick={props.onOptionClick} />
       </View>

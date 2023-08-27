@@ -26,6 +26,7 @@ import {
 import moment from 'moment';
 
 interface Props {
+  navigation: any;
   item: singleVideoItemType;
   currentVideoIndex: number;
   index: number;
@@ -130,6 +131,7 @@ const SingleVideoComponent = (props: Props) => {
           index={props.index}
         />
         <VideoBottomSection
+          navigation={props?.navigation}
           item={props.item}
           onOptionClick={(val: string) => {
             if (val == 'comment') {
