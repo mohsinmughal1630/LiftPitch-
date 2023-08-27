@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {FlatList, StatusBar, StyleSheet, View} from 'react-native';
+import React, { useState } from 'react';
+import { FlatList, StatusBar, StyleSheet, View } from 'react-native';
 import SingleVideoComponent from '../Components/SingleVideoComponent';
 import {
   ScreenProps,
@@ -32,7 +32,7 @@ const VideosHomeScreen = (props: ScreenProps) => {
         pagingEnabled
         onMomentumScrollEnd={updateCurrentSlideIndex}
         keyExtractor={(item, index) => `${item.id}`}
-        renderItem={({item, index}) => (
+        renderItem={({ item, index }) => (
           <SingleVideoComponent
             navigation={props?.navigation}
             item={item}

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  AddVideoStack,
   FollowerStack,
   HomeStack,
   NotificationStack,
@@ -32,8 +31,6 @@ export const setContainerStack = (index: any) => {
     return <HomeStack />;
   } else if (index == 1) {
     return <FollowerStack />;
-  } else if (index == 2) {
-    return <AddVideoStack />;
   } else if (index == 3) {
     return <NotificationStack />;
   } else if (index == 4) {

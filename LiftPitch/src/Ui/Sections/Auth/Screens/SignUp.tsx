@@ -1,6 +1,5 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import {
-  Alert,
   Image,
   Keyboard,
   KeyboardAvoidingView,
@@ -21,33 +20,33 @@ import {
   hv,
   normalized,
 } from '../../../../Utils/AppConstants';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import SimpleInput from '../../../Components/CustomInput/SimpleInput';
 import CustomFilledBtn from '../../../Components/CustomButtom/CustomButton';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setIsAlertShow,
   setIsLoader,
   setUpdateFBToken,
   setUserData,
 } from '../../../../Redux/reducers/AppReducer';
-import {Routes} from '../../../../Utils/Routes';
+import { Routes } from '../../../../Utils/Routes';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import AppImagePicker from '../../../Components/CustomModal/AppImagePicker';
-import {saveUserData} from '../../../../Utils/AsyncStorage';
-import {AppStrings} from '../../../../Utils/Strings';
-import {AppRootStore} from '../../../../Redux/store/AppStore';
+import { saveUserData } from '../../../../Utils/AsyncStorage';
+import { AppStrings } from '../../../../Utils/Strings';
+import { AppRootStore } from '../../../../Redux/store/AppStore';
 import LocationPickerModal from '../../../Components/CustomModal/LocationPickerModal';
 import PressableInput from '../../../Components/CustomInput/PressableInput';
-import {userSignupRequest} from '../../../../Network/Services/AuthServices';
+import { userSignupRequest } from '../../../../Network/Services/AuthServices';
 import LoadingImage from '../../../Components/LoadingImage';
 import SocialBtn from '../Components/SocialBtn';
-import {SocialTypeStrings} from '../../../../Utils/AppEnums';
+import { SocialTypeStrings } from '../../../../Utils/AppEnums';
 
 const SignUp = (props: ScreenProps) => {
   const dispatch = useDispatch();
-  const {isNetConnected, isPersisterUser} = useSelector(
+  const { isNetConnected, isPersisterUser } = useSelector(
     (state: AppRootStore) => state.AppReducer,
   );
   const [openImage, setOpenImage] = useState(false);
@@ -69,7 +68,6 @@ const SignUp = (props: ScreenProps) => {
   const passwordRef = useRef();
   const cPAsswordRef = useRef();
 
-  //error====>
   const [compNameError, setCompNameError] = useState('');
   const [compRNumberError, setCompRNumberError] = useState('');
   const [compTypeError, setCompTypeError] = useState('');
@@ -93,7 +91,6 @@ const SignUp = (props: ScreenProps) => {
           message: 'Please select your profile Picture',
         }),
       );
-      // Alert.alert('Error', 'Please select your profile Picture');
       return;
     }
     if (!compName) {
@@ -103,7 +100,6 @@ const SignUp = (props: ScreenProps) => {
           message: 'Please enter Company Name',
         }),
       );
-      // Alert.alert('Error', 'Please enter Company Name');
       return;
     }
     if (CommonDataManager.getSharedInstance().hasNumber(compName)) {
@@ -113,7 +109,6 @@ const SignUp = (props: ScreenProps) => {
           message: 'Company name cannot contain numbers',
         }),
       );
-      // Alert.alert('Error', 'Company name cannot contain numbers');
       return;
     }
     if (!locationObj?.address) {
@@ -123,7 +118,6 @@ const SignUp = (props: ScreenProps) => {
           message: 'Please select location',
         }),
       );
-      // Alert.alert('Error', 'Please select location');
       return;
     }
     if (!compRNumber) {
@@ -133,7 +127,6 @@ const SignUp = (props: ScreenProps) => {
           message: 'Please enter Company Number',
         }),
       );
-      // Alert.alert('Error', 'Please enter Company Number');
       return;
     }
     if (!compType) {
@@ -143,7 +136,6 @@ const SignUp = (props: ScreenProps) => {
           message: 'Please select Business Type',
         }),
       );
-      // Alert.alert('Error', 'Please select Business Type');
       return;
     }
     if (!userName) {
@@ -153,7 +145,6 @@ const SignUp = (props: ScreenProps) => {
           message: 'Please enter username',
         }),
       );
-      // Alert.alert('Error', 'Please enter username');
       return;
     }
     if (!email) {
@@ -163,7 +154,6 @@ const SignUp = (props: ScreenProps) => {
           message: 'Please enter Email',
         }),
       );
-      // Alert.alert('Error', 'Please enter an Email');
       return;
     }
     if (!CommonDataManager.getSharedInstance().isEmailValid(email)) {
@@ -173,7 +163,6 @@ const SignUp = (props: ScreenProps) => {
           message: AppStrings.Validation.invalidEmailError,
         }),
       );
-      // Alert.alert('Error', AppStrings.Validation.invalidEmailError);
       return;
     }
     if (password.length < 8) {
@@ -183,7 +172,6 @@ const SignUp = (props: ScreenProps) => {
           message: 'Password should be at least 8 characters long',
         }),
       );
-      // Alert.alert('Error', 'Password should be at least 8 characters long');
       return;
     }
     if (password !== cPassword) {
@@ -193,7 +181,6 @@ const SignUp = (props: ScreenProps) => {
           message: AppStrings.Validation.passwordNotMatchError,
         }),
       );
-      // Alert.alert('Error', AppStrings.Validation.passwordNotMatchError);
       return;
     }
     if (!isChecked) {
@@ -203,7 +190,6 @@ const SignUp = (props: ScreenProps) => {
           message: 'Please accept the terms and conditions first',
         }),
       );
-      // Alert.alert('Error', 'Please accept the terms and conditions first');
       return;
     }
     if (!isNetConnected) {
@@ -213,7 +199,6 @@ const SignUp = (props: ScreenProps) => {
           message: AppStrings.Network.internetError,
         }),
       );
-      // Alert.alert('Error', AppStrings.Network.internetError);
       return;
     }
     const paramsObj = {
@@ -230,17 +215,10 @@ const SignUp = (props: ScreenProps) => {
     await userSignupRequest(paramsObj, response => {
       dispatch(setIsLoader(false));
       if (response?.status) {
-        CommonDataManager.getSharedInstance().showPopUpWithOk(
-          'Success',
-          'User successfully registered',
-          () => {
-            dispatch(setUserData(response?.data));
-            if (isPersisterUser) {
-              saveUserData(response?.data);
-              dispatch(setUpdateFBToken(true));
-            }
-          },
-        );
+        dispatch(setUserData(response?.data));
+        if (isPersisterUser) {
+          saveUserData(response?.data);
+        }
       } else {
         let errorMessage = response?.message
           ? response?.message
@@ -251,7 +229,6 @@ const SignUp = (props: ScreenProps) => {
             message: errorMessage,
           }),
         );
-        // Alert.alert('Error', errorMessage);
       }
     }).catch(() => dispatch(setIsLoader(false)));
   };
@@ -318,13 +295,13 @@ const SignUp = (props: ScreenProps) => {
         }}
       />
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
         <ScrollView
           style={styles.containerStyle}
           showsVerticalScrollIndicator={false}>
-          <View style={{alignSelf: 'center'}}>
+          <View style={{ alignSelf: 'center' }}>
             {imgUrl ? (
               <TouchableOpacity
                 activeOpacity={1}
@@ -332,7 +309,7 @@ const SignUp = (props: ScreenProps) => {
                   setOpenImage(true);
                 }}>
                 <LoadingImage
-                  source={{uri: imgUrl}}
+                  source={{ uri: imgUrl }}
                   viewStyle={styles.imageCont}
                   resizeMode="cover"
                 />
@@ -361,7 +338,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Company Name'}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
+            textInputStyle={{ width: normalized(270) }}
             setValue={(txt: any) => {
               setCompNameError('');
               setCompName(txt);
@@ -382,7 +359,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Company Registration Number '}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
+            textInputStyle={{ width: normalized(270) }}
             setValue={(txt: any) => {
               setCompRNumberError('');
               setRNumber(txt);
@@ -397,7 +374,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Business Type / Industry'}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
+            textInputStyle={{ width: normalized(270) }}
             setValue={(txt: any) => {
               setCompTypeError('');
               setCompType(txt);
@@ -412,7 +389,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Your Name'}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
+            textInputStyle={{ width: normalized(270) }}
             setValue={(txt: any) => {
               setUserNameError('');
               setUserName(txt);
@@ -428,7 +405,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Your Email'}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
+            textInputStyle={{ width: normalized(270) }}
             setValue={(txt: any) => {
               setEmailError('');
               setEmail(txt);
@@ -444,7 +421,7 @@ const SignUp = (props: ScreenProps) => {
             placeHold={'Password'}
             returnKeyType={'next'}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
+            textInputStyle={{ width: normalized(270) }}
             setValue={(passTxt: any) => {
               if (passTxt.includes(' ')) {
                 setPassword(passTxt.trim());
@@ -461,7 +438,7 @@ const SignUp = (props: ScreenProps) => {
             ref={cPAsswordRef}
             placeHold={'Confirm Password'}
             container={styles.inputMainCont}
-            textInputStyle={{width: normalized(270)}}
+            textInputStyle={{ width: normalized(270) }}
             setValue={(passTxt: any) => {
               if (passTxt.includes(' ')) {
                 setCPassword(passTxt.trim());
@@ -498,18 +475,18 @@ const SignUp = (props: ScreenProps) => {
             onPressBtn={onRegisterPress}
           />
           <View style={styles.socialCont}>
-            <SocialBtn
+            {/* <SocialBtn
               label={'FACEBOOK'}
               icon={AppImages.Auth.fbIcon}
               atPress={() => {}}
               containerStyle={{
                 width: normalized(150),
               }}
-            />
+            /> */}
             <SocialBtn
               label={'GOOGLE'}
               icon={AppImages.Auth.google}
-              atPress={() => socialBtnClicked(SocialTypeStrings.google)}
+              atPress={() => CommonDataManager.getSharedInstance().commonSocialLoginRequest(SocialTypeStrings.google, isNetConnected, isPersisterUser, props.navigation)}
               containerStyle={{
                 width: normalized(150),
               }}
@@ -620,6 +597,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     marginHorizontal: 10,
+    alignSelf: 'center'
   },
 });
 

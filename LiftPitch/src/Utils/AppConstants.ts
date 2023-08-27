@@ -1,7 +1,7 @@
-import {StackScreenProps} from '@react-navigation/stack';
-import {Dimensions, Platform, PixelRatio, StatusBar} from 'react-native';
+import { StackScreenProps } from '@react-navigation/stack';
+import { Dimensions, Platform, PixelRatio, StatusBar } from 'react-native';
 import moment from 'moment';
-import {AppStrings} from './Strings';
+import { AppStrings } from './Strings';
 export const platformVersion = Platform.Version;
 export type ScreenProps = StackScreenProps<any, any>;
 export const ScreenSize = Dimensions.get('screen');
@@ -43,10 +43,14 @@ export const AppImages = {
   },
   bottomBar: {
     Home: require('../Ui/assets/images/BottomBar/Home.png'),
+    HomeFilled: require('../Ui/assets/images/BottomBar/HomeFilled.png'),
     followerIcon: require('../Ui/assets/images/BottomBar/followerIcon.png'),
+    FollowersFilled: require('../Ui/assets/images/BottomBar/FollowersFilled.png'),
     Message: require('../Ui/assets/images/BottomBar/Message.png'),
+    MessageFilled: require('../Ui/assets/images/BottomBar/MessageFilled.png'),
     PlusIcon: require('../Ui/assets/images/BottomBar/PlusIcon.png'),
     Profile: require('../Ui/assets/images/BottomBar/Profile.png'),
+    ProfileFilled: require('../Ui/assets/images/BottomBar/ProfileFilled.png'),
   },
   Chat: {
     SendIcon: require('../Ui/assets/images/Chat/SendIcon.png'),
@@ -102,6 +106,12 @@ export const AppImages = {
     Send: require('../Ui/assets/images/Common/Send.png'),
     menuIcon: require('../Ui/assets/images/Common/menuIcon.png'),
     LeftArrowIcon: require('../Ui/assets/images/Common/LeftArrowIcon.png'),
+    CrossFilled: require('../Ui/assets/images/Common/CrossIconFilled.png'),
+  },
+  Followers: {
+    ContactsInvite: require('../Ui/assets/images/Followers/ContactsInvite.png'),
+    Facebookinvite: require('../Ui/assets/images/Followers/Facebookinvite.png'),
+    MailInvite: require('../Ui/assets/images/Followers/MailInvite.png'),
   },
 };
 export const AppFonts = {};
@@ -185,10 +195,12 @@ export const AppColors = {
 export const BottomBarList = [
   {
     icon: AppImages.bottomBar.Home,
+    selectedIcon: AppImages.bottomBar.HomeFilled,
     title: AppStrings.bottomBar.home,
   },
   {
     icon: AppImages.bottomBar.followerIcon,
+    selectedIcon: AppImages.bottomBar.FollowersFilled,
     title: AppStrings.bottomBar.followers,
   },
   {
@@ -197,10 +209,12 @@ export const BottomBarList = [
   },
   {
     icon: AppImages.bottomBar.Message,
+    selectedIcon: AppImages.bottomBar.MessageFilled,
     title: AppStrings.bottomBar.notification,
   },
   {
     icon: AppImages.bottomBar.Profile,
+    selectedIcon: AppImages.bottomBar.ProfileFilled,
     title: AppStrings.bottomBar.profile,
   },
 ];
@@ -617,6 +631,81 @@ export const commentsConstants = [
   },
 ];
 
+
+export const followersListConstant = [
+  {
+    id: 1,
+    name: 'Kabir Khan',
+    image:
+      'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
+    date: new Date().setHours(0),
+    message: 'This is my profile description. Its for testing purposes for now.',
+  },
+  {
+    id: 2,
+    name: 'Salman Khan',
+    image:
+      'https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_1280.jpg',
+    date: new Date().setHours(1),
+    message: 'This is my profile description. Its for testing purposes for now.',
+  },
+  {
+    id: 3,
+    name: 'Kabir Khan',
+    image:
+      'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
+    date: new Date().setHours(2),
+    message: 'This is my profile description. Its for testing purposes for now.',
+  },
+  {
+    id: 4,
+    name: 'Salman Khan',
+    image:
+      'https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_1280.jpg',
+    date: new Date().setHours(3),
+    message: 'This is my profile description. Its for testing purposes for now.',
+  },
+  {
+    id: 5,
+    name: 'Kabir Khan',
+    image:
+      'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
+    date: new Date().setHours(4),
+    message: 'This is my profile description. Its for testing purposes for now.',
+  },
+  {
+    id: 6,
+    name: 'Salman Khan',
+    image: null,
+    date: new Date().setHours(6),
+    message:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ',
+  },
+];
+
+export type socialInviteType = 'facebook' | 'email' | 'contacts';
+
+export const socialInviteList = [
+  {
+    id: 1,
+    name: 'Invite by Email',
+    type: 'email',
+    image: AppImages.Followers.MailInvite
+  },
+  {
+    id: 2,
+    name: 'Import contacts',
+    type: 'contacts',
+    image: AppImages.Followers.ContactsInvite,
+  },
+  // {
+  //   id: 3,
+  //   name: 'Import Facebook friends',
+  //   type: 'facebook',
+  //   image: AppImages.Followers.Facebookinvite
+  // },
+];
+
 export const shareOptionsList = [
   {
     id: 3,
@@ -651,13 +740,13 @@ export interface ILocation {
 //   }
 //   return Dimensions.get('window').height;
 // };
-export const calculateWindowHeight = () => {
+export const calculateWindowHeight = (type: 'status' | 'diff') => {
   const diff =
     Dimensions.get('screen').height - Dimensions.get('window').height;
   const isPoco = Platform?.constants?.Brand?.toLowerCase() == 'poco';
   const isRedmi = Platform?.constants?.Brand?.toLowerCase() == 'redmi';
   const statusHeight = StatusBar?.currentHeight || 0;
-  return Dimensions.get('screen').height - statusHeight;
+  return Dimensions.get('screen').height - (type == 'diff' ? diff : statusHeight)
 };
 
 export const makeid = (length: number) => {

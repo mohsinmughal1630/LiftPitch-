@@ -1,11 +1,11 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {AppColors, AppImages, normalized} from '../../../../Utils/AppConstants';
-import {AppHorizontalMargin} from '../../../../Utils/AppStyles';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { AppColors, AppImages, normalized } from '../../../../Utils/AppConstants';
+import { AppHorizontalMargin } from '../../../../Utils/AppStyles';
 const VideoCreateHeader = (props: any) => {
   return (
     <View style={styles.mainContainer}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={props.onClose}>
         <Image source={AppImages.createVideo.CloseIcon} />
       </TouchableOpacity>
       <TouchableOpacity style={styles.musicContainer}>

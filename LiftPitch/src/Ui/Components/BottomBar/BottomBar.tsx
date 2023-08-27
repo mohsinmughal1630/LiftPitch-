@@ -1,11 +1,12 @@
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import React from 'react';
-import {View} from 'react-native';
+import { View } from 'react-native';
 import Bar from './Bar';
-import {AppColors, normalized} from '../../../Utils/AppConstants';
-import {containerStateEnum} from '../../Sections/Container/State';
-import {setTab} from '../../../Redux/reducers/AppReducer';
-const BottomBar = ({bottomBarList, dispatch, navigation, tab}: any) => {
+import { AppColors, normalized } from '../../../Utils/AppConstants';
+import { containerStateEnum } from '../../Sections/Container/State';
+import { setTab } from '../../../Redux/reducers/AppReducer';
+import { Routes } from '../../../Utils/Routes';
+const BottomBar = ({ bottomBarList, dispatch, navigation, tab }: any) => {
   const redux_Dispatch = useDispatch();
   const selector = useSelector((AppState: any) => AppState.AppReducer);
   return (
@@ -38,7 +39,7 @@ const BottomBar = ({bottomBarList, dispatch, navigation, tab}: any) => {
           zIndex: 20,
         }}>
         {bottomBarList.map((item: any, index: any) => (
-          <View key={index} style={{padding: 5}}>
+          <View key={index} style={{ padding: 5 }}>
             <Bar
               key={item.title}
               tab={tab}
@@ -48,7 +49,11 @@ const BottomBar = ({bottomBarList, dispatch, navigation, tab}: any) => {
                 if (navigation.canGoBack()) {
                   navigation.popToTop();
                 }
-                dispatch({type: containerStateEnum.changeTab, data: index});
+                if (index == 2) {
+                  navigation.push(Routes.addVideoTab.createVideoScreen);
+                  return;
+                }
+                dispatch({ type: containerStateEnum.changeTab, data: index });
                 redux_Dispatch(setTab(index));
               }}
             />

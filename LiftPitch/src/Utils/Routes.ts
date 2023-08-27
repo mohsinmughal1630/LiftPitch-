@@ -6,6 +6,7 @@ export const Routes = {
     otp: 'otp',
     newPassword: 'newPassword',
     newPasswordSuccessScreen: 'newPasswordSuccessScreen',
+    profileCompleteScreen: 'profileCompleteScreen'
   },
   GetStarting: {
     onBoarding: 'onBoarding',
