@@ -16,13 +16,14 @@ import {
 import AppLoader from './Ui/Components/AppLoader';
 import MainNavigation from './Navigation/MainNavigation';
 import AuthStack from './Navigation/AuthNavigation';
-import {AppColors} from '../src/Utils/AppConstants';
+import {AppColors, PITCH_IDEAS_LIST} from '../src/Utils/AppConstants';
 import {notifications} from 'react-native-firebase-push-notifications';
 import ThreadManager from './ChatModule/ThreadManger';
 import {getUserData} from './Utils/AsyncStorage';
 import {setUpChat} from './Utils/Helper';
 import LocalNotification from './Ui/Components/LocalNotification';
 import {Routes} from './Utils/Routes';
+import firestore from '@react-native-firebase/firestore';
 export const navigationRef = createNavigationContainerRef();
 export const navRef = React.createRef();
 
@@ -81,6 +82,7 @@ function AppContainer() {
     if (token) {
       const user = await getUserData();
       console.log('FCM token------->', token);
+
       await ThreadManager.instance.updateUserToken(
         token,
         user?.userId?.toString(),

@@ -30,23 +30,45 @@ export const addNUpdateCommentReq = async (
 
               commentsArr[indexToUpdate].reply = replyArr;
             }
+          } else if (action == CommentActionType.deleteComment) {
+            if (obj?.type == 'reply') {
+              const indexToUpdate = commentsArr.findIndex(
+                (item: any) => item?.commentId === obj?.PCommentId,
+              );
+              if (indexToUpdate !== -1) {
+                let replyArr: any = commentsArr[indexToUpdate]?.reply.filter(
+                  function (returnableObjects: any) {
+                    return returnableObjects.commentId !== obj?.commentId;
+                  },
+                );
+                commentsArr[indexToUpdate].reply = replyArr;
+              }
+            } else {
+              const indexToUpdate = commentsArr.findIndex(
+                (item: any) => item?.commentId === obj?.commentId,
+              );
+              if (indexToUpdate != -1) {
+                commentsArr[indexToUpdate].isDeleted = true;
+              }
+            }
           }
-
-          // Set the modified array back into the document
-          await firestore()
-            .collection(Collections.POST_COLLECTION)
-            .doc(videoId)
-            .update({
-              comments: commentsArr,
-            })
-            .then(() => {
-              onComplete(commentsArr);
-              console.log('Array value successfully updated!');
-            })
-            .catch((error: any) => {
-              onComplete('error!');
-              console.error('Error updating array value:', error);
-            });
+          if (action != CommentActionType.reportComment) {
+            // Set the modified array back into the document
+            await firestore()
+              .collection(Collections.POST_COLLECTION)
+              .doc(videoId)
+              .update({
+                comments: commentsArr,
+              })
+              .then(() => {
+                onComplete(commentsArr);
+                console.log('Array value successfully updated!');
+              })
+              .catch((error: any) => {
+                onComplete('error!');
+                console.error('Error updating array value:', error);
+              });
+          }
         });
       }
     })
