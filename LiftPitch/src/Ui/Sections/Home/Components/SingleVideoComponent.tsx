@@ -49,7 +49,7 @@ const SingleVideoComponent = (props: Props) => {
       return;
     }
     setIsLoading(true);
-    await getCommentListingAgainstVideo('0MIZNeas', (response: any) => {
+    await getCommentListingAgainstVideo('GTwSTopd', (response: any) => {
       if (response != 'error!') {
         setIsLoading(false);
         setCommentsList(response);
@@ -87,7 +87,7 @@ const SingleVideoComponent = (props: Props) => {
     await addNUpdateCommentReq(
       newObj,
       actionType,
-      '0MIZNeas',
+      'GTwSTopd',
       (response: any) => {
         if (response != 'error!') {
           dispatch(setIsLoader(false));
@@ -110,7 +110,7 @@ const SingleVideoComponent = (props: Props) => {
       return;
     }
     // dispatch(setIsLoader(true));
-    await addNUpdateCommentReq(obj, actionType, '0MIZNeas', (response: any) => {
+    await addNUpdateCommentReq(obj, actionType, 'GTwSTopd', (response: any) => {
       if (response != 'error!') {
         dispatch(setIsLoader(false));
         setCommentsList(response);

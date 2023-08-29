@@ -59,7 +59,6 @@ export const filterListAndSorted = (threadList: any) => {
 };
 
 export const followingActionObj = (action: any, obj: any, arr: any) => {
-  console.log('action--------->', action);
   let newArr: any = [];
   if (action == 'add') {
     newArr = [...arr, obj];

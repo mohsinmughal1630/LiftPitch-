@@ -109,7 +109,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
         console.log('url------>', url);
         if (url !== 'error') {
           let userData = getVideoCreateObj(selector?.userData);
-          console.log('userData------->', userData);
+
           let postId = ThreadManager.instance.makeid(8);
           obj['videoId'] = postId;
           obj['thumbnail'] = url;
