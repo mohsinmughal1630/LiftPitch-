@@ -4,19 +4,19 @@ import SocialBox from './SocialBox';
 import {
   AppColors,
   AppImages,
-  mainBottomPadding,
   normalized,
   singleVideoItemType,
 } from '../../../../Utils/AppConstants';
 import {AppStyles} from '../../../../Utils/AppStyles';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import LoadingImage from '../../../Components/LoadingImage';
-import {Routes} from '../../../../Utils/Routes';
-
 interface Props {
   navigation: any;
   item: singleVideoItemType;
   onOptionClick: (val: string) => void;
+  isLike: boolean;
+  atLikePress: () => void;
+  likeCount: any;
 }
 
 const maxStrLength = 100;
@@ -70,7 +70,6 @@ const VideoBottomSection = (props: Props) => {
         </View>
       </View>
       <View>
-        {/* Start of Profile Image */}
         <TouchableOpacity
           style={styles.profileImgBox}
           onPress={() => {
@@ -95,7 +94,43 @@ const VideoBottomSection = (props: Props) => {
             />
           )}
         </TouchableOpacity>
-        {/* End of Profile Image */}
+        <TouchableOpacity
+          activeOpacity={1}
+          style={{
+            height: 45,
+            width: 45,
+            alignItems: 'center',
+            marginBottom: normalized(10),
+          }}
+          onPress={() => {
+            props?.atLikePress();
+          }}>
+          <>
+            <Image
+              source={
+                props?.isLike
+                  ? AppImages.Videos.likeIcon
+                  : AppImages.Videos.unLikeIcon
+              }
+              resizeMode="contain"
+              style={{
+                justifyContent: 'center',
+                height: '60%',
+                width: '60%',
+                tintColor: AppColors.red.darkRed,
+              }}
+            />
+            <Text
+              style={{
+                color: AppColors.white.white,
+                fontSize: normalized(14),
+                fontWeight: '500',
+              }}>
+              {props?.likeCount}
+            </Text>
+          </>
+        </TouchableOpacity>
+
         <SocialBox onOptionClick={props.onOptionClick} />
       </View>
     </View>

@@ -167,14 +167,29 @@ const CommentsModal = (props: Props) => {
                                     actionType: CommentActionType.deleteComment,
                                   });
                                 } else {
-                                  setMoreActionBtn({
+                                  let newObj: any = {
                                     commentId: item?.commentId,
                                     actionType: CommentActionType.reportComment,
-                                    reportedBy: item?.creatorName,
-                                    reportedTo: selector?.userData?.userName
-                                      ? selector?.userData?.userName
-                                      : '',
-                                  });
+                                    reportedTo: {
+                                      name: item?.creatorName,
+                                      userId: item?.creatorId,
+                                      profile: item?.createProfile
+                                        ? item?.createProfile
+                                        : '',
+                                    },
+                                    reportedBy: {
+                                      name: selector?.userData?.userName
+                                        ? selector?.userData?.userName
+                                        : '',
+                                      userId: selector?.userData?.userId
+                                        ? selector?.userData?.userId
+                                        : '',
+                                      profile: selector?.userData?.companyLogo
+                                        ? selector?.userData?.companyLogo
+                                        : '',
+                                    },
+                                  };
+                                  setMoreActionBtn(newObj);
                                 }
                               }}>
                               <Image
@@ -303,18 +318,34 @@ const CommentsModal = (props: Props) => {
                                             type: 'reply',
                                           });
                                         } else {
-                                          setMoreActionBtn({
+                                          let newObj: any = {
+                                            type: 'reply',
                                             PCommentId: el?.PCommentId,
                                             commentId: el?.commentId,
                                             actionType:
                                               CommentActionType.reportComment,
-                                            reportedBy: el?.creatorName,
-                                            reportedTo: selector?.userData
-                                              ?.userName
-                                              ? selector?.userData?.userName
-                                              : '',
-                                            type: 'reply',
-                                          });
+                                            reportedTo: {
+                                              name: el?.creatorName,
+                                              userId: el?.creatorId,
+                                              profile: el?.createProfile
+                                                ? item?.createProfile
+                                                : '',
+                                            },
+                                            reportedBy: {
+                                              name: selector?.userData?.userName
+                                                ? selector?.userData?.userName
+                                                : '',
+                                              userId: selector?.userData?.userId
+                                                ? selector?.userData?.userId
+                                                : '',
+                                              profile: selector?.userData
+                                                ?.companyLogo
+                                                ? selector?.userData
+                                                    ?.companyLogo
+                                                : '',
+                                            },
+                                          };
+                                          setMoreActionBtn(newObj);
                                         }
                                       }}>
                                       <Image

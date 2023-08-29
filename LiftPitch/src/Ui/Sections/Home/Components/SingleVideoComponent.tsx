@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {Platform, StyleSheet, View} from 'react-native';
 import {
@@ -17,6 +17,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   addNUpdateCommentReq,
   getCommentListingAgainstVideo,
+  likeNDisListReq,
 } from '../../../../Network/Services/VideoListingServices';
 import {AppStrings, CommentActionType} from '../../../../Utils/Strings';
 import {
@@ -37,7 +38,22 @@ const SingleVideoComponent = (props: Props) => {
   const selector = useSelector((AppState: any) => AppState.AppReducer);
   const [isLoading, setIsLoading] = useState(false);
   const [commentsList, setCommentsList] = useState([]);
+  const [isLike, setIsLike] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
   const [showCommentsModal, setShowComments] = useState(false);
+
+  useEffect(() => {
+    if (props?.item?.like?.length > 0) {
+      setLikeCount(props?.item?.like?.length);
+      const indexToUpdate = props?.item?.like.findIndex(
+        (item: any) => item === selector?.userData?.userId,
+      );
+      if (indexToUpdate !== -1) {
+        setIsLike(true);
+      }
+    }
+  }, [props?.item]);
+
   const getCommentList = async () => {
     if (!selector.isNetConnected) {
       dispatch(
@@ -111,7 +127,7 @@ const SingleVideoComponent = (props: Props) => {
     }
     // dispatch(setIsLoader(true));
     await addNUpdateCommentReq(obj, actionType, 'GTwSTopd', (response: any) => {
-      if (response != 'error!') {
+      if (response != 'error!' && response?.length > 0) {
         dispatch(setIsLoader(false));
         setCommentsList(response);
       } else {
@@ -119,6 +135,31 @@ const SingleVideoComponent = (props: Props) => {
         dispatch(setIsAlertShow({value: true, message: response}));
       }
     });
+  };
+  const likeDisLikeFun = async (action?: any) => {
+    if (!selector?.isNetConnected) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.internetError,
+        }),
+      );
+      return;
+    }
+    await likeNDisListReq(
+      selector?.userData?.userId,
+      action?.length > 0 ? action : isLike ? 'remove' : 'add',
+      'GTwSTopd',
+      (response: any) => {
+        if (response != 'error!') {
+          setIsLike(!isLike);
+          setLikeCount(response?.length);
+        } else {
+          dispatch(setIsLoader(false));
+          dispatch(setIsAlertShow({value: true, message: response}));
+        }
+      },
+    );
   };
   return (
     <View style={styles.mainContainer}>
@@ -129,6 +170,11 @@ const SingleVideoComponent = (props: Props) => {
           index={props.index}
         />
         <VideoBottomSection
+          likeCount={likeCount}
+          isLike={isLike}
+          atLikePress={() => {
+            likeDisLikeFun();
+          }}
           navigation={props?.navigation}
           item={props.item}
           onOptionClick={(val: string) => {
@@ -150,6 +196,7 @@ const SingleVideoComponent = (props: Props) => {
             if (obj?.actionType == CommentActionType.deleteComment) {
               await deleteNReportReq(obj, obj?.actionType);
             } else if (obj?.actionType == CommentActionType.reportComment) {
+              await deleteNReportReq(obj, obj?.actionType);
             }
           }}
           onNewComment={val => {

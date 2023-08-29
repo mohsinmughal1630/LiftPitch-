@@ -81,6 +81,8 @@ export const AppImages = {
     Error: require('../Ui/assets/images/Videos/Error.png'),
     PauseIcon: require('../Ui/assets/images/Videos/PauseIcon.png'),
     moreIcon: require('../Ui/assets/images/Videos/moreIcon.png'),
+    likeIcon: require('../Ui/assets/images/Videos/likeIcon.png'),
+    unLikeIcon: require('../Ui/assets/images/Videos/unLikeIcon.png'),
   },
   Common: {
     DropDownIcon: require('../Ui/assets/images/Common/DropDownIcon.png'),

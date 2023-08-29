@@ -62,6 +62,7 @@ export const Collections = {
   Users: 'Users',
   FOLLOW_N_FOLLOWING_COLLECTION: 'follow_&_follower',
   POST_COLLECTION: 'Videos',
+  REPORTED_USER: 'Report_USER',
 };
 
 export const CommentActionType = {
