@@ -150,6 +150,9 @@ const ProfileScreen = (props: ScreenProps) => {
       description: data?.companyType,
       profile: data?.companyLogo,
     };
+    console.log('followingObj-------->', followingObj);
+    console.log('followerObj------>', followerObj);
+
     await followNFollowingUser(
       followingObj,
       followerObj,

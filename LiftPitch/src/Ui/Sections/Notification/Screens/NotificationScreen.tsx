@@ -17,12 +17,16 @@ import {
   normalized,
 } from '../../../../Utils/AppConstants';
 import {useDispatch, useSelector} from 'react-redux';
-import {setIsLoader} from '../../../../Redux/reducers/AppReducer';
+import {
+  setIsAlertShow,
+  setIsLoader,
+} from '../../../../Redux/reducers/AppReducer';
 import {filterListAndSorted, setUpChat} from '../../../../Utils/Helper';
 import {AppStyles} from '../../../../Utils/AppStyles';
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import SingleMessageComponent from '../Components/SingleMessageComponent';
 import {Routes} from '../../../../Utils/Routes';
+import {AppStrings} from '../../../../Utils/Strings';
 
 const NotificationScreen = (props: ScreenProps) => {
   const isFouced = useIsFocused();
@@ -38,6 +42,15 @@ const NotificationScreen = (props: ScreenProps) => {
   };
   useEffect(() => {
     if (isFouced) {
+      if (!selector.isNetConnected) {
+        dispatch(
+          setIsAlertShow({
+            value: true,
+            message: AppStrings.Network.internetError,
+          }),
+        );
+        return;
+      }
       dispatch(setIsLoader(true));
       setUpChat((result: any) => {
         dispatch(setIsLoader(false));

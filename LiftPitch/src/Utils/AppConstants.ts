@@ -1,7 +1,7 @@
-import { StackScreenProps } from '@react-navigation/stack';
-import { Dimensions, Platform, PixelRatio, StatusBar } from 'react-native';
+import {StackScreenProps} from '@react-navigation/stack';
+import {Dimensions, Platform, PixelRatio, StatusBar} from 'react-native';
 import moment from 'moment';
-import { AppStrings } from './Strings';
+import {AppStrings} from './Strings';
 export const platformVersion = Platform.Version;
 export type ScreenProps = StackScreenProps<any, any>;
 export const ScreenSize = Dimensions.get('screen');
@@ -631,7 +631,6 @@ export const commentsConstants = [
   },
 ];
 
-
 export const followersListConstant = [
   {
     id: 1,
@@ -639,7 +638,8 @@ export const followersListConstant = [
     image:
       'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
     date: new Date().setHours(0),
-    message: 'This is my profile description. Its for testing purposes for now.',
+    message:
+      'This is my profile description. Its for testing purposes for now.',
   },
   {
     id: 2,
@@ -647,7 +647,8 @@ export const followersListConstant = [
     image:
       'https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_1280.jpg',
     date: new Date().setHours(1),
-    message: 'This is my profile description. Its for testing purposes for now.',
+    message:
+      'This is my profile description. Its for testing purposes for now.',
   },
   {
     id: 3,
@@ -655,7 +656,8 @@ export const followersListConstant = [
     image:
       'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
     date: new Date().setHours(2),
-    message: 'This is my profile description. Its for testing purposes for now.',
+    message:
+      'This is my profile description. Its for testing purposes for now.',
   },
   {
     id: 4,
@@ -663,7 +665,8 @@ export const followersListConstant = [
     image:
       'https://cdn.pixabay.com/photo/2016/01/05/13/58/apple-1122537_1280.jpg',
     date: new Date().setHours(3),
-    message: 'This is my profile description. Its for testing purposes for now.',
+    message:
+      'This is my profile description. Its for testing purposes for now.',
   },
   {
     id: 5,
@@ -671,7 +674,8 @@ export const followersListConstant = [
     image:
       'https://cdn.pixabay.com/photo/2014/09/14/18/04/dandelion-445228_1280.jpg',
     date: new Date().setHours(4),
-    message: 'This is my profile description. Its for testing purposes for now.',
+    message:
+      'This is my profile description. Its for testing purposes for now.',
   },
   {
     id: 6,
@@ -690,7 +694,7 @@ export const socialInviteList = [
     id: 1,
     name: 'Invite by Email',
     type: 'email',
-    image: AppImages.Followers.MailInvite
+    image: AppImages.Followers.MailInvite,
   },
   {
     id: 2,
@@ -743,10 +747,10 @@ export interface ILocation {
 export const calculateWindowHeight = (type: 'status' | 'diff') => {
   const diff =
     Dimensions.get('screen').height - Dimensions.get('window').height;
-  const isPoco = Platform?.constants?.Brand?.toLowerCase() == 'poco';
-  const isRedmi = Platform?.constants?.Brand?.toLowerCase() == 'redmi';
   const statusHeight = StatusBar?.currentHeight || 0;
-  return Dimensions.get('screen').height - (type == 'diff' ? diff : statusHeight)
+  return (
+    Dimensions.get('screen').height - (type == 'diff' ? diff : statusHeight)
+  );
 };
 
 export const makeid = (length: number) => {

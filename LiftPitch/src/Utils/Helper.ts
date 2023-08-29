@@ -18,14 +18,13 @@ export const setUpChat = async (onComplete: any) => {
 
   userId = user?.user ? user?.user?.userId : user?.userId;
   let newId = userId?.toString();
-  if (newId?.length > 0) {
-    await ThreadManager.instance.getUserThread(newId, async (list: any) => {
-      await ThreadManager.instance.setupParticipantListener(newId);
-      await ThreadManager.instance.setupThreadListener(newId);
-      ThreadManager.instance.setupUserListener();
-    });
-  }
-  onComplete(true);
+  await ThreadManager.instance.getUserThread(newId, async (list: any) => {
+    console.log('list------->', list?.length);
+    await ThreadManager.instance.setupParticipantListener(newId);
+    await ThreadManager.instance.setupThreadListener(newId);
+    await ThreadManager.instance.setupUserListener();
+    onComplete(true);
+  });
 };
 
 export const filterListAndSorted = (threadList: any) => {
@@ -60,6 +59,7 @@ export const filterListAndSorted = (threadList: any) => {
 };
 
 export const followingActionObj = (action: any, obj: any, arr: any) => {
+  console.log('action--------->', action);
   let newArr: any = [];
   if (action == 'add') {
     newArr = [...arr, obj];
@@ -71,11 +71,11 @@ export const followingActionObj = (action: any, obj: any, arr: any) => {
 
 export const getVideoCreateObj = (userData: any) => {
   let obj: any = {
-    userName: userData?.userName,
-    email: userData?.email,
-    phone: userData?.phone,
-    companyLogo: userData?.companyLogo,
-    companyName: userData?.companyName,
+    userName: userData?.userName ? userData?.userName : '',
+    email: userData?.email ? userData?.email : '',
+    phone: userData?.phone ? userData?.phone : '',
+    companyLogo: userData?.companyLogo ? userData?.companyLogo : '',
+    companyName: userData?.companyName ? userData?.companyName : '',
   };
   if (userData?.userId) {
     obj['userId'] = userData?.userId;

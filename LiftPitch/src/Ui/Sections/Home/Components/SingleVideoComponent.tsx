@@ -91,7 +91,6 @@ const SingleVideoComponent = (props: Props) => {
       (response: any) => {
         if (response != 'error!') {
           dispatch(setIsLoader(false));
-          // commentsList.unshift(newObj);
           setCommentsList(response);
         } else {
           dispatch(setIsLoader(false));
@@ -114,7 +113,6 @@ const SingleVideoComponent = (props: Props) => {
     await addNUpdateCommentReq(obj, actionType, '0MIZNeas', (response: any) => {
       if (response != 'error!') {
         dispatch(setIsLoader(false));
-
         setCommentsList(response);
       } else {
         dispatch(setIsLoader(false));
