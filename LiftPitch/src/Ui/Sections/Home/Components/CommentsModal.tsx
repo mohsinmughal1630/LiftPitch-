@@ -39,7 +39,6 @@ interface Props {
   delNReportAction: (val: any) => void;
   onNewComment: (val: any) => void;
 }
-
 const CommentsModal = (props: Props) => {
   const selector = useSelector((AppState: any) => AppState.AppReducer);
   const [isReply, setIsReply] = useState<any>(null);

@@ -8,7 +8,7 @@ import {Collections} from '../Utils/Strings';
 let CHANNEL_COLLECTION = 'channels';
 let PARTICIPATION_COLLECTION = 'channel_participation';
 let THREAD_COLLECITON = 'thread';
-let POST_COLLECTION = 'videos';
+let POST_COLLECTION = 'Videos';
 
 class ThreadManager {
   static instance = new ThreadManager();
@@ -367,7 +367,6 @@ class ThreadManager {
   };
   // REQUEST METHODS
   getUserThread = async (userId: any, onComplete: any) => {
-    console.log('this is initial user id ', userId);
     firestore()
       .collection(PARTICIPATION_COLLECTION)
       .where('user', '==', userId)
@@ -389,14 +388,14 @@ class ThreadManager {
                     .collection(PARTICIPATION_COLLECTION)
                     .where('user', '!=', userId)
                     .where('channel', '==', snapObj['channel'])
-
                     .get()
                     .then(snapData => {
                       let findedData = {
                         ...threadData,
                         participants: [snapData.docs[0].data(), snapObj],
                       };
-                      this.threadList.push(findedData);
+                      this.threadList = [...this.threadList, findedData];
+                      // this.threadList.push(findedData);
                       resolve(true);
                     })
                     .catch(error => {
@@ -434,7 +433,7 @@ class ThreadManager {
       }
     }
     this.threadList = newArray;
-    this.dispatch(setThreadList(this.threadList));
+    this.dispatch(setThreadList(newArray));
   };
   // MESSAGES METHOD
   sendMessage = async (docId: any, data: any) => {
@@ -607,8 +606,6 @@ class ThreadManager {
 
   // SET FIREBASE TOKEN FOR FCM
   updateUserToken = async (token: any, userId: any) => {
-    console.log('token-------->', token, '====', userId);
-
     firestore()
       .collection(Collections.Users)
       .doc(userId)
@@ -795,7 +792,6 @@ class ThreadManager {
       .collection(POST_COLLECTION)
       .doc(params?.videoId)
       .set(params)
-      .then(() => {})
       .then(() => {
         onComplete('created Successfully');
       })

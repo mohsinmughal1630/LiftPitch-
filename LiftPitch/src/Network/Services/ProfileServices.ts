@@ -26,11 +26,10 @@ export const followNFollowingUser = async (
   action: any,
   onComplete: any,
 ) => {
-  let senderPromise = new Promise((resolve, reject) => {
-    getfollowPreviousList(sender?.id, (senderResult: any) => {
-      if (senderResult?.userId && senderResult?.following?.length > 0) {
-        console.log('take Action for following----->', action);
-        let newArr = followingActionObj(
+  let senderPromise = new Promise(async (resolve, reject) => {
+    await getfollowPreviousList(sender?.id, async (senderResult: any) => {
+      if (senderResult?.following?.length > 0) {
+        let newArr = await followingActionObj(
           action,
           reciver,
           senderResult?.following,
@@ -50,12 +49,15 @@ export const followNFollowingUser = async (
             });
         });
       } else {
-        console.log('create new Doc----->');
         let newObj = {
           userId: reciver?.id,
-          follower: [],
+          follower:
+            senderResult?.follower?.length > 0
+              ? [...senderResult?.follower]
+              : [],
           following: [reciver],
         };
+
         firestore()
           .collection(Collections.FOLLOW_N_FOLLOWING_COLLECTION)
           .doc(sender?.id)
@@ -70,11 +72,10 @@ export const followNFollowingUser = async (
       }
     });
   });
-  let receiverPromise = new Promise((resolve, reject) => {
-    getfollowPreviousList(reciver?.id, (receiverResult: any) => {
-      if (receiverResult?.userId && receiverResult?.follower?.length > 0) {
-        console.log('take Action for follower----->', action);
-        let newArr = followingActionObj(
+  let receiverPromise = new Promise(async (resolve, reject) => {
+    await getfollowPreviousList(reciver?.id, async (receiverResult: any) => {
+      if (receiverResult?.follower?.length > 0) {
+        let newArr = await followingActionObj(
           action,
           sender,
           receiverResult?.follower,
@@ -94,12 +95,15 @@ export const followNFollowingUser = async (
             });
         });
       } else {
-        console.log('create new Doc----->');
         let newObj = {
           userId: sender?.id,
           follower: [sender],
-          following: [],
+          following:
+            receiverResult?.following?.length > 0
+              ? [...receiverResult?.following]
+              : [],
         };
+
         firestore()
           .collection(Collections.FOLLOW_N_FOLLOWING_COLLECTION)
           .doc(reciver?.id)

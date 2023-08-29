@@ -61,7 +61,7 @@ export const USER_TYPE = {
 export const Collections = {
   Users: 'Users',
   FOLLOW_N_FOLLOWING_COLLECTION: 'follow_&_follower',
-  POST_COLLECTION: 'videos',
+  POST_COLLECTION: 'Videos',
 };
 
 export const CommentActionType = {

@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
-import { Routes } from '../Utils/Routes';
+import {Routes} from '../Utils/Routes';
 import Container from '../Ui/Sections/Container/Container';
 import ProfileScreen from '../Ui/Sections/Profile/Screens/ProfileScreen';
 import ChatScreen from '../Ui/Sections/Chat/Screens/ChatScreen';
@@ -13,15 +13,11 @@ import PitchIdeaStepScreen from '../Ui/Sections/CreateVideo/Screens/PitchIdeaSte
 import VideoCreateScreen from '../Ui/Sections/CreateVideo/Screens/VideoCreateScreen';
 const MainStack = createStackNavigator();
 
-interface AppStackProps {
-  initialScreen: string;
-}
-
 export default function MainNavigation() {
   return (
     <MainStack.Navigator
-      // initialRouteName={Routes.Container.Container}
-      initialRouteName={Routes.addVideoTab.createVideoScreen}
+      initialRouteName={Routes.Container.Container}
+      // initialRouteName={Routes.addVideoTab.createVideoScreen}
       screenOptions={{
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
