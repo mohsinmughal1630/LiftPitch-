@@ -51,7 +51,7 @@ const CommentsModal = (props: Props) => {
           <View />
         </TouchableWithoutFeedback>
         <KeyboardAvoidingView
-          behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+          behavior={Platform.OS == 'ios' ? 'padding' : undefined}>
           <View style={styles.mainContainer}>
             <View style={styles.headerRow}>
               <View style={styles.endView} />

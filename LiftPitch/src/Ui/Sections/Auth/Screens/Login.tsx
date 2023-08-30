@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import {
   Alert,
   Image,
@@ -20,12 +20,12 @@ import {
   hv,
   normalized,
 } from '../../../../Utils/AppConstants';
-import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
+import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import SocialBtn from '../Components/SocialBtn';
 import CustomFilledBtn from '../../../Components/CustomButtom/CustomButton';
 import SimpleInput from '../../../Components/CustomInput/SimpleInput';
 import CustomSwitch from '../../../Components/CustomSwitch/CustomSwitch';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   setIsAlertShow,
   setIsLoader,
@@ -33,20 +33,19 @@ import {
   setUpdateFBToken,
   setUserData,
 } from '../../../../Redux/reducers/AppReducer';
-import { Routes } from '../../../../Utils/Routes';
-import { saveUserData } from '../../../../Utils/AsyncStorage';
-import { AppStrings } from '../../../../Utils/Strings';
+import {Routes} from '../../../../Utils/Routes';
+import {saveUserData} from '../../../../Utils/AsyncStorage';
+import {AppStrings} from '../../../../Utils/Strings';
 import CommonDataManager from '../../../../Utils/CommonManager';
-import { AppRootStore } from '../../../../Redux/store/AppStore';
+import {AppRootStore} from '../../../../Redux/store/AppStore';
 import {
   loginRequest,
   userSignupRequest,
 } from '../../../../Network/Services/AuthServices';
-import { SocialTypeStrings } from '../../../../Utils/AppEnums';
-import ThreadManager from '../../../../ChatModule/ThreadManger';
+import {SocialTypeStrings} from '../../../../Utils/AppEnums';
 const LoginScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
-  const { isNetConnected, isPersisterUser } = useSelector(
+  const {isNetConnected, isPersisterUser} = useSelector(
     (state: AppRootStore) => state.AppReducer,
   );
   const [email, setEmail] = useState('');
@@ -99,7 +98,7 @@ const LoginScreen = (props: ScreenProps) => {
       );
       return;
     }
-    const paramsObj = { email, password };
+    const paramsObj = {email, password};
     dispatch(setIsLoader(true));
     await loginRequest(paramsObj, response => {
       dispatch(setIsLoader(false));
@@ -207,7 +206,7 @@ const LoginScreen = (props: ScreenProps) => {
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
         <ScrollView
@@ -224,7 +223,7 @@ const LoginScreen = (props: ScreenProps) => {
               returnKeyType={'next'}
               placeHold={'Email'}
               container={styles.inputMainCont}
-              textInputStyle={{ width: normalized(270) }}
+              textInputStyle={{width: normalized(270)}}
               showLastIcon={false}
               showFirstIcon={true}
               rightIcon={AppImages.Auth.Message}
@@ -241,7 +240,7 @@ const LoginScreen = (props: ScreenProps) => {
               ref={passRef}
               placeHold={'Password'}
               container={styles.inputMainCont}
-              textInputStyle={{ width: normalized(270) }}
+              textInputStyle={{width: normalized(270)}}
               showLastIcon={true}
               showFirstIcon={true}
               rightIcon={AppImages.Auth.Password}
@@ -284,7 +283,14 @@ const LoginScreen = (props: ScreenProps) => {
               <SocialBtn
                 label={'GOOGLE'}
                 icon={AppImages.Auth.google}
-                atPress={() => CommonDataManager.getSharedInstance().commonSocialLoginRequest(SocialTypeStrings.google, isNetConnected, isPersisterUser, props.navigation)}
+                atPress={() =>
+                  CommonDataManager.getSharedInstance().commonSocialLoginRequest(
+                    SocialTypeStrings.google,
+                    isNetConnected,
+                    isPersisterUser,
+                    props.navigation,
+                  )
+                }
               />
             </View>
             <Text style={styles.bottomTxt}>
@@ -376,7 +382,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: AppHorizontalMargin,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   bottomTxt: {
     fontSize: normalized(13),
