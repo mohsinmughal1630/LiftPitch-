@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { StatusBar, View } from 'react-native';
+import { LogBox, StatusBar, View } from 'react-native';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import store, { AppRootStore } from './src/Redux/store/AppStore';
 import { NavigationContainer } from '@react-navigation/native';
@@ -31,6 +31,8 @@ const App = () => {
     fetchUser();
     onAppStart();
   }, []);
+
+  LogBox.ignoreLogs(['ViewPropTypes will be removed']);
 
   const fetchUser = async () => {
     let userDataa = await getUserData();

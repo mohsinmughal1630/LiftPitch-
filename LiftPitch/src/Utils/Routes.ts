@@ -23,6 +23,7 @@ export const Routes = {
   },
   addVideoTab: {
     createVideoScreen: 'createVideoScreen',
+    uploadMediaPreviewScreen: 'uploadMediaPreviewScreen',
     pitchListScreen: 'PitchListScreen',
     pitchIdeaScreen: 'PitchIdeaScreen',
   },
