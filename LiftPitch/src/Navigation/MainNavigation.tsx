@@ -1,9 +1,9 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
-import {Routes} from '../Utils/Routes';
+import { Routes } from '../Utils/Routes';
 import Container from '../Ui/Sections/Container/Container';
 import ProfileScreen from '../Ui/Sections/Profile/Screens/ProfileScreen';
 import ChatScreen from '../Ui/Sections/Chat/Screens/ChatScreen';
@@ -11,13 +11,14 @@ import NotificationScreen from '../Ui/Sections/Notification/Screens/Notification
 import PitchIdeasListScreen from '../Ui/Sections/CreateVideo/Screens/PitchIdeasListScreen';
 import PitchIdeaStepScreen from '../Ui/Sections/CreateVideo/Screens/PitchIdeaStepScreen';
 import VideoCreateScreen from '../Ui/Sections/CreateVideo/Screens/VideoCreateScreen';
+import UploadMediaPreviewScreen from '../Ui/Sections/CreateVideo/Screens/UploadMediaPreviewScreen';
 const MainStack = createStackNavigator();
 
 export default function MainNavigation() {
   return (
     <MainStack.Navigator
-      initialRouteName={Routes.Container.Container}
-      // initialRouteName={Routes.addVideoTab.createVideoScreen}
+      // initialRouteName={Routes.Container.Container}
+      initialRouteName={Routes.addVideoTab.createVideoScreen}
       screenOptions={{
         headerShown: false,
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
@@ -39,6 +40,10 @@ export default function MainNavigation() {
       <MainStack.Screen
         name={Routes.addVideoTab.createVideoScreen}
         component={VideoCreateScreen}
+      />
+      <MainStack.Screen
+        name={Routes.addVideoTab.uploadMediaPreviewScreen}
+        component={UploadMediaPreviewScreen}
       />
       <MainStack.Screen
         name={Routes.addVideoTab.pitchListScreen}
