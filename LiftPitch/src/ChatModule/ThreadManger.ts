@@ -8,7 +8,6 @@ import {Collections} from '../Utils/Strings';
 let CHANNEL_COLLECTION = 'channels';
 let PARTICIPATION_COLLECTION = 'channel_participation';
 let THREAD_COLLECITON = 'thread';
-let POST_COLLECTION = 'Videos';
 
 class ThreadManager {
   static instance = new ThreadManager();
@@ -704,7 +703,7 @@ class ThreadManager {
   uploadMedia = async (uri: any, videoType: boolean, onComplete: any) => {
     let filename = this.makeid(6) + uri.substring(uri.lastIndexOf('/') + 1);
     let uploadUri = Platform.OS === 'ios' ? uri.replace('file://', '') : uri;
-    console.log('before fileName----->', filename);
+
     if (videoType && uploadUri.includes('mov')) {
       let fileArr = filename.split('.');
       const ext = fileArr[fileArr.length - 1];
@@ -712,13 +711,10 @@ class ThreadManager {
         filename = filename.replace(/mov/g, 'mp4');
       }
     }
-    console.log('after fileName----->', filename);
     const ref = storage().ref(filename);
     const task = ref.putFile(uploadUri);
     // set progress state
-    task.on('state_changed', snapshot => {
-      console.log(snapshot.state);
-    });
+    task.on('state_changed', snapshot => {});
     try {
       await task
         .then(item => {
@@ -789,7 +785,7 @@ class ThreadManager {
 
   createPost = async (params: any, onComplete: any) => {
     await firestore()
-      .collection(POST_COLLECTION)
+      .collection(Collections.POST_COLLECTION)
       .doc(params?.videoId)
       .set(params)
       .then(() => {

@@ -1,13 +1,6 @@
 import moment from 'moment';
 import React from 'react';
-import {
-  Image,
-  Linking,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Linking, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Hyperlink from 'react-native-hyperlink';
 import SingleVideoItem from './SingleVideoItem';
 import SingleImageItem from './SingleImageItem';
@@ -89,7 +82,7 @@ const OtherUserMessage = ({
   return (
     <View>
       <View style={styles.container}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           activeOpacity={1}
           onPress={() => {
             navigation.navigate('ProfileScreen', {
@@ -122,13 +115,13 @@ const OtherUserMessage = ({
               <View style={styles.online} />
             </>
           )}
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         {setContainerComponent()}
       </View>
       <View style={styles.timeTextCon}>
         <Text style={styles.timeText}>
-          {moment(item.time, 'HH:mm:ss').format('HH:mm a')}
+          {moment(item.time, 'HH:mm:ss').format('hh:mm A')}
         </Text>
       </View>
     </View>
@@ -150,8 +143,8 @@ const styles = StyleSheet.create({
     marginStart: normalized(4),
     backgroundColor: AppColors.green.lightGreen,
     padding: normalized(8),
-    borderRadius: normalized(12),
-    borderTopLeftRadius: 0,
+    borderRadius: normalized(15),
+    borderBottomLeftRadius: 0,
   },
   message: {
     fontSize: normalized(14),
@@ -159,7 +152,7 @@ const styles = StyleSheet.create({
   },
   timeTextCon: {
     alignSelf: 'flex-start',
-    marginStart: normalized(40),
+    // marginStart: normalized(40),
   },
   timeText: {
     fontSize: normalized(11),

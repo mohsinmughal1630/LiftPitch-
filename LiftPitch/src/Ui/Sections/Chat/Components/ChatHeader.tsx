@@ -12,9 +12,9 @@ import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlace
 const ChatHeader = (props: any) => {
   return (
     <>
-      {props.showBorder ? (
+      {/* {props.showBorder ? (
         <View style={[styles.line, {marginTop: hv(7)}]} />
-      ) : null}
+      ) : null} */}
       <View style={[styles.maincontainer, props?.mainStyle]}>
         <>
           <View
@@ -60,13 +60,21 @@ const ChatHeader = (props: any) => {
           {props?.atRightBtn ? (
             <TouchableOpacity
               activeOpacity={1}
+              style={{
+                paddingHorizontal: normalized(8),
+              }}
               onPress={() => {
                 props?.atRightBtn();
               }}>
               {props?.rightTxt ? (
                 <Text style={styles.rightTxt}>{props?.rightTxt}</Text>
               ) : (
-                <></>
+                <Image
+                  source={AppImages.Common.menuIcon}
+                  style={{
+                    tintColor: AppColors.black.black,
+                  }}
+                />
               )}
             </TouchableOpacity>
           ) : (
@@ -93,8 +101,8 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   line: {
-    height: 0.5,
-    backgroundColor: AppColors.white.white,
+    height: 0.8,
+    backgroundColor: '#E8E6EA',
     marginTop: hv(5),
   },
   rightTxt: {

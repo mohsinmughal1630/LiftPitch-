@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Image, ActivityIndicator} from 'react-native';
+import FastImage from 'react-native-fast-image';
 const AppImageViewer = (props: any) => {
   const [loading, setLoading] = useState(false);
   const [src, setSource] = useState(props.source);
@@ -15,12 +16,15 @@ const AppImageViewer = (props: any) => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <Image
+      <FastImage
         resizeMode="cover"
         onLoadStart={() => setLoading(true)}
         onLoadEnd={() => setLoading(false)}
         onError={() => {
           setLoading(false);
+          if (props?.placeHolder) {
+            setSource(props.placeHolder);
+          }
         }}
         source={src}
         style={{
@@ -28,7 +32,6 @@ const AppImageViewer = (props: any) => {
           borderWidth: 0,
         }}
       />
-
       {loading && (
         <View
           style={{

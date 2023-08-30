@@ -1,30 +1,24 @@
 import moment from 'moment';
 import React, {useEffect, useState} from 'react';
-import {Text, View, Linking, StyleSheet} from 'react-native';
+import {Text, View, Linking, StyleSheet, Image} from 'react-native';
 import {useSelector} from 'react-redux';
 import Hyperlink from 'react-native-hyperlink';
 import SingleVideoItem from './SingleVideoItem';
 import SingleImageItem from './SingleImageItem';
 import SingleDocItem from './SingleDocItem';
-import {AppColors, hv, normalized} from '../../../../Utils/AppConstants';
+import {
+  AppColors,
+  AppImages,
+  hv,
+  normalized,
+} from '../../../../Utils/AppConstants';
 
 const MyMessage = ({item, onPdf, onImage, playVideo}: any) => {
-  const selector = useSelector((AppState: any) => AppState.SliceReducer);
   const [messageRead, setMessageRead] = useState(false);
   useEffect(() => {
     checkMessageRead();
   }, [item]);
-  const setImage = () => {
-    if (
-      selector?.AppReducer?.user?.user &&
-      selector.AppReducer.user.user['images'] &&
-      selector.AppReducer.user.user['images']['profile']
-    ) {
-      return selector.AppReducer.user.user['images']['profile'];
-    } else {
-      return '';
-    }
-  };
+
   const checkMessageRead = () => {
     if (item?.lastMessageSeeners?.length > 0) {
       setMessageRead(true);
@@ -68,7 +62,6 @@ const MyMessage = ({item, onPdf, onImage, playVideo}: any) => {
                   console.log("Don't know how to open URI: " + item?.callUrl);
                 }
               });
-              // _checkPermissions();
             } else {
               Linking.canOpenURL(url).then(supported => {
                 if (supported) {
@@ -90,9 +83,17 @@ const MyMessage = ({item, onPdf, onImage, playVideo}: any) => {
     <View>
       <View style={styles.container}>{setContainerComponent()}</View>
       <View style={styles.timeTextCon}>
-        <Text style={styles.timeText}>
-          {moment(item.time, 'HH:mm:ss').format('HH:mm a')}
-        </Text>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.timeText}>
+            {moment(item?.time, 'HH:mm:ss').format('hh:mm A')}
+          </Text>
+          <Image
+            source={AppImages.Chat.msgSeen}
+            style={{
+              tintColor: messageRead ? AppColors.red.mainColor : '#979797',
+            }}
+          />
+        </View>
       </View>
     </View>
   );
@@ -110,12 +111,11 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   messageCon: {
-    // width: rwp(240),
     marginEnd: normalized(4),
     backgroundColor: AppColors.white.creamy,
     padding: normalized(15),
-    borderRadius: normalized(12),
-    borderTopRightRadius: 0,
+    borderRadius: normalized(15),
+    borderBottomRightRadius: 0,
   },
   message: {
     fontSize: normalized(16),

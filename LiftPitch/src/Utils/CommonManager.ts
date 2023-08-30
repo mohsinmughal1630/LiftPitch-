@@ -1,15 +1,35 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Alert, Keyboard, Linking, PermissionsAndroid, Platform } from 'react-native';
-import { AppColors, normalized, ScreenProps } from './AppConstants';
-import { AppStrings } from './Strings';
-import { SocialTypeStrings } from './AppEnums';
-import { appleLoginRequest, facebookLoginRequest, gmailLoginRequest } from './Social.d';
-import { setIsAlertShow, setIsLoader, setUserData } from '../Redux/reducers/AppReducer';
-import { loginRequest, userSignupRequest } from '../Network/Services/AuthServices';
-import { saveUserData } from './AsyncStorage';
-import { Routes } from './Routes';
-import RNFS, { DownloadBeginCallbackResult, DownloadProgressCallbackResult } from "react-native-fs";
-import Share from "react-native-share";
+import {
+  Alert,
+  Keyboard,
+  Linking,
+  PermissionsAndroid,
+  Platform,
+} from 'react-native';
+import {AppColors, normalized, ScreenProps} from './AppConstants';
+import {AppStrings} from './Strings';
+import {SocialTypeStrings} from './AppEnums';
+import {
+  appleLoginRequest,
+  facebookLoginRequest,
+  gmailLoginRequest,
+} from './Social.d';
+import {
+  setIsAlertShow,
+  setIsLoader,
+  setUserData,
+} from '../Redux/reducers/AppReducer';
+import {
+  loginRequest,
+  userSignupRequest,
+} from '../Network/Services/AuthServices';
+import {saveUserData} from './AsyncStorage';
+import {Routes} from './Routes';
+import RNFS, {
+  DownloadBeginCallbackResult,
+  DownloadProgressCallbackResult,
+} from 'react-native-fs';
+import Share from 'react-native-share';
 import Contacts from 'react-native-contacts';
 
 export default class CommonDataManager {
@@ -47,7 +67,7 @@ export default class CommonDataManager {
       this._translations = [];
       const localTranslaionsData = require('../Utils/translation.json');
       this._translations = localTranslaionsData;
-    } catch (e) { }
+    } catch (e) {}
   };
   setReduxReducer = (select: any, dispatch: any) => {
     this.selector = select;
@@ -95,10 +115,7 @@ export default class CommonDataManager {
     }
     let fullNumber = `${this.addPlusToNumber(code)}${phone}`;
     const customNumber = ignoreCode ? phone : fullNumber;
-    if (
-      this.addPlusToNumber(code) == '+1' &&
-      phone.length >= 10
-    ) {
+    if (this.addPlusToNumber(code) == '+1' && phone.length >= 10) {
       return this.formatUSNumber(customNumber);
     } else {
       return ignoreCode ? phone : `${this.addPlusToNumber(code)} ${phone}`;
@@ -174,14 +191,10 @@ export default class CommonDataManager {
         socialParams = {
           token: response.data?.id,
           first_name: response.data?.first_name
-            ? this.truncateString(
-              response.data?.first_name,
-            )
+            ? this.truncateString(response.data?.first_name)
             : '',
           last_name: response.data?.last_name
-            ? this.truncateString(
-              response.data?.last_name,
-            )
+            ? this.truncateString(response.data?.last_name)
             : '',
           email: response.data?.email ? response.data?.email : '',
         };
@@ -199,12 +212,8 @@ export default class CommonDataManager {
         );
         socialParams = {
           token: response.data?.user,
-          first_name: this.truncateString(
-            response.data?.fullName?.givenName,
-          ),
-          last_name: this.truncateString(
-            response.data?.fullName?.familyName,
-          ),
+          first_name: this.truncateString(response.data?.fullName?.givenName),
+          last_name: this.truncateString(response.data?.fullName?.familyName),
           email: response.data?.email ? response.data?.email : '',
         };
       } else {
@@ -380,12 +389,12 @@ export default class CommonDataManager {
     return str.length < 25
       ? normalized(22)
       : str.length < 35
-        ? normalized(20)
-        : str.length < 40
-          ? normalized(18)
-          : str.length < 45
-            ? normalized(16)
-            : normalized(14);
+      ? normalized(20)
+      : str.length < 40
+      ? normalized(18)
+      : str.length < 45
+      ? normalized(16)
+      : normalized(14);
   };
 
   openNativeMaps = (loc: any, addressLabel: string) => {
@@ -449,8 +458,8 @@ export default class CommonDataManager {
       return arr.length == 0
         ? '-'
         : arr.length == 1
-          ? txt.charAt(0).toUpperCase()
-          : arr[0].charAt(0).toUpperCase() + arr[1].charAt(0).toUpperCase();
+        ? txt.charAt(0).toUpperCase()
+        : arr[0].charAt(0).toUpperCase() + arr[1].charAt(0).toUpperCase();
     } else {
       return '';
     }
@@ -462,44 +471,50 @@ export default class CommonDataManager {
       obj['uri'] = image?.uri
         ? image?.uri
         : image?.sourceURL
-          ? image?.sourceURL
-          : image?.path;
+        ? image?.sourceURL
+        : image?.path;
       obj['name'] = image?.filename
         ? image?.filename
         : image?.fileName
-          ? image?.fileName
-          : image?.name
-            ? image?.name
-            : image?.path
-              ? image?.path?.split('/')[image?.path?.split('/')?.length - 1]
-              : image?.sourceURL?.split('/')[
-              image?.sourceURL?.split('/')?.length - 1
-              ];
+        ? image?.fileName
+        : image?.name
+        ? image?.name
+        : image?.path
+        ? image?.path?.split('/')[image?.path?.split('/')?.length - 1]
+        : image?.sourceURL?.split('/')[
+            image?.sourceURL?.split('/')?.length - 1
+          ];
       obj['type'] = image?.type ? image?.type : image.mime;
     }
     return obj;
   };
 
-  commonSocialLoginRequest = async (socialType: string, isNetConnected: boolean, isPersisterUser: boolean, navigation: any) => {
+  commonSocialLoginRequest = async (
+    socialType: string,
+    isNetConnected: boolean,
+    isPersisterUser: boolean,
+    navigation: any,
+  ) => {
     Keyboard.dismiss();
     this.dispatch(setIsLoader(true));
-    let socialParams = await this.socialCallRequest(isNetConnected, socialType)
-      .catch(e => {
-        this.dispatch(setIsLoader(false))
-        console.log('Er ', e)
-      })
+    let socialParams = await this.socialCallRequest(
+      isNetConnected,
+      socialType,
+    ).catch(e => {
+      this.dispatch(setIsLoader(false));
+      console.log('Er ', e);
+    });
     if (socialParams) {
       const paramsObj = {
         email: socialParams.email,
         password: socialParams.token,
       };
-      console.log("paramsObj: ", paramsObj);
+      console.log('paramsObj: ', paramsObj);
       await loginRequest(paramsObj, async response => {
-        console.log("response - loginRequest: ");
+        console.log('response - loginRequest: ');
         console.log(response);
         if (response?.status) {
-          this.dispatch(setUserData
-            (response?.data));
+          this.dispatch(setUserData(response?.data));
           if (isPersisterUser) {
             await saveUserData(response?.data);
           }
@@ -508,11 +523,11 @@ export default class CommonDataManager {
           let errorMessage = response?.message
             ? response?.message
             : 'Something went wrong';
-          console.log("errorMessage: ", errorMessage);
+          console.log('errorMessage: ', errorMessage);
           if (errorMessage == 'User not found against this Email.') {
             navigation.push(Routes.Auth.profileCompleteScreen, {
-              socialParams: socialParams
-            })
+              socialParams: socialParams,
+            });
             return;
           }
           this.dispatch(
@@ -523,10 +538,10 @@ export default class CommonDataManager {
           );
         }
         this.dispatch(setIsLoader(false));
-      }).catch((e) => {
+      }).catch(e => {
         console.log('Err ', e);
-        this.dispatch(setIsLoader(false))
-      })
+        this.dispatch(setIsLoader(false));
+      });
     } else {
       console.log('here 23');
       this.dispatch(setIsLoader(false));
@@ -534,47 +549,53 @@ export default class CommonDataManager {
     }
   };
 
-  convertRemoteVideoToBase64 = async (videoUrl: string, onProgress: (obj: DownloadProgressCallbackResult) => void, onComplete: (url: string) => void) => {
+  convertRemoteVideoToBase64 = async (
+    videoUrl: string,
+    onProgress: (obj: DownloadProgressCallbackResult) => void,
+    onComplete: (url: string) => void,
+  ) => {
     const downloadDest = `${RNFS.DocumentDirectoryPath}/video.mp4`;
     try {
       const options = {
         fromUrl: videoUrl,
         toFile: downloadDest,
         discretionary: true,
-        begin: () => { }, // onBegin: (res: DownloadBeginCallbackResult) => void,
+        begin: () => {}, // onBegin: (res: DownloadBeginCallbackResult) => void,
         progress: onProgress,
       };
 
       const response = RNFS.downloadFile(options);
-      console.log("response: ", response);
+      console.log('response: ', response);
 
-      response.promise.then(async result => {
-        console.log("result: ", result);
-        if (result.statusCode === 200) {
-          console.log('Video downloaded successfully:', downloadDest);
-          // const base64String = await RNFS.readFile(downloadDest, "base64");
-          onComplete(downloadDest);
-        } else {
-          console.error('Error downloading video:', result.statusCode);
-        }
-      }).catch(error => {
-        console.error('Error while downloading video:', error);
-      });
+      response.promise
+        .then(async result => {
+          console.log('result: ', result);
+          if (result.statusCode === 200) {
+            console.log('Video downloaded successfully:', downloadDest);
+            // const base64String = await RNFS.readFile(downloadDest, "base64");
+            onComplete(downloadDest);
+          } else {
+            console.error('Error downloading video:', result.statusCode);
+          }
+        })
+        .catch(error => {
+          console.error('Error while downloading video:', error);
+        });
     } catch (error) {
       console.error('Error in downloadVideo function:', error);
     }
-  }
-
+  };
 
   shareVideo = async (videoUrl: string) => {
     try {
-      const filePath = Platform.OS == 'ios' ? videoUrl : `content://${videoUrl}`;
+      const filePath =
+        Platform.OS == 'ios' ? videoUrl : `content://${videoUrl}`;
       let shareOptions = {
-        title: "Check out my video",
-        message: "Check out my video!",
+        title: 'Check out my video',
+        message: 'Check out my video!',
         url: filePath,
         type: 'video/mp4',
-        subject: "Check out my video!"
+        subject: 'Check out my video!',
       };
       setTimeout(() => {
         Share.open(shareOptions)
@@ -584,12 +605,19 @@ export default class CommonDataManager {
       // };
       // })
     } catch (e) {
-      console.log('Error sharing video ', e)
+      console.log('Error sharing video ', e);
     }
-  }
+  };
+  paginationLogic = (totalCount: number, limit: number) => {
+    let totalPages = 0;
+    return (totalPages = Math.ceil(totalCount / limit));
+  };
 
-
-  fetchDeviceContacts = async (userId: string, onErr: () => void, onSuccess: (list: Array<any>) => void) => {
+  fetchDeviceContacts = async (
+    userId: string,
+    onErr: () => void,
+    onSuccess: (list: Array<any>) => void,
+  ) => {
     try {
       if (Platform.OS == 'android') {
         const granted = await PermissionsAndroid.request(
@@ -651,7 +679,7 @@ export default class CommonDataManager {
 
   fetchContacts = async (userId: string) => {
     try {
-      const allContacts: Array<any> = await Contacts.getAll()
+      const allContacts: Array<any> = await Contacts.getAll();
       if (allContacts) {
         const filteredContacts = allContacts.filter(
           (el: any) =>
@@ -678,5 +706,4 @@ export default class CommonDataManager {
       return [];
     }
   };
-
 }

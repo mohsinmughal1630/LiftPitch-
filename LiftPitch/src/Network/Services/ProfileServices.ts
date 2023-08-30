@@ -36,7 +36,7 @@ export const followNFollowingUser = async (
         );
         new Promise((resolve: any, reject) => {
           firestore()
-            .collection(Collections.FOLLOW_N_FOLLOWING_COLLECTION)
+            .collection(Collections.Users)
             .doc(sender?.id)
             .update({
               following: newArr,
@@ -50,16 +50,12 @@ export const followNFollowingUser = async (
         });
       } else {
         let newObj = {
-          userId: reciver?.id,
-          follower:
-            senderResult?.follower?.length > 0
-              ? [...senderResult?.follower]
-              : [],
+          ...senderResult,
           following: [reciver],
         };
 
         firestore()
-          .collection(Collections.FOLLOW_N_FOLLOWING_COLLECTION)
+          .collection(Collections.Users)
           .doc(sender?.id)
           .set(newObj)
           .then(() => {
@@ -82,7 +78,7 @@ export const followNFollowingUser = async (
         );
         new Promise((resolve: any, reject) => {
           firestore()
-            .collection(Collections.FOLLOW_N_FOLLOWING_COLLECTION)
+            .collection(Collections.Users)
             .doc(reciver?.id)
             .update({
               follower: newArr,
@@ -96,16 +92,11 @@ export const followNFollowingUser = async (
         });
       } else {
         let newObj = {
-          userId: sender?.id,
+          ...receiverResult,
           follower: [sender],
-          following:
-            receiverResult?.following?.length > 0
-              ? [...receiverResult?.following]
-              : [],
         };
-
         firestore()
-          .collection(Collections.FOLLOW_N_FOLLOWING_COLLECTION)
+          .collection(Collections.Users)
           .doc(reciver?.id)
           .set(newObj)
           .then(() => {
@@ -122,7 +113,7 @@ export const followNFollowingUser = async (
 };
 export const getfollowPreviousList = async (id: any, onComplete: any) => {
   await firestore()
-    .collection(Collections.FOLLOW_N_FOLLOWING_COLLECTION)
+    .collection(Collections.Users)
     .doc(id)
     .get()
     .then((snapDoc: any) => {
@@ -140,7 +131,7 @@ export const checkUserFollowState = async (
   onComplete: any,
 ) => {
   await firestore()
-    .collection(Collections.FOLLOW_N_FOLLOWING_COLLECTION)
+    .collection(Collections.Users)
     .doc(id)
     .get()
     .then((snapDoc: any) => {
@@ -159,9 +150,9 @@ export const checkUserFollowState = async (
     });
 };
 
-export const fetchFollowingList = async (id: any, onComplete: any) => {
+export const fetchFollowingList = async (id: string, onComplete: any) => {
   await firestore()
-    .collection(Collections.FOLLOW_N_FOLLOWING_COLLECTION)
+    .collection(Collections.Users)
     .doc(id)
     .get()
     .then((snapDoc: any) => {
@@ -170,5 +161,35 @@ export const fetchFollowingList = async (id: any, onComplete: any) => {
         obj = snapDoc?._data;
       }
       onComplete(obj);
+    });
+};
+
+export const searchUserfromFB = async (
+  userId: any,
+  searchText: any,
+  onComplete: any,
+) => {
+  const usersRef = firestore().collection(Collections.Users);
+
+  usersRef
+    .where('userName', '>=', searchText)
+    .where('userName', '<=', searchText + '\uf8ff')
+    .get()
+    .then(querySnapshot => {
+      let results: any = [];
+      querySnapshot.forEach(doc => {
+        if (userId != doc?.data()?.userId) {
+          results.push({
+            userId: doc?.data()?.userId,
+            userName: doc?.data()?.userName,
+            profile: doc?.data()?.companyLogo,
+            description: doc?.data()?.companyType,
+          });
+        }
+      });
+      onComplete(results);
+    })
+    .catch(error => {
+      console.error('Error searching documents:', error);
     });
 };

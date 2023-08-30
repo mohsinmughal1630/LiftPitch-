@@ -1,17 +1,17 @@
-import React, { useRef } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, {useRef} from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {
   AppColors,
   AppImages,
   hv,
   normalized,
 } from '../../../Utils/AppConstants';
-import { AppHorizontalMargin } from '../../../Utils/AppStyles';
+import {AppHorizontalMargin} from '../../../Utils/AppStyles';
 const CustomHeader = (props: any) => {
   return (
     <>
       {props.showBorder ? (
-        <View style={[styles.line, { marginTop: hv(7) }]} />
+        <View style={[styles.line, {marginTop: hv(7)}]} />
       ) : null}
       <View style={[styles.maincontainer, props?.mainStyle]}>
         <>
@@ -25,14 +25,16 @@ const CustomHeader = (props: any) => {
               }}>
               <Image
                 source={AppImages.Auth.backIcon}
-                style={{ tintColor: AppColors.black.black }}
+                style={{tintColor: AppColors.black.black}}
               />
             </TouchableOpacity>
           ) : (
-            <View style={{ margin: 10 }} />
+            <View style={{margin: 10}} />
           )}
           <Text style={styles.title}>{props?.title}</Text>
-          {props.rightComponent ? (props.rightComponent()) : props?.atRightBtn ? (
+          {props.rightComponent ? (
+            props.rightComponent()
+          ) : props?.atRightBtn ? (
             <TouchableOpacity
               activeOpacity={1}
               onPress={() => {

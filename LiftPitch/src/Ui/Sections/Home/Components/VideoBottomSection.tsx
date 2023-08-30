@@ -10,6 +10,9 @@ import {
 import {AppStyles} from '../../../../Utils/AppStyles';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import LoadingImage from '../../../Components/LoadingImage';
+import {Routes} from '../../../../Utils/Routes';
+import AppImageViewer from '../../../Components/ProfileView/AppImageView';
+import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlaceHolderComp';
 interface Props {
   navigation: any;
   item: singleVideoItemType;
@@ -17,13 +20,14 @@ interface Props {
   isLike: boolean;
   atLikePress: () => void;
   likeCount: any;
+  index: any;
 }
 
 const maxStrLength = 100;
 
 const VideoBottomSection = (props: Props) => {
-  const profileImg = null;
-  const description = props.item.productDescription;
+  const profileImg = props?.item?.creatorData?.companyLogo;
+  const description = props?.item?.pitch_idea?.description;
   const [showMore, setShowMore] = useState(false);
   return (
     <View style={styles.mainContainer}>
@@ -40,17 +44,28 @@ const VideoBottomSection = (props: Props) => {
           </Text>
           <View style={styles.bottomBox}>
             <View style={styles.bottomContentBox}>
-              <Text style={styles.userName}>{`@${props.item.userName}`}</Text>
+              <Text
+                style={
+                  styles.userName
+                }>{`@${props?.item?.creatorData?.userName}`}</Text>
             </View>
           </View>
+          <Text
+            style={{
+              ...styles.descriptionText,
+              fontSize: normalized(14),
+              fontWeight: '500',
+            }}>
+            {props?.item?.pitch_idea?.name}
+          </Text>
           <Text style={styles.descriptionText}>
-            {description.length > maxStrLength
+            {description?.length > maxStrLength
               ? showMore
                 ? description
                 : description.substring(0, maxStrLength) + '...'
               : description}
           </Text>
-          {description.length > maxStrLength && (
+          {description?.length > maxStrLength && (
             <Text
               onPress={() => setShowMore(!showMore)}
               style={[
@@ -61,11 +76,11 @@ const VideoBottomSection = (props: Props) => {
           <Text
             onPress={() =>
               CommonDataManager.getSharedInstance().redirectToUrl(
-                props.item.storeLink,
+                props?.item?.storeLink,
               )
             }
             style={styles.linkText}>
-            {props.item.storeLink}
+            {props?.item?.storeLink}
           </Text>
         </View>
       </View>
@@ -73,24 +88,29 @@ const VideoBottomSection = (props: Props) => {
         <TouchableOpacity
           style={styles.profileImgBox}
           onPress={() => {
-            // props?.navigation?.navigate(Routes.ProfileTab.ProfileScreen, {
-            //   userId: 'GdPK1Rn1',
-            // });
+            props?.navigation?.navigate(Routes.ProfileTab.ProfileScreen, {
+              userId: props?.item?.creatorData?.userId,
+            });
           }}>
-          {profileImg ? (
-            <LoadingImage
+          {profileImg?.length > 0 ? (
+            <AppImageViewer
               source={{uri: profileImg}}
-              viewStyle={{
-                ...styles.profileImgBox,
-                backgroundColor: AppColors.white.bgWhite,
-              }}
+              style={{...styles.profileImgBox, marginBottom: 0}}
               resizeMode="cover"
             />
           ) : (
-            <Image
-              source={AppImages.bottomBar.Profile}
-              resizeMode="contain"
-              style={styles.placeholderImg}
+            <ProfilePlaceHolderComp
+              index={props?.index}
+              name={
+                props?.item?.creatorData?.userName
+                  ? props?.item?.creatorData?.userName
+                  : 'Testing'
+              }
+              mainStyles={styles.profileImgBox}
+              nameStyles={{
+                fontSize: normalized(16),
+                fontWeight: '500',
+              }}
             />
           )}
         </TouchableOpacity>
@@ -165,13 +185,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   profileImgBox: {
-    backgroundColor: AppColors.red.mainColor,
-    height: 45,
-    width: 45,
-    borderRadius: 23,
+    height: normalized(45),
+    width: normalized(45),
+    borderRadius: normalized(45 / 2),
     borderWidth: 1,
     borderColor: AppColors.white.white,
-    ...AppStyles.centeredCommon,
     marginBottom: normalized(10),
   },
   placeholderImg: {

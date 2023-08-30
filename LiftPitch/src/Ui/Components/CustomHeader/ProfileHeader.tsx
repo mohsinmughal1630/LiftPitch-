@@ -74,7 +74,7 @@ const ProfileHeader = (props: any) => {
               props?.atRightBtn();
             }}>
             <Text style={styles.followBtnTxt}>
-              {props?.isFollow ? `- Unfollow` : `+ Follow`}
+              {props?.isFollow ? `Following` : `Follow`}
             </Text>
           </TouchableOpacity>
         )

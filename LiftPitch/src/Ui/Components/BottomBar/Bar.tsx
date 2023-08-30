@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Image, StyleSheet, TouchableWithoutFeedback } from 'react-native';
-import { AppColors, hv, normalized } from '../../../Utils/AppConstants';
-import { AppStrings } from '../../../Utils/Strings';
-const Bar = ({ obj, onPress, index, tab }: any) => {
+import {View, Image, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import {AppColors, hv, normalized} from '../../../Utils/AppConstants';
+import {AppStrings} from '../../../Utils/Strings';
+const Bar = ({obj, onPress, index, tab}: any) => {
   return (
     <TouchableWithoutFeedback
       style={{}}
@@ -26,9 +26,15 @@ const Bar = ({ obj, onPress, index, tab }: any) => {
         ) : (
           <View>
             <Image
-              style={[styles.selectedTab, {
-                tintColor: tab == index ? AppColors.primaryPurple : AppColors.black.light
-              }]}
+              style={[
+                styles.selectedTab,
+                {
+                  tintColor:
+                    tab == index
+                      ? AppColors.primaryPurple
+                      : AppColors.black.light,
+                },
+              ]}
               source={tab == index ? obj.selectedIcon : obj.icon}
               resizeMode="contain"
             />

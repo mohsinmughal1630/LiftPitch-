@@ -275,11 +275,6 @@ const LoginScreen = (props: ScreenProps) => {
               <View style={styles.simpleLine} />
             </View>
             <View style={styles.socialCont}>
-              {/* <SocialBtn
-                label={'FACEBOOK'}
-                icon={AppImages.Auth.fbIcon}
-                atPress={() => { }}
-              /> */}
               <SocialBtn
                 label={'GOOGLE'}
                 icon={AppImages.Auth.google}

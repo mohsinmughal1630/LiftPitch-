@@ -548,6 +548,7 @@ const ChatScreen = (props: ScreenProps) => {
           atBackPress={() => {
             props?.navigation?.goBack();
           }}
+          atRightBtn={() => {}}
           showBorder={true}
         />
         <View
@@ -616,7 +617,7 @@ const ChatScreen = (props: ScreenProps) => {
                   <View style={styles.simpleLine} />
                   <Text
                     style={{
-                      marginHorizontal: normalized(8),
+                      marginHorizontal: normalized(15),
                       fontSize: normalized(14),
                       paddingVertical: hv(4),
                       color: AppColors.black.lightBlack,
@@ -747,7 +748,7 @@ const styles = StyleSheet.create({
   },
   simpleLine: {
     height: normalized(1),
-    width: normalized(80),
+    width: normalized(90),
     backgroundColor: '#E8E6EA',
   },
 });

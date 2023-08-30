@@ -25,6 +25,7 @@ import {
   setIsLoader,
 } from '../../../../Redux/reducers/AppReducer';
 import moment from 'moment';
+import ReportReasonModal from './ReportReasonModal';
 
 interface Props {
   navigation: any;
@@ -40,19 +41,23 @@ const SingleVideoComponent = (props: Props) => {
   const [commentsList, setCommentsList] = useState([]);
   const [isLike, setIsLike] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [reportingReasonModal, setReportingReasonModal] = useState<any>({
+    value: false,
+    data: null,
+  });
   const [showCommentsModal, setShowComments] = useState(false);
 
   useEffect(() => {
     if (props?.item?.like?.length > 0) {
       setLikeCount(props?.item?.like?.length);
       const indexToUpdate = props?.item?.like.findIndex(
-        (item: any) => item === selector?.userData?.userId,
+        (item: any) => item == selector?.userData?.userId,
       );
       if (indexToUpdate !== -1) {
         setIsLike(true);
       }
     }
-  }, [props?.item]);
+  }, [props]);
 
   const getCommentList = async () => {
     if (!selector.isNetConnected) {
@@ -65,14 +70,17 @@ const SingleVideoComponent = (props: Props) => {
       return;
     }
     setIsLoading(true);
-    await getCommentListingAgainstVideo('GTwSTopd', (response: any) => {
-      if (response != 'error!') {
-        setIsLoading(false);
-        setCommentsList(response);
-      } else {
-        setIsLoading(false);
-      }
-    });
+    await getCommentListingAgainstVideo(
+      props?.item?.videoId,
+      (response: any) => {
+        if (response != 'error!') {
+          setIsLoading(false);
+          setCommentsList(response);
+        } else {
+          setIsLoading(false);
+        }
+      },
+    );
   };
   const addNupdateComment = async (obj: any, actionType: any) => {
     if (!selector?.isNetConnected) {
@@ -103,7 +111,7 @@ const SingleVideoComponent = (props: Props) => {
     await addNUpdateCommentReq(
       newObj,
       actionType,
-      'GTwSTopd',
+      props?.item?.videoId,
       (response: any) => {
         if (response != 'error!') {
           dispatch(setIsLoader(false));
@@ -126,15 +134,20 @@ const SingleVideoComponent = (props: Props) => {
       return;
     }
     // dispatch(setIsLoader(true));
-    await addNUpdateCommentReq(obj, actionType, 'GTwSTopd', (response: any) => {
-      if (response != 'error!' && response?.length > 0) {
-        dispatch(setIsLoader(false));
-        setCommentsList(response);
-      } else {
-        dispatch(setIsLoader(false));
-        dispatch(setIsAlertShow({value: true, message: response}));
-      }
-    });
+    await addNUpdateCommentReq(
+      obj,
+      actionType,
+      props?.item?.videoId,
+      (response: any) => {
+        if (typeof response != 'string') {
+          dispatch(setIsLoader(false));
+          setCommentsList(response);
+        } else {
+          dispatch(setIsLoader(false));
+          dispatch(setIsAlertShow({value: true, message: response}));
+        }
+      },
+    );
   };
   const likeDisLikeFun = async (action?: any) => {
     if (!selector?.isNetConnected) {
@@ -149,7 +162,7 @@ const SingleVideoComponent = (props: Props) => {
     await likeNDisListReq(
       selector?.userData?.userId,
       action?.length > 0 ? action : isLike ? 'remove' : 'add',
-      'GTwSTopd',
+      props?.item?.videoId,
       (response: any) => {
         if (response != 'error!') {
           setIsLike(!isLike);
@@ -161,15 +174,18 @@ const SingleVideoComponent = (props: Props) => {
       },
     );
   };
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.innerContainer}>
         <VideoPlayer
-          url={props.item.videoUrl}
+          thumbnail={props?.item?.thumbnail}
+          url={props?.item?.videoUrl}
           currentVideoIndex={props.currentVideoIndex}
-          index={props.index}
+          index={props?.index}
         />
         <VideoBottomSection
+          index={props?.index}
           likeCount={likeCount}
           isLike={isLike}
           atLikePress={() => {
@@ -196,7 +212,10 @@ const SingleVideoComponent = (props: Props) => {
             if (obj?.actionType == CommentActionType.deleteComment) {
               await deleteNReportReq(obj, obj?.actionType);
             } else if (obj?.actionType == CommentActionType.reportComment) {
-              await deleteNReportReq(obj, obj?.actionType);
+              setShowComments(false);
+              setTimeout(() => {
+                setReportingReasonModal({value: true, data: obj});
+              }, 500);
             }
           }}
           onNewComment={val => {
@@ -220,6 +239,23 @@ const SingleVideoComponent = (props: Props) => {
           }}
         />
       )}
+      {reportingReasonModal?.value ? (
+        <ReportReasonModal
+          value={reportingReasonModal?.value}
+          onClose={() => {
+            setReportingReasonModal({value: false, data: null});
+          }}
+          atSubmit={async (val: any) => {
+            let newObj: any = {
+              ...reportingReasonModal?.data,
+              reason: val,
+            };
+            setReportingReasonModal({value: false, data: null});
+
+            await deleteNReportReq(newObj, CommentActionType.reportComment);
+          }}
+        />
+      ) : null}
     </View>
   );
 };

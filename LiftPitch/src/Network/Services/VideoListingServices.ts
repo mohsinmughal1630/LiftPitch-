@@ -1,6 +1,5 @@
 import firestore from '@react-native-firebase/firestore';
 import {Collections, CommentActionType} from '../../Utils/Strings';
-import {Alert} from 'react-native';
 export const addNUpdateCommentReq = async (
   obj: any,
   action: any,
@@ -55,7 +54,7 @@ export const addNUpdateCommentReq = async (
           } else if (action == CommentActionType.reportComment) {
             await checkIsAlreadyReported(obj, async (result: any) => {
               if (result?.action) {
-                Alert.alert(
+                onComplete(
                   `you already reported ${obj?.reportedTo?.name} against this comment!`,
                 );
               } else {
@@ -67,6 +66,7 @@ export const addNUpdateCommentReq = async (
                       commentId: obj?.commentId,
                       PCommentId: obj?.PCommentId ? obj?.PCommentId : '',
                       type: obj?.type ? obj?.type : 'comment',
+                      reason: obj?.reason,
                     },
                   ];
 
@@ -75,7 +75,7 @@ export const addNUpdateCommentReq = async (
                     .doc(obj?.reportedBy?.userId)
                     .update({reported_User_List: updateArr})
                     .then(() => {
-                      Alert.alert('reported Successfully!');
+                      onComplete('reported Successfully!');
                     })
                     .catch((error: any) => {
                       onComplete('error!');
@@ -90,6 +90,7 @@ export const addNUpdateCommentReq = async (
                         commentId: obj?.commentId,
                         PCommentId: obj?.PCommentId ? obj?.PCommentId : '',
                         type: obj?.type ? obj?.type : 'comment',
+                        reason: obj?.reason,
                       },
                     ],
                   };
@@ -98,7 +99,7 @@ export const addNUpdateCommentReq = async (
                     .doc(obj?.reportedBy?.userId)
                     .set(updateObj)
                     .then(() => {
-                      Alert.alert('reported Successfully!');
+                      onComplete('reported Successfully!');
                     })
                     .catch((error: any) => {
                       onComplete('error!');
@@ -118,7 +119,6 @@ export const addNUpdateCommentReq = async (
               })
               .then(() => {
                 onComplete(commentsArr);
-                console.log('Array value successfully updated!');
               })
               .catch((error: any) => {
                 onComplete('error!');
@@ -219,4 +219,39 @@ export const getCommentListingAgainstVideo = async (
       onComplete('error!');
       console.log('e at get Comment List-------->', e);
     });
+};
+
+export const getUpdatedVideoListing = async (
+  userId: any,
+  limit: any,
+  currentPage: any,
+  onUpdates: any,
+) => {
+  await firestore()
+    .collection(Collections.POST_COLLECTION)
+    // .orderBy('createdAt', 'desc')
+    .limit(limit * currentPage)
+    .get()
+    .then(snapShot => {
+      var list: any = [];
+      snapShot.docs.forEach(doc => {
+        if (doc.data()?.creatorData?.userId != userId) {
+          list.push(doc.data());
+        }
+      });
+      onUpdates(list);
+    })
+    .catch(() => {
+      onUpdates([]);
+    });
+};
+
+export const getVideoListSize = async (onComplete: any) => {
+  await firestore()
+    .collection(Collections.POST_COLLECTION)
+    .get()
+    .then(snapShot => {
+      onComplete(snapShot.docs?.length);
+    })
+    .catch(() => {});
 };

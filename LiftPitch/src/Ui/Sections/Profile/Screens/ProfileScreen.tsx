@@ -22,13 +22,14 @@ import {useDispatch, useSelector} from 'react-redux';
 import {logoutRequest} from '../../../../Network/Services/AuthServices';
 import {AppRootStore} from '../../../../Redux/store/AppStore';
 import {
+  setIsAlertShow,
   setIsLoader,
   setIsPersisterUser,
   setUserData,
 } from '../../../../Redux/reducers/AppReducer';
 import {saveUserData} from '../../../../Utils/AsyncStorage';
 import ProfileHeader from '../../../Components/CustomHeader/ProfileHeader';
-import {USER_TYPE} from '../../../../Utils/Strings';
+import {AppStrings, USER_TYPE} from '../../../../Utils/Strings';
 import ProfileCustomTab from '../../../Components/CustomTab/ProfileCustomTab';
 import {
   checkUserFollowState,
@@ -65,6 +66,15 @@ const ProfileScreen = (props: ScreenProps) => {
   };
   useEffect(() => {
     if (params?.userId && params?.userId != userData?.userId) {
+      if (!selector?.isNetConnected) {
+        dispatch(
+          setIsAlertShow({
+            value: true,
+            message: AppStrings.Network.internetError,
+          }),
+        );
+        return;
+      }
       dispatch(setIsLoader(true));
       getOtherUserProfile(props?.route?.params?.userId, (response: any) => {
         dispatch(setIsLoader(false));
@@ -85,6 +95,15 @@ const ProfileScreen = (props: ScreenProps) => {
   }, []);
 
   const goToChat = async () => {
+    if (!selector?.isNetConnected) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.internetError,
+        }),
+      );
+      return;
+    }
     let threadObj = null;
     ThreadManager.instance.checkIsConnectionExist(
       userData?.userId,
@@ -137,6 +156,15 @@ const ProfileScreen = (props: ScreenProps) => {
   };
 
   const followNfollowerFun = async () => {
+    if (!selector?.isNetConnected) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.internetError,
+        }),
+      );
+      return;
+    }
     dispatch(setIsLoader(true));
     let followingObj = {
       id: userData?.userId,
@@ -150,8 +178,6 @@ const ProfileScreen = (props: ScreenProps) => {
       description: data?.companyType,
       profile: data?.companyLogo,
     };
-    console.log('followingObj-------->', followingObj);
-    console.log('followerObj------>', followerObj);
 
     await followNFollowingUser(
       followingObj,

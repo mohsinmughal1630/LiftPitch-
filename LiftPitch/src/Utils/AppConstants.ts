@@ -60,6 +60,7 @@ export const AppImages = {
     Gallery: require('../Ui/assets/images/Chat/Gallery.png'),
     Video: require('../Ui/assets/images/Chat/Video.png'),
     Document: require('../Ui/assets/images/Chat/Document.png'),
+    msgSeen: require('../Ui/assets/images/Chat/msgSeen.png'),
   },
   createVideo: {
     galleryIcon: require('../Ui/assets/images/CreateVideo/galleryIcon.png'),
@@ -87,7 +88,6 @@ export const AppImages = {
   Common: {
     DropDownIcon: require('../Ui/assets/images/Common/DropDownIcon.png'),
     Setting: require('../Ui/assets/images/Common/Setting.png'),
-
     WarningIcon: require('../Ui/assets/images/Common/WarningIcon.png'),
     MorningIcon: require('../Ui/assets/images/Common/MorningIcon.png'),
     TickIcon: require('../Ui/assets/images/Common/TickIcon.png'),

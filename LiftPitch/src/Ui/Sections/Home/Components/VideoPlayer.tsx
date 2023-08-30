@@ -14,6 +14,7 @@ interface Props {
   url: string;
   index: number;
   currentVideoIndex: number;
+  thumbnail: any;
 }
 
 const VideoPlayer = (props: Props) => {
@@ -65,6 +66,8 @@ const VideoPlayer = (props: Props) => {
         ignoreSilentSwitch="ignore"
         paused={isPaused}
         repeat
+        poster={props?.thumbnail}
+        pictureInPicture={false}
         onError={(e: any) => {
           setIsLoading(false);
           setIsError(true);

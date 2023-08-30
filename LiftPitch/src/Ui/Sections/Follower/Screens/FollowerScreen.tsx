@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   AppColors,
   AppImages,
@@ -24,17 +24,26 @@ import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import HeaderTab from '../../../Components/CustomTab/HeaderTab';
 import CustomSearchBar from '../../../Components/CustomSearchBar/CustomSearchBar';
 import {Routes} from '../../../../Utils/Routes';
-import {fetchFollowingList} from '../../../../Network/Services/ProfileServices';
+import {
+  checkUserFollowState,
+  fetchFollowingList,
+  followNFollowingUser,
+  searchUserfromFB,
+} from '../../../../Network/Services/ProfileServices';
 import {useDispatch, useSelector} from 'react-redux';
 import {useIsFocused} from '@react-navigation/native';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
 import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlaceHolderComp';
-import {setIsLoader} from '../../../../Redux/reducers/AppReducer';
+import {
+  setIsAlertShow,
+  setIsLoader,
+} from '../../../../Redux/reducers/AppReducer';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import SocialInviteSection from '../Components/SocialInviteSection';
 import ConfirmationModal from '../../../Components/CustomModal/ConfirmationModal';
 import DeviceContactsListModal from '../../../Components/CustomModal/DeviceContactsListModal';
 import {openSettings} from 'react-native-permissions';
+import {AppStrings} from '../../../../Utils/Strings';
 
 const FollowerScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
@@ -47,26 +56,57 @@ const FollowerScreen = (props: ScreenProps) => {
   const [deviceContactsList, setDeviceContactsList] = useState<Array<any>>([]);
   const [showContactsListModal, setShowContactsListModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [searchResult, setSearchResult] = useState([]);
 
   useEffect(() => {
     if (isFocused) {
-      dispatch(setIsLoader(true));
-      fetchFollowingList(selector?.userData?.userId, (response: any) => {
-        if (response?.follower) {
-          setFollowerData(response?.follower);
-        }
-        if (response?.following) {
-          setFollowingData(response?.following);
-        }
-        setTimeout(() => {
-          dispatch(setIsLoader(false));
-        }, 1000);
-      });
+      fetchUserFollowingList();
     }
   }, [isFocused]);
 
+  const fetchUserFollowingList = async () => {
+    if (!selector?.isNetConnected) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.internetError,
+        }),
+      );
+      return;
+    }
+    if (!selector?.isLoaderStart) {
+      dispatch(setIsLoader(true));
+    }
+    await fetchFollowingList(selector?.userData?.userId, (response: any) => {
+      if (response?.follower?.length > 0) {
+        let newArr: any = [];
+        for (let i = 0; i < response?.follower?.length; i++) {
+          let singleItem = response?.follower[i];
+          checkUserFollowState(
+            selector?.userData?.userId,
+            singleItem?.id,
+            (result: any) => {
+              newArr.push({
+                ...singleItem,
+                isFollow: result,
+              });
+              if (i == response?.follower?.length - 1) {
+                setFollowerData(newArr);
+              }
+            },
+          );
+        }
+      }
+      if (response?.following) {
+        setFollowingData(response?.following);
+      }
+      setTimeout(() => {
+        dispatch(setIsLoader(false));
+      }, 1000);
+    });
+  };
+
   const inviteSelected = (type: socialInviteType) => {
-    console.log('On social invitation ', type);
     if (type == 'contacts') {
       if (deviceContactsList.length > 0) {
         setShowContactsListModal(true);
@@ -91,6 +131,63 @@ const FollowerScreen = (props: ScreenProps) => {
       );
     }
   };
+  //follow and Unfollow Functionality
+  const followNfollowerFun = async (obj: any) => {
+    if (!selector?.isNetConnected) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.internetError,
+        }),
+      );
+      return;
+    }
+    dispatch(setIsLoader(true));
+    let followingObj = {
+      id: selector?.userData?.userId,
+      userName: selector?.userData?.userName,
+      description: selector?.userData?.companyType,
+      profile: selector?.userData?.companyLogo,
+    };
+    let followerObj = {
+      id: obj?.id,
+      userName: obj?.userName,
+      description: obj?.description,
+      profile: obj?.profile,
+    };
+
+    await followNFollowingUser(
+      followingObj,
+      followerObj,
+      obj?.isFollow ? 'remove' : 'add',
+      (response: any) => {
+        setTimeout(async () => {
+          await fetchUserFollowingList();
+          dispatch(setIsLoader(false));
+        }, 3000);
+      },
+    );
+  };
+
+  ////
+
+  ///search Functionality----->
+
+  const handleSearch = async (txt: any) => {
+    if (!selector?.isNetConnected) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.internetError,
+        }),
+      );
+      return;
+    }
+    await searchUserfromFB(selector?.userData?.userId, txt, (response: any) => {
+      setSearchResult(response);
+    });
+  };
+  /////
 
   return (
     <View style={AppStyles.MainStyle}>
@@ -105,109 +202,206 @@ const FollowerScreen = (props: ScreenProps) => {
         mainStyle={{marginTop: normalized(10)}}
       />
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{flex: 1, marginHorizontal: AppHorizontalMargin}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
-        <ScrollView
-          contentContainerStyle={styles.containerStyle}
-          showsVerticalScrollIndicator={false}>
-          <CustomSearchBar
-            placeHolder={'Search'}
-            value={searchTxt}
-            atChangeTxt={(txt: any) => {
-              setSearchTxt(txt);
-            }}
-            mainStyle={{marginVertical: normalized(30)}}
-          />
-          <SocialInviteSection onPress={inviteSelected} />
-          {(selectTab == 0 && followingData?.length > 0) ||
-          (selectTab == 1 && followerData?.length > 0) ? (
-            <FlatList
-              keyExtractor={(item, index) => `${index}`}
-              showsVerticalScrollIndicator={false}
-              data={selectTab == 0 ? followingData : followerData}
-              renderItem={({item, index}) => {
-                return (
-                  <TouchableOpacity
-                    activeOpacity={0.7}
-                    style={styles.singleCommentContainer}
-                    key={index}
-                    onPress={() => {
-                      let userId = item?.userId
-                        ? item?.userId
-                        : item?.id
-                        ? item?.id
-                        : null;
-                      if (userId) {
-                        props?.navigation.navigate(
-                          Routes.ProfileTab.ProfileScreen,
-                          {
-                            userId: userId,
-                          },
-                        );
-                      }
-                    }}>
-                    <View style={styles.profileImgBox}>
-                      {item?.profile ? (
-                        <AppImageViewer
-                          source={{uri: item?.profile}}
-                          placeHolder={AppImages.bottomBar.Profile}
-                          style={{
-                            ...styles.profileImgBox,
-                            backgroundColor: AppColors.white.bgWhite,
-                          }}
-                        />
-                      ) : (
-                        <ProfilePlaceHolderComp
-                          index={index}
-                          name={item?.userName ? item?.userName : 'Testing'}
-                          mainStyles={styles.profileImgBox}
-                          nameStyles={{
-                            fontSize: normalized(16),
-                            fontWeight: '500',
-                          }}
-                        />
-                      )}
-                    </View>
-                    <View style={styles.contentBox}>
-                      <View
-                        style={[
-                          AppStyles.horiCommon,
-                          {justifyContent: 'space-between'},
-                        ]}>
-                        <Text
-                          style={[
-                            styles.description,
-                            {color: AppColors.black.black, marginTop: 0},
-                          ]}>
-                          {item.userName}
-                        </Text>
-                      </View>
-                      <Text style={styles.msgTxt}>{item?.description}</Text>
-                    </View>
+        <CustomSearchBar
+          placeHolder={'Search'}
+          value={searchTxt}
+          atChangeTxt={(txt: any) => {
+            if (txt?.length > 3) {
+              handleSearch(txt);
+            } else if (txt?.length == 0) {
+              setSearchResult([]);
+            }
+            setSearchTxt(txt);
+          }}
+          mainStyle={{
+            marginTop: normalized(30),
+            marginBottom:
+              searchResult?.length > 0 ? normalized(0) : normalized(30),
+          }}
+        />
 
-                    <TouchableOpacity
-                      style={{
-                        alignSelf: 'center',
-                        padding: normalized(5),
-                      }}>
-                      <Image
-                        source={AppImages.Common.LeftArrowIcon}
-                        resizeMode="contain"
-                      />
-                    </TouchableOpacity>
-                  </TouchableOpacity>
-                );
-              }}
-            />
-          ) : (
-            <View style={styles.emptyCont}>
-              <Text style={styles.emptyTxt}>
-                {`No ${selectTab == 0 ? 'Following' : 'Followers'} Found`}
-              </Text>
-            </View>
-          )}
-        </ScrollView>
+        <FlatList
+          data={[1, 2, 3, 4]}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item, index) => `${index}`}
+          renderItem={({item, index}) => {
+            return index == 1 ? (
+              <>
+                {searchResult?.length > 0 ? (
+                  <FlatList
+                    data={searchResult}
+                    keyExtractor={(item, i) => `${i}`}
+                    renderItem={({item, index}) => {
+                      return (
+                        <TouchableOpacity
+                          activeOpacity={0.7}
+                          style={styles.singleCommentContainer}
+                          key={index}
+                          onPress={() => {
+                            if (item?.userId) {
+                              props?.navigation.navigate(
+                                Routes.ProfileTab.ProfileScreen,
+                                {
+                                  userId: item?.userId,
+                                },
+                              );
+                              setSearchResult([]);
+                              setSearchTxt('');
+                            }
+                          }}>
+                          <View style={styles.profileImgBox}>
+                            {item?.profile ? (
+                              <AppImageViewer
+                                source={{uri: item?.profile}}
+                                placeHolder={AppImages.bottomBar.Profile}
+                                style={{
+                                  ...styles.profileImgBox,
+                                  backgroundColor: AppColors.white.bgWhite,
+                                }}
+                              />
+                            ) : (
+                              <ProfilePlaceHolderComp
+                                index={index}
+                                name={
+                                  item?.userName ? item?.userName : 'Testing'
+                                }
+                                mainStyles={styles.profileImgBox}
+                                nameStyles={{
+                                  fontSize: normalized(16),
+                                  fontWeight: '500',
+                                }}
+                              />
+                            )}
+                          </View>
+                          <View style={styles.contentBox}>
+                            <View
+                              style={[
+                                AppStyles.horiCommon,
+                                {justifyContent: 'space-between'},
+                              ]}>
+                              <Text
+                                style={[
+                                  styles.description,
+                                  {color: AppColors.black.black, marginTop: 0},
+                                ]}>
+                                {item?.userName}
+                              </Text>
+                            </View>
+                            <Text style={styles.msgTxt}>
+                              {item?.description}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      );
+                    }}
+                  />
+                ) : null}
+              </>
+            ) : index == 2 ? (
+              <>
+                <SocialInviteSection onPress={inviteSelected} />
+                {(selectTab == 0 && followingData?.length > 0) ||
+                (selectTab == 1 && followerData?.length > 0) ? (
+                  <FlatList
+                    keyExtractor={(item, index) => `${index}`}
+                    showsVerticalScrollIndicator={false}
+                    data={selectTab == 0 ? followingData : followerData}
+                    renderItem={({item, index}) => {
+                      return (
+                        <TouchableOpacity
+                          activeOpacity={0.7}
+                          style={styles.singleCommentContainer}
+                          key={index}
+                          onPress={() => {
+                            let userId = item?.userId
+                              ? item?.userId
+                              : item?.id
+                              ? item?.id
+                              : null;
+                            if (userId) {
+                              props?.navigation.navigate(
+                                Routes.ProfileTab.ProfileScreen,
+                                {
+                                  userId: userId,
+                                },
+                              );
+                            }
+                          }}>
+                          <View style={styles.profileImgBox}>
+                            {item?.profile ? (
+                              <AppImageViewer
+                                source={{uri: item?.profile}}
+                                placeHolder={AppImages.bottomBar.Profile}
+                                style={{
+                                  ...styles.profileImgBox,
+                                  backgroundColor: AppColors.white.bgWhite,
+                                }}
+                              />
+                            ) : (
+                              <ProfilePlaceHolderComp
+                                index={index}
+                                name={
+                                  item?.userName ? item?.userName : 'Testing'
+                                }
+                                mainStyles={styles.profileImgBox}
+                                nameStyles={{
+                                  fontSize: normalized(16),
+                                  fontWeight: '500',
+                                }}
+                              />
+                            )}
+                          </View>
+                          <View style={styles.contentBox}>
+                            <View
+                              style={[
+                                AppStyles.horiCommon,
+                                {justifyContent: 'space-between'},
+                              ]}>
+                              <Text
+                                style={[
+                                  styles.description,
+                                  {
+                                    color: AppColors.black.black,
+                                    marginTop: 0,
+                                  },
+                                ]}>
+                                {item.userName}
+                              </Text>
+                            </View>
+                            <Text style={styles.msgTxt}>
+                              {item?.description}
+                            </Text>
+                          </View>
+                          {selectTab == 1 ? (
+                            <TouchableOpacity
+                              activeOpacity={1}
+                              style={styles.followBtn}
+                              onPress={() => {
+                                followNfollowerFun(item);
+                              }}>
+                              <Text style={styles.followBtnTxt}>
+                                {item?.isFollow ? `Following` : `Follow`}
+                              </Text>
+                            </TouchableOpacity>
+                          ) : null}
+                        </TouchableOpacity>
+                      );
+                    }}
+                  />
+                ) : (
+                  <View style={styles.emptyCont}>
+                    <Text style={styles.emptyTxt}>
+                      {`No ${selectTab == 0 ? 'Following' : 'Followers'} Found`}
+                    </Text>
+                  </View>
+                )}
+              </>
+            ) : null;
+          }}
+        />
       </KeyboardAvoidingView>
       {showConfirmationModal && (
         <ConfirmationModal
@@ -314,7 +508,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   emptyCont: {
-    flex: 1,
+    height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -322,6 +516,17 @@ const styles = StyleSheet.create({
     fontSize: normalized(14),
     color: AppColors.black.black,
     fontWeight: '500',
+  },
+  followBtnTxt: {
+    fontSize: normalized(12),
+    fontWeight: '500',
+    color: AppColors.white.white,
+  },
+  followBtn: {
+    backgroundColor: AppColors.red.mainColor,
+    paddingHorizontal: normalized(10),
+    paddingVertical: normalized(8),
+    borderRadius: normalized(5),
   },
 });
 export default FollowerScreen;

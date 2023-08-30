@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
-import {AppStrings} from '../../../../Utils/Strings';
+import {AppStrings, Collections} from '../../../../Utils/Strings';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
 import {useIsFocused} from '@react-navigation/native';
 
@@ -33,12 +33,12 @@ const PitchIdeasListScreen = (props: ScreenProps) => {
   }, []);
   const getPitchIdeasList = async () => {
     await firestore()
-      .collection('Pitch_Ideas')
+      .collection(Collections.PITCH_IDEAS)
       .get()
       .then((snapDoc: any) => {
         let list = snapDoc?._docs[0]?.data();
         if (list?.Ideas_List?.length > 0) {
-          setIdeasList(list?.Idea_List);
+          setIdeasList(list?.Ideas_List);
         }
       });
   };
@@ -69,6 +69,7 @@ const PitchIdeasListScreen = (props: ScreenProps) => {
                     Routes.addVideoTab.pitchIdeaScreen,
                     {
                       data: item,
+                      mediaPath: props?.route?.params?.mediaPath,
                     },
                   );
                 }}>
