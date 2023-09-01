@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import {
   Image,
   Keyboard,
@@ -20,33 +20,34 @@ import {
   hv,
   normalized,
 } from '../../../../Utils/AppConstants';
-import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
+import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import SimpleInput from '../../../Components/CustomInput/SimpleInput';
 import CustomFilledBtn from '../../../Components/CustomButtom/CustomButton';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   setIsAlertShow,
   setIsLoader,
   setUpdateFBToken,
   setUserData,
 } from '../../../../Redux/reducers/AppReducer';
-import { Routes } from '../../../../Utils/Routes';
+import {Routes} from '../../../../Utils/Routes';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import AppImagePicker from '../../../Components/CustomModal/AppImagePicker';
-import { saveUserData } from '../../../../Utils/AsyncStorage';
-import { AppStrings } from '../../../../Utils/Strings';
-import { AppRootStore } from '../../../../Redux/store/AppStore';
+import {saveUserData} from '../../../../Utils/AsyncStorage';
+import {AppStrings} from '../../../../Utils/Strings';
+import {AppRootStore} from '../../../../Redux/store/AppStore';
 import LocationPickerModal from '../../../Components/CustomModal/LocationPickerModal';
 import PressableInput from '../../../Components/CustomInput/PressableInput';
-import { userSignupRequest } from '../../../../Network/Services/AuthServices';
+import {userSignupRequest} from '../../../../Network/Services/AuthServices';
 import LoadingImage from '../../../Components/LoadingImage';
 import SocialBtn from '../Components/SocialBtn';
-import { SocialTypeStrings } from '../../../../Utils/AppEnums';
+import {SocialTypeStrings} from '../../../../Utils/AppEnums';
+import {uploadMedia} from '../../../../Network/Services/GeneralServices';
 
 const SignUp = (props: ScreenProps) => {
   const dispatch = useDispatch();
-  const { isNetConnected, isPersisterUser } = useSelector(
+  const {isNetConnected, isPersisterUser} = useSelector(
     (state: AppRootStore) => state.AppReducer,
   );
   const [openImage, setOpenImage] = useState(false);
@@ -81,6 +82,12 @@ const SignUp = (props: ScreenProps) => {
     if (inputRef?.current) {
       inputRef?.current?.focus();
     }
+  };
+
+  const uploadImageToFirebase = async (uri: string, onComplete: any) => {
+    await uploadMedia(uri, (url: string | null) => {
+      onComplete(url);
+    }).finally(() => {});
   };
 
   const onRegisterPress = async () => {
@@ -201,36 +208,43 @@ const SignUp = (props: ScreenProps) => {
       );
       return;
     }
-    const paramsObj = {
-      userName,
-      email,
-      password,
+
+    const paramsObj: any = {
+      userName: userName.toLowerCase(),
+      email: email?.toLocaleLowerCase(),
+      password: password,
       companyName: compName,
       companyRegNo: compRNumber,
       companyType: compType,
       companyLocation: locationObj,
-      companyLogo: imgUrl,
     };
     dispatch(setIsLoader(true));
-    await userSignupRequest(paramsObj, response => {
-      dispatch(setIsLoader(false));
-      if (response?.status) {
-        dispatch(setUserData(response?.data));
-        if (isPersisterUser) {
-          saveUserData(response?.data);
-        }
-      } else {
-        let errorMessage = response?.message
-          ? response?.message
-          : 'Something went wrong';
-        dispatch(
-          setIsAlertShow({
-            value: true,
-            message: errorMessage,
-          }),
-        );
+    await uploadImageToFirebase(imgUrl, async (result: any) => {
+      if (result) {
+        paramsObj['companyLogo'] = result;
       }
-    }).catch(() => dispatch(setIsLoader(false)));
+      dispatch(setIsLoader(false));
+      await userSignupRequest(paramsObj, response => {
+        dispatch(setIsLoader(false));
+        if (response?.status) {
+          dispatch(setUserData(response?.data));
+          if (isPersisterUser) {
+            saveUserData(response?.data);
+            dispatch(setUpdateFBToken(true));
+          }
+        } else {
+          let errorMessage = response?.message
+            ? response?.message
+            : 'Something went wrong';
+          dispatch(
+            setIsAlertShow({
+              value: true,
+              message: errorMessage,
+            }),
+          );
+        }
+      }).catch(() => dispatch(setIsLoader(false)));
+    });
   };
 
   const socialBtnClicked = async (socialType: string) => {
@@ -295,13 +309,13 @@ const SignUp = (props: ScreenProps) => {
         }}
       />
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
         <ScrollView
           style={styles.containerStyle}
           showsVerticalScrollIndicator={false}>
-          <View style={{ alignSelf: 'center' }}>
+          <View style={{alignSelf: 'center'}}>
             {imgUrl ? (
               <TouchableOpacity
                 activeOpacity={1}
@@ -309,7 +323,7 @@ const SignUp = (props: ScreenProps) => {
                   setOpenImage(true);
                 }}>
                 <LoadingImage
-                  source={{ uri: imgUrl }}
+                  source={{uri: imgUrl}}
                   viewStyle={styles.imageCont}
                   resizeMode="cover"
                 />
@@ -338,7 +352,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Company Name'}
             container={styles.inputMainCont}
-            textInputStyle={{ width: normalized(270) }}
+            textInputStyle={{width: normalized(270)}}
             setValue={(txt: any) => {
               setCompNameError('');
               setCompName(txt);
@@ -359,7 +373,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Company Registration Number '}
             container={styles.inputMainCont}
-            textInputStyle={{ width: normalized(270) }}
+            textInputStyle={{width: normalized(270)}}
             setValue={(txt: any) => {
               setCompRNumberError('');
               setRNumber(txt);
@@ -374,7 +388,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Business Type / Industry'}
             container={styles.inputMainCont}
-            textInputStyle={{ width: normalized(270) }}
+            textInputStyle={{width: normalized(270)}}
             setValue={(txt: any) => {
               setCompTypeError('');
               setCompType(txt);
@@ -389,7 +403,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Your Name'}
             container={styles.inputMainCont}
-            textInputStyle={{ width: normalized(270) }}
+            textInputStyle={{width: normalized(270)}}
             setValue={(txt: any) => {
               setUserNameError('');
               setUserName(txt);
@@ -405,7 +419,7 @@ const SignUp = (props: ScreenProps) => {
             returnKeyType={'next'}
             placeHold={'Your Email'}
             container={styles.inputMainCont}
-            textInputStyle={{ width: normalized(270) }}
+            textInputStyle={{width: normalized(270)}}
             setValue={(txt: any) => {
               setEmailError('');
               setEmail(txt);
@@ -421,7 +435,7 @@ const SignUp = (props: ScreenProps) => {
             placeHold={'Password'}
             returnKeyType={'next'}
             container={styles.inputMainCont}
-            textInputStyle={{ width: normalized(270) }}
+            textInputStyle={{width: normalized(270)}}
             setValue={(passTxt: any) => {
               if (passTxt.includes(' ')) {
                 setPassword(passTxt.trim());
@@ -438,7 +452,7 @@ const SignUp = (props: ScreenProps) => {
             ref={cPAsswordRef}
             placeHold={'Confirm Password'}
             container={styles.inputMainCont}
-            textInputStyle={{ width: normalized(270) }}
+            textInputStyle={{width: normalized(270)}}
             setValue={(passTxt: any) => {
               if (passTxt.includes(' ')) {
                 setCPassword(passTxt.trim());
@@ -475,18 +489,17 @@ const SignUp = (props: ScreenProps) => {
             onPressBtn={onRegisterPress}
           />
           <View style={styles.socialCont}>
-            {/* <SocialBtn
-              label={'FACEBOOK'}
-              icon={AppImages.Auth.fbIcon}
-              atPress={() => {}}
-              containerStyle={{
-                width: normalized(150),
-              }}
-            /> */}
             <SocialBtn
               label={'GOOGLE'}
               icon={AppImages.Auth.google}
-              atPress={() => CommonDataManager.getSharedInstance().commonSocialLoginRequest(SocialTypeStrings.google, isNetConnected, isPersisterUser, props.navigation)}
+              atPress={() =>
+                CommonDataManager.getSharedInstance().commonSocialLoginRequest(
+                  SocialTypeStrings.google,
+                  isNetConnected,
+                  isPersisterUser,
+                  props.navigation,
+                )
+              }
               containerStyle={{
                 width: normalized(150),
               }}
@@ -597,7 +610,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     marginHorizontal: 10,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
 });
 

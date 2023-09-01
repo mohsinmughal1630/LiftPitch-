@@ -10,6 +10,7 @@ import {AppHorizontalMargin} from '../../../Utils/AppStyles';
 import AppImageViewer from '../ProfileView/AppImageView';
 import ProfilePlaceHolderComp from '../ProfileView/ProfilePlaceHolderComp';
 import {USER_TYPE} from '../../../Utils/Strings';
+import CommonDataManager from '../../../Utils/CommonManager';
 const ProfileHeader = (props: any) => {
   return (
     <View style={styles.maincontainer}>
@@ -51,7 +52,11 @@ const ProfileHeader = (props: any) => {
             flex: 1,
             marginHorizontal: normalized(5),
           }}>
-          <Text style={styles.userNameTxt}>{props?.data?.userName}</Text>
+          <Text style={styles.userNameTxt}>
+            {CommonDataManager.getSharedInstance().capitalizeFirstLetter(
+              props?.data?.userName,
+            )}
+          </Text>
           <Text numberOfLines={2} style={styles.des}>
             {props?.data?.companyType}
           </Text>

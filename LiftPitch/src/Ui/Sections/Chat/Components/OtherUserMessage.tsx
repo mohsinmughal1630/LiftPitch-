@@ -81,44 +81,7 @@ const OtherUserMessage = ({
   };
   return (
     <View>
-      <View style={styles.container}>
-        {/* <TouchableOpacity
-          activeOpacity={1}
-          onPress={() => {
-            navigation.navigate('ProfileScreen', {
-              userId: otherUserData.user,
-              type: otherUserData.type,
-              from: 'ChatScreen',
-            });
-          }}>
-          {setImage() !== '' ? (
-            <>
-              <AppImageViewer
-                type="fast"
-                source={{uri: setImage()}}
-                style={styles.image}
-                placeHolder={AppImages.bottomBar.Profile}
-              />
-              <View style={styles.online} />
-            </>
-          ) : (
-            <>
-              <ProfilePlaceHolderComp
-                index={1}
-                name={item?.userName ? item?.userName : 'Testing'}
-                mainStyles={styles.image}
-                nameStyles={{
-                  fontSize: normalized(16),
-                  fontWeight: '500',
-                }}
-              />
-              <View style={styles.online} />
-            </>
-          )}
-        </TouchableOpacity> */}
-
-        {setContainerComponent()}
-      </View>
+      <View style={styles.container}>{setContainerComponent()}</View>
       <View style={styles.timeTextCon}>
         <Text style={styles.timeText}>
           {moment(item.time, 'HH:mm:ss').format('hh:mm A')}

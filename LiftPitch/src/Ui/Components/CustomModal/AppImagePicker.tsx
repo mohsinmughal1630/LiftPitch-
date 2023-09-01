@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { request, PERMISSIONS } from 'react-native-permissions';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {request, PERMISSIONS} from 'react-native-permissions';
 import {
   AppColors,
   ScreenSize,
@@ -22,8 +22,8 @@ import {
   maxImageSizeInBytes,
   normalized,
 } from '../../../Utils/AppConstants';
-import { AppStrings } from '../../../Utils/Strings';
-import { uploadMedia } from '../../../Network/Services/GeneralServices';
+import {AppStrings} from '../../../Utils/Strings';
+import {uploadMedia} from '../../../Network/Services/GeneralServices';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -32,8 +32,8 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import { useDispatch } from 'react-redux';
-import { setIsAlertShow } from '../../../Redux/reducers/AppReducer';
+import {useDispatch} from 'react-redux';
+import {setIsAlertShow} from '../../../Redux/reducers/AppReducer';
 
 interface Props {
   onClose: () => void;
@@ -57,36 +57,38 @@ const AppImagePicker = (props: Props) => {
       if (index == 0) {
         await launchImageLibrary({
           mediaType: 'photo',
+          quality: 0.5,
         }).then((result: any) => {
           if (result.assets) {
             if (result.assets[0].fileSize > maxImageSizeInBytes) {
               dispatch(
                 setIsAlertShow({
                   value: true,
-                  message: AppStrings.Validation.maxImageSizeError
+                  message: AppStrings.Validation.maxImageSizeError,
                 }),
               );
               return;
             }
-            uploadImageToFirebase(result?.assets[0]?.uri);
+            props?.onImageSelect(result?.assets[0]?.uri);
           }
         });
       } else {
         setTimeout(async () => {
           await launchCamera({
             mediaType: 'photo',
+            quality: 0.5,
           }).then((result: any) => {
             if (result.assets) {
               if (result.assets[0].fileSize > maxImageSizeInBytes) {
                 dispatch(
                   setIsAlertShow({
                     value: true,
-                    message: AppStrings.Validation.maxImageSizeError
+                    message: AppStrings.Validation.maxImageSizeError,
                   }),
                 );
                 return;
               }
-              uploadImageToFirebase(result?.assets[0]?.uri);
+              props?.onImageSelect(result?.assets[0]?.uri);
             }
           });
         }, 500);
@@ -94,16 +96,6 @@ const AppImagePicker = (props: Props) => {
     } catch (e) {
       console.log('Pick Image err ', e);
     }
-  };
-
-  const uploadImageToFirebase = async (uri: string) => {
-    setIsLoading(true);
-    await uploadMedia(uri, (url: string | null) => {
-      props.onImageSelect(url ? url : null);
-    }).finally(() => {
-      setIsLoading(false);
-      props.onClose();
-    });
   };
 
   return (
@@ -236,7 +228,7 @@ const LoadingLine = () => {
   const offsetX = useSharedValue(0);
   useEffect(() => {
     offsetX.value = withRepeat(
-      withTiming(lineFullWidth - innerLineWidth, { duration: 1000 }),
+      withTiming(lineFullWidth - innerLineWidth, {duration: 1000}),
       -1,
       true,
     );

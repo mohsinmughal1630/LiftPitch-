@@ -27,6 +27,7 @@ import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import SingleMessageComponent from '../Components/SingleMessageComponent';
 import {Routes} from '../../../../Utils/Routes';
 import {AppStrings} from '../../../../Utils/Strings';
+import CommonDataManager from '../../../../Utils/CommonManager';
 
 const NotificationScreen = (props: ScreenProps) => {
   const isFouced = useIsFocused();
@@ -90,9 +91,9 @@ const NotificationScreen = (props: ScreenProps) => {
     <View style={{...AppStyles.MainStyle}}>
       <SafeAreaView />
       <CustomHeader
-        atBackPress={() => {
-          props?.navigation.goBack();
-        }}
+        // atBackPress={() => {
+        //   props?.navigation.goBack();
+        // }}
         title={`Message’s`}
         mainStyle={{height: hv(60)}}
         placeHolder={'Search.....'}
@@ -141,7 +142,9 @@ const NotificationScreen = (props: ScreenProps) => {
                           otherUserIndex={otherUserIndex}
                           findedIndex={findedIndex}
                           obj={item}
-                          name={item?.participants[otherUserIndex]?.userName}
+                          name={CommonDataManager.getSharedInstance().capitalizeFirstLetter(
+                            item?.participants[otherUserIndex]?.userName,
+                          )}
                           profileImage={
                             item?.participants[otherUserIndex]
                               ?.userProfileImageUrl

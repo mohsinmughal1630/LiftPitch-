@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import Video from 'react-native-video';
-import {AppImages} from '../../../../Utils/AppConstants';
+import {AppColors, AppImages} from '../../../../Utils/AppConstants';
 import {AppStyles} from '../../../../Utils/AppStyles';
 
 interface Props {
@@ -81,6 +81,9 @@ const VideoPlayer = (props: Props) => {
         resizeMode="cover"
         style={styles.videoStyles}
       />
+      {isLoading ? (
+        <ActivityIndicator size={'large'} color={AppColors.blue.lightBlue} />
+      ) : null}
     </View>
   );
 };

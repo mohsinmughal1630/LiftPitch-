@@ -73,6 +73,7 @@ export const AppImages = {
     musicIcon: require('../Ui/assets/images/CreateVideo/musicIcon.png'),
     SpeedIcon: require('../Ui/assets/images/CreateVideo/SpeedIcon.png'),
     TimerIcon: require('../Ui/assets/images/CreateVideo/TimerIcon.png'),
+    doneIcon: require('../Ui/assets/images/CreateVideo/doneIcon.png'),
   },
   Videos: {
     Play: require('../Ui/assets/images/Videos/Play.png'),
@@ -153,7 +154,7 @@ export const AppColors = {
     whiteOp: '#E8E8E8',
     bgWhite: '#F7FBF9',
     silverWhite: '#EBE4D9',
-    creamy: '#FBF5F4',
+    creamy: '#ffe3e3',
   },
   black: {
     black: '#000000',

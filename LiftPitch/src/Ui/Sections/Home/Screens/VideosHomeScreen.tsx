@@ -4,13 +4,16 @@ import {
   FlatList,
   StatusBar,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
 import SingleVideoComponent from '../Components/SingleVideoComponent';
 import {
   AppColors,
+  AppFonts,
   ScreenProps,
   deviceHeightwithOutBar,
+  normalized,
 } from '../../../../Utils/AppConstants';
 import VideoHeaderSection from '../Components/VideoHeaderSection';
 import {useIsFocused} from '@react-navigation/native';
@@ -30,7 +33,7 @@ const VideosHomeScreen = (props: ScreenProps) => {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const selector = useSelector((AppState: any) => AppState.AppReducer);
-  const [selectedTab, setSelectedTab] = useState(1);
+  const [selectedTab, setSelectedTab] = useState(0);
   const [searchTxt, setSearchTxt] = useState('');
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const counter = useRef(1);
@@ -68,14 +71,16 @@ const VideosHomeScreen = (props: ScreenProps) => {
         pageSize,
         counter.current,
         async (onResponse: any) => {
-          await getVideoListSize((result: any) => {
-            let pageLimit =
-              CommonDataManager.getSharedInstance().paginationLogic(
-                result,
-                pageSize,
-              );
-            setTotalPages(pageLimit);
-          });
+          if (onResponse?.length > 0) {
+            await getVideoListSize((result: any) => {
+              let pageLimit =
+                CommonDataManager.getSharedInstance().paginationLogic(
+                  result,
+                  pageSize,
+                );
+              setTotalPages(pageLimit);
+            });
+          }
 
           if (onResponse?.length > 0) {
             let arr: any = counter.current == 1 ? [] : [...videoList];
@@ -95,8 +100,6 @@ const VideosHomeScreen = (props: ScreenProps) => {
     }
   };
 
-  console.log('videoList Length----->', videoList?.length);
-
   return (
     <View style={styles.mainContainer}>
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
@@ -106,44 +109,58 @@ const VideosHomeScreen = (props: ScreenProps) => {
         searchTxt={searchTxt}
         onSearchChange={setSearchTxt}
       />
-      <FlatList
-        data={videoList}
-        showsVerticalScrollIndicator={false}
-        pagingEnabled
-        onMomentumScrollEnd={updateCurrentSlideIndex}
-        keyExtractor={(item, index) => `${index}`}
-        renderItem={({item, index}) => (
-          <SingleVideoComponent
-            navigation={props?.navigation}
-            item={item}
-            key={index}
-            index={index}
-            currentVideoIndex={currentVideoIndex}
-          />
-        )}
-        onEndReachedThreshold={0.05}
-        onEndReached={async () => {
-          if (counter.current < totalPages) {
-            counter.current = counter.current + 1;
-            await fetchVideoListing();
-          }
-        }}
-        ListFooterComponent={() => {
-          return (
-            <View
-              style={{
-                marginBottom: 10,
-              }}>
-              {counter.current < totalPages && videoList?.length > 0 ? (
-                <ActivityIndicator
-                  size={'large'}
-                  color={AppColors.red.mainColor}
-                />
-              ) : null}
-            </View>
-          );
-        }}
-      />
+      {videoList?.length > 0 ? (
+        <FlatList
+          data={videoList}
+          showsVerticalScrollIndicator={false}
+          pagingEnabled
+          onMomentumScrollEnd={updateCurrentSlideIndex}
+          keyExtractor={(item, index) => `${index}`}
+          renderItem={({item, index}) => {
+            return (
+              <SingleVideoComponent
+                navigation={props?.navigation}
+                item={item}
+                key={index}
+                index={index}
+                currentVideoIndex={currentVideoIndex}
+              />
+            );
+          }}
+          onEndReachedThreshold={0.05}
+          onEndReached={async () => {
+            if (counter.current < totalPages) {
+              counter.current = counter.current + 1;
+              await fetchVideoListing();
+            }
+          }}
+          ListFooterComponent={() => {
+            return (
+              <View
+                style={{
+                  marginBottom: 10,
+                }}>
+                {counter.current < totalPages && videoList?.length > 0 ? (
+                  <ActivityIndicator
+                    size={'large'}
+                    color={AppColors.red.mainColor}
+                  />
+                ) : null}
+              </View>
+            );
+          }}
+        />
+      ) : selector?.isLoaderStart ? null : (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text
+            style={{
+              fontSize: normalized(14),
+              fontWeight: '400',
+            }}>
+            No feeds found!
+          </Text>
+        </View>
+      )}
     </View>
   );
 };

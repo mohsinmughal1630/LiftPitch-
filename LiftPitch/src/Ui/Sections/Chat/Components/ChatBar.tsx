@@ -86,18 +86,17 @@ const ChatBar = (props: any) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: normalized(14),
-    paddingVertical: hv(8),
+    paddingVertical: hv(3),
     flexDirection: 'row',
   },
   messageCon: {
     flexDirection: 'row',
     padding: normalized(4),
-    // paddingVertical: hv(3),
     borderRadius: normalized(8),
     backgroundColor: AppColors.white.white,
     width: isLargeWidth ? normalized(300) : normalized(290),
     borderWidth: 1,
-    borderColor: AppColors.white.bgWhite,
+    borderColor: AppColors.white.whiteOp,
     alignItems: 'center',
   },
   textInput: {
@@ -111,7 +110,7 @@ const styles = StyleSheet.create({
 
   sendBtn: {
     backgroundColor: AppColors.red.mainColor,
-    padding: Platform.OS == 'android' ? normalized(11) : normalized(8.5),
+    padding: Platform.OS == 'android' ? normalized(7) : normalized(5),
     borderRadius: normalized(6),
     marginStart: normalized(5),
   },

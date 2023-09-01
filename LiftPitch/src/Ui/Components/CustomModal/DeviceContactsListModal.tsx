@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -15,10 +15,17 @@ import {
   Linking,
 } from 'react-native';
 import CustomHeader from '../CustomHeader/CustomHeader';
-import { AppColors, AppImages, hv, isSmallDevice, normalized } from '../../../Utils/AppConstants';
-import { AppStyles } from '../../../Utils/AppStyles';
-import { useSelector } from 'react-redux';
-import { AppRootStore } from '../../../Redux/store/AppStore';
+import {
+  AppColors,
+  AppImages,
+  hv,
+  isSmallDevice,
+  normalized,
+} from '../../../Utils/AppConstants';
+import {AppStyles} from '../../../Utils/AppStyles';
+import {useSelector} from 'react-redux';
+import {AppRootStore} from '../../../Redux/store/AppStore';
+import CommonDataManager from '../../../Utils/CommonManager';
 
 interface Props {
   onClose: () => void;
@@ -26,64 +33,69 @@ interface Props {
 }
 
 const DeviceContactsListModal = (props: Props) => {
-  const { userData } = useSelector((state: AppRootStore) => state.AppReducer);
+  const {userData} = useSelector((state: AppRootStore) => state.AppReducer);
   const [searchTxt, setSearchTxt] = useState('');
   const filteredList = useRef([]);
   const [showSearchBar, setShowSearchBar] = useState(false);
 
   const onInviteClick = (phone: string) => {
-    const message = `Hey there, I am ${userData.userName}, and I am using LiftPitch. I am inviting you to join as well.`
+    const message = `Hey there, I am ${CommonDataManager.getSharedInstance().capitalizeFirstLetter(
+      userData.userName,
+    )}, and I am using LiftPitch. I am inviting you to join as well.`;
 
     const url = `sms:${phone}?body=${encodeURIComponent(message)}`;
 
-    Linking.openURL(url)
-      .catch(error => console.error('Error opening SMS app:', error));
-  }
+    Linking.openURL(url).catch(error =>
+      console.error('Error opening SMS app:', error),
+    );
+  };
 
   return (
     <Modal onRequestClose={props.onClose} animationType="slide">
       <View style={styles.main}>
-        <SafeAreaView style={{
-          backgroundColor: AppColors.white.white
-        }} />
+        <SafeAreaView
+          style={{
+            backgroundColor: AppColors.white.white,
+          }}
+        />
         <View style={styles.main}>
           <CustomHeader
             title={'Device Contacts'}
             atBackPress={props.onClose}
-            rightComponent={() => <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => {
-                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-                setShowSearchBar(!showSearchBar)
-              }}
-              style={{
-                paddingVertical: normalized(7),
-                paddingHorizontal: normalized(5),
-              }}>
-              <Image
-                source={AppImages.Common.SearchIcon}
-                style={{
-                  tintColor: AppColors.black.black,
-                  height: 20,
-                  width: 20
+            rightComponent={() => (
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => {
+                  LayoutAnimation.configureNext(
+                    LayoutAnimation.Presets.easeInEaseOut,
+                  );
+                  setShowSearchBar(!showSearchBar);
                 }}
-              />
-            </TouchableOpacity>}
+                style={{
+                  paddingVertical: normalized(7),
+                  paddingHorizontal: normalized(5),
+                }}>
+                <Image
+                  source={AppImages.Common.SearchIcon}
+                  style={{
+                    tintColor: AppColors.black.black,
+                    height: 20,
+                    width: 20,
+                  }}
+                />
+              </TouchableOpacity>
+            )}
           />
-          {
-            showSearchBar &&
+          {showSearchBar && (
             <SearchComp
               searchTxt={searchTxt}
               setSearchInput={(e: string) => {
                 console.log('tempList ', e);
                 setSearchTxt(e);
                 const tempList: any = props.list.filter(el => {
-                  const name = el.displayName || el.givenName
-                  return name
-                    ?.toLowerCase()
-                    ?.includes(e.toLowerCase());
-                }
-                );
+                  const name = el.displayName || el.givenName;
+                  return name?.toLowerCase()?.includes(e.toLowerCase());
+                });
                 filteredList.current = tempList;
               }}
               crossClicked={() => {
@@ -91,13 +103,13 @@ const DeviceContactsListModal = (props: Props) => {
                 filteredList.current = [];
               }}
             />
-          }
+          )}
           <View style={styles.contentView}>
             <FlatList
               data={searchTxt ? filteredList.current : props.list}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
-              renderItem={({ item, index }) => (
+              renderItem={({item, index}) => (
                 <View key={index} style={styles.singleContact}>
                   <View style={styles.textSection}>
                     <Text numberOfLines={1} style={styles.title}>
@@ -109,16 +121,23 @@ const DeviceContactsListModal = (props: Props) => {
                       {item?.phoneNumbers[0]?.number}
                     </Text>
                   </View>
-                  <TouchableWithoutFeedback onPress={() => onInviteClick(item?.phoneNumbers[0]?.number)} >
-                    <View style={{
-                      padding: 6,
-                      paddingHorizontal: 15,
-                      backgroundColor: AppColors.primaryPurple,
-                      borderRadius: 20
-                    }}>
-                      <Text style={{
-                        color: AppColors.white.white,
-                      }}>Invite</Text>
+                  <TouchableWithoutFeedback
+                    onPress={() =>
+                      onInviteClick(item?.phoneNumbers[0]?.number)
+                    }>
+                    <View
+                      style={{
+                        padding: 6,
+                        paddingHorizontal: 15,
+                        backgroundColor: AppColors.primaryPurple,
+                        borderRadius: 20,
+                      }}>
+                      <Text
+                        style={{
+                          color: AppColors.white.white,
+                        }}>
+                        Invite
+                      </Text>
                     </View>
                   </TouchableWithoutFeedback>
                 </View>
@@ -154,7 +173,7 @@ export default DeviceContactsListModal;
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    backgroundColor: AppColors.dark.darkLevel5
+    backgroundColor: AppColors.dark.darkLevel5,
   },
   contentView: {
     flex: 1,

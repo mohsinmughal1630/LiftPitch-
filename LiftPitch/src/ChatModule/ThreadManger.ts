@@ -611,9 +611,7 @@ class ThreadManager {
       .update({
         FCM_Token: token,
       })
-      .then(() => {
-        console.log('Token Update at Firebase');
-      })
+      .then(() => {})
       .catch(err => {
         console.log('updateUserToken====>', err);
       });

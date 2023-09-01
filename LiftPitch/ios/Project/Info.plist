@@ -77,6 +77,8 @@
      <!-- Add for vision camera--> 
      <key>NSMicrophoneUsageDescription</key>
      <string>$(PRODUCT_NAME) needs access to your Microphone.</string>
+    <key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-Black.ttf</string>

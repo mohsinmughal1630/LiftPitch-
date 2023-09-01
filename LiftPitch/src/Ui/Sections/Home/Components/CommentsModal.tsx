@@ -223,8 +223,8 @@ const CommentsModal = (props: Props) => {
                               <Text style={styles.deleteBtnTxt}>
                                 {moreActionBtn?.actionType ==
                                 CommentActionType.deleteComment
-                                  ? 'delete comment'
-                                  : 'report User'}
+                                  ? 'Delete'
+                                  : 'Report'}
                               </Text>
                             </MenuOption>
                           </MenuOptions>
@@ -366,8 +366,8 @@ const CommentsModal = (props: Props) => {
                                       <Text style={styles.deleteBtnTxt}>
                                         {moreActionBtn?.actionType ==
                                         CommentActionType.deleteComment
-                                          ? 'delete reply'
-                                          : 'report User'}
+                                          ? 'Delete'
+                                          : 'Report'}
                                       </Text>
                                     </MenuOption>
                                   </MenuOptions>

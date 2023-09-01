@@ -16,22 +16,33 @@ const CustomHeader = (props: any) => {
       <View style={[styles.maincontainer, props?.mainStyle]}>
         <>
           {props?.atBackPress ? (
-            <TouchableOpacity
-              onPress={() => {
-                props?.atBackPress();
-              }}
+            <View
               style={{
-                paddingVertical: normalized(7),
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}>
-              <Image
-                source={AppImages.Auth.backIcon}
-                style={{tintColor: AppColors.black.black}}
-              />
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  props?.atBackPress();
+                }}
+                style={{
+                  marginEnd: normalized(10),
+                  paddingVertical: normalized(7),
+                }}>
+                <Image
+                  source={AppImages.Auth.backIcon}
+                  style={{tintColor: AppColors.black.black}}
+                />
+              </TouchableOpacity>
+              <Text style={styles.title}>{props?.title}</Text>
+            </View>
           ) : (
             <View style={{margin: 10}} />
           )}
-          <Text style={styles.title}>{props?.title}</Text>
+          {props?.atBackPress ? null : (
+            <Text style={styles.title}>{props?.title}</Text>
+          )}
           {props.rightComponent ? (
             props.rightComponent()
           ) : props?.atRightBtn ? (
@@ -41,7 +52,9 @@ const CustomHeader = (props: any) => {
                 props?.atRightBtn();
               }}>
               {props?.rightTxt ? (
-                <Text style={styles.rightTxt}>{props?.rightTxt}</Text>
+                <Text style={[styles.rightTxt, props?.rigthBtnStyle]}>
+                  {props?.rightTxt}
+                </Text>
               ) : (
                 <></>
               )}
@@ -77,6 +90,7 @@ const styles = StyleSheet.create({
   rightTxt: {
     fontSize: normalized(14),
     color: AppColors.black.black,
+    fontWeight: '500',
   },
 });
 export default CustomHeader;
