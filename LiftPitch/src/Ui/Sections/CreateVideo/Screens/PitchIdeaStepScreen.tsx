@@ -71,10 +71,10 @@ const PitchIdeaStepScreen = (props: ScreenProps) => {
       ThreadManager.instance.uploadMedia(
         props?.route?.params?.mediaPath,
         true,
-        (url: any) => {
+        async (url: any) => {
           if (url != 'error') {
             let params: any = {};
-            if (url) {
+            if (url && props?.route?.params?.mediaType == 'video') {
               createThumbnail({
                 url: url,
                 timeStamp: 10000,
@@ -91,6 +91,28 @@ const PitchIdeaStepScreen = (props: ScreenProps) => {
                   dispatch(setIsLoader(false));
                   console.log('printImgErr ', err);
                 });
+            } else {
+              let userData = getVideoCreateObj(selector?.userData);
+              let postId = ThreadManager.instance.makeid(8);
+              let obj: any = {
+                photoUrl: url,
+                pitch_idea: {
+                  ...props?.route?.params?.data,
+                  steps: stepObj,
+                },
+                videoId: postId,
+                thumbnail: url,
+                like: [],
+                comments: [],
+                creatorData: userData,
+                createdAt: moment
+                  .utc(new Date())
+                  .format(ThreadManager.instance.dateFormater.fullDate),
+              };
+              dispatch(setIsLoader(false));
+              await ThreadManager.instance.createPost(obj, (response: any) => {
+                props?.navigation.pop(3);
+              });
             }
           } else {
             dispatch(setIsLoader(false));

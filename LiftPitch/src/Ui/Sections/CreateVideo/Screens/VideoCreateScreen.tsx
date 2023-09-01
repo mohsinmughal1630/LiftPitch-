@@ -88,7 +88,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
         video = images.mime.toLocaleLowerCase().includes('video');
         if (video) {
           props.navigation.push(Routes.addVideoTab.uploadMediaPreviewScreen, {
-            mediaType: 'video',
+            mediaType: video ? 'video' : 'photo',
             mediaPath: images?.path,
           });
         }
