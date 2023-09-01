@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     paddingVertical: hv(10),
     alignItems: 'center',
     flexDirection: 'row',
+    width: '100%',
   },
   onlineView: {
     height: normalized(10),
@@ -120,9 +121,8 @@ const styles = StyleSheet.create({
     borderRadius: 23,
   },
   textCon: {
-    // width: normalized(200),
-    marginLeft: normalized(12),
-    width: '90%',
+    marginLeft: normalized(8),
+    width: '83%',
     flexDirection: 'row',
   },
   name: {
@@ -155,6 +155,7 @@ const styles = StyleSheet.create({
     borderRadius: normalized(25 / 2),
     justifyContent: 'center',
     alignItems: 'center',
+    right: normalized(-40),
   },
   countTxt: {
     color: AppColors.white.white,
@@ -163,15 +164,17 @@ const styles = StyleSheet.create({
   },
   countTimeCont: {
     justifyContent: 'space-around',
+    width: normalized(70),
   },
   titleMsgCon: {
     width: '75%',
   },
   timeStyle: {
     fontSize: normalized(10),
-    marginLeft: normalized(-20),
-    marginTop: hv(2),
+    marginLeft: normalized(-10),
+    marginTop: hv(-3),
     color: AppColors.grey.gray,
     fontWeight: '400',
+    textAlign: 'center',
   },
 });

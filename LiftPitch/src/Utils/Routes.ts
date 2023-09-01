@@ -6,7 +6,7 @@ export const Routes = {
     otp: 'otp',
     newPassword: 'newPassword',
     newPasswordSuccessScreen: 'newPasswordSuccessScreen',
-    profileCompleteScreen: 'profileCompleteScreen'
+    profileCompleteScreen: 'profileCompleteScreen',
   },
   GetStarting: {
     onBoarding: 'onBoarding',
@@ -26,6 +26,7 @@ export const Routes = {
     uploadMediaPreviewScreen: 'uploadMediaPreviewScreen',
     pitchListScreen: 'PitchListScreen',
     pitchIdeaScreen: 'PitchIdeaScreen',
+    sharePitch: 'SharePitchScreen',
   },
   NotificationTab: {
     NotificationScreen: 'NotificationScreen',

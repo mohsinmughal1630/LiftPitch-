@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AsyncKeyStrings } from './Strings';
-
+import {AsyncKeyStrings} from './Strings';
 
 export const getUserData = async () => {
   try {
@@ -46,7 +45,7 @@ export const saveUserToken = async (token: string) => {
   }
 };
 
-export const clearAppData = async (key:any) => {
+export const clearAppData = async (key: any) => {
   try {
     await AsyncStorage.removeItem(key);
     console.log('Data removed');

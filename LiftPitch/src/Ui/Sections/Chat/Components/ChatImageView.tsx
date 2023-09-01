@@ -7,14 +7,10 @@ import {
   Modal,
   TouchableOpacity,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
-import {
-  AppImages,
-  hv,
-  isSmallDevice,
-  normalized,
-} from '../../../../Utils/AppConstants';
+import {AppColors, AppImages, normalized} from '../../../../Utils/AppConstants';
 const ChatImageView = ({showImageView, url, onClose}) => {
   return (
     <Modal
@@ -41,7 +37,24 @@ const ChatImageView = ({showImageView, url, onClose}) => {
           style={{
             flex: 1,
           }}>
-          <ImageViewer imageUrls={[{url: url}]} />
+          <ImageViewer
+            imageUrls={[{url: url}]}
+            loadingRender={() => {
+              return (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <ActivityIndicator
+                    size={'large'}
+                    color={AppColors.white.white}
+                  />
+                </View>
+              );
+            }}
+          />
         </View>
       </View>
     </Modal>

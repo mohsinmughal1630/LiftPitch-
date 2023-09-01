@@ -229,15 +229,15 @@ export const getUpdatedVideoListing = async (
 ) => {
   await firestore()
     .collection(Collections.POST_COLLECTION)
-    // .orderBy('createdAt', 'desc')
+    .orderBy('createdAt', 'desc')
     .limit(limit * currentPage)
     .get()
     .then(snapShot => {
       var list: any = [];
       snapShot.docs.forEach(doc => {
-        if (doc.data()?.creatorData?.userId != userId) {
-          list.push(doc.data());
-        }
+        // if (doc.data()?.creatorData?.userId != userId) {
+        list.push(doc.data());
+        // }
       });
       onUpdates(list);
     })

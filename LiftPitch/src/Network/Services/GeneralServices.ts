@@ -21,7 +21,6 @@ export const uploadMedia = async (
     await task
       .then(item => {
         ref.getDownloadURL().then(url => {
-          console.log('url is ', url);
           onComplete(url);
         });
       })

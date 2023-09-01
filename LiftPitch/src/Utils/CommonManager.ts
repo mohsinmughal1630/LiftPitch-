@@ -17,6 +17,7 @@ import {
 import {
   setIsAlertShow,
   setIsLoader,
+  setUpdateFBToken,
   setUserData,
 } from '../Redux/reducers/AppReducer';
 import {
@@ -509,14 +510,15 @@ export default class CommonDataManager {
         email: socialParams.email,
         password: socialParams.token,
       };
-      console.log('paramsObj: ', paramsObj);
       await loginRequest(paramsObj, async response => {
         console.log('response - loginRequest: ');
         console.log(response);
         if (response?.status) {
           this.dispatch(setUserData(response?.data));
+
           if (isPersisterUser) {
             await saveUserData(response?.data);
+            this.dispatch(setUpdateFBToken(true));
           }
         } else {
           this.dispatch(setIsLoader(false));
@@ -543,7 +545,6 @@ export default class CommonDataManager {
         this.dispatch(setIsLoader(false));
       });
     } else {
-      console.log('here 23');
       this.dispatch(setIsLoader(false));
       console.log('Some problem getting social data');
     }

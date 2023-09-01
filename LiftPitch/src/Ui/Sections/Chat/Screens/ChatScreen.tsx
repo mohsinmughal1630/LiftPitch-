@@ -74,54 +74,7 @@ const ChatScreen = (props: ScreenProps) => {
     }
   }, [props?.route?.params?.thread]);
 
-  const getOtherUpdatedData = async () => {
-    // try {
-    //   let findedIndex = props?.route?.params?.thread?.participants.findIndex(
-    //     (value: any) => value.user == userId,
-    //   );
-    //   let otherIndex = props?.route?.params?.thread?.participants.findIndex(
-    //     (value: any) => value.user != userId,
-    //   );
-    //   if (otherIndex != -1) {
-    //     await ThreadManager.instance.getUpdateUserData(
-    //       props?.route?.params?.thread?.participants[otherIndex],
-    //       (response: any) => {
-    //         let obj = {};
-    //         if (response) {
-    //           let otherUser = {
-    //             ...props?.route?.params?.thread?.participants[otherIndex],
-    //             userName: response?.name
-    //               ? response?.name
-    //               : props?.route?.params?.thread?.participants[otherIndex]
-    //                   .userName,
-    //             userProfileImageUrl: response?.image
-    //               ? response?.image
-    //               : response?.cover_image
-    //               ? response?.cover_image
-    //               : props?.route?.params?.thread?.participants[otherIndex]
-    //                   .userProfileImageUrl,
-    //           };
-    //           obj = {
-    //             ...props?.route?.params?.thread,
-    //             participants: [
-    //               props?.route?.params?.thread?.participants[findedIndex],
-    //               otherUser,
-    //             ],
-    //           };
-    //         } else {
-    //           obj = {
-    //             ...props?.route?.params?.thread,
-    //           };
-    //         }
-    //         threadRef.current = obj;
-    //         setThreadIsUpdated(true);
-    //       },
-    //     );
-    //   }
-    // } catch (e) {
-    //   console.log('err ', e);
-    // }
-  };
+  const getOtherUpdatedData = async () => {};
 
   useEffect(() => {
     threadRef.current = thread;
@@ -341,8 +294,8 @@ const ChatScreen = (props: ScreenProps) => {
         ? currentUserData.full_name
         : '',
       senderProfilePictureURL: currentUserDataPic,
-      recipientID: otherUserRef.current.user,
-      recipientName: otherUserRef.current.userName,
+      recipientID: otherUserRef?.current?.user,
+      recipientName: otherUserRef.current?.userName,
       recipientProfilePictureURL: otherUserRef.current?.userProfileImageUrl,
       lastMessageSeeners: [],
       messageId: messageId,
@@ -412,7 +365,10 @@ const ChatScreen = (props: ScreenProps) => {
                 ThreadManager.instance.generatePushNotification(
                   threadRef.current,
                   {
-                    userName: fullName,
+                    userName:
+                      CommonDataManager.getSharedInstance().capitalizeFirstLetter(
+                        fullName,
+                      ),
                   },
                   otherUserRef.current,
                   lastMessage,
@@ -548,7 +504,7 @@ const ChatScreen = (props: ScreenProps) => {
           atBackPress={() => {
             props?.navigation?.goBack();
           }}
-          atRightBtn={() => {}}
+          // atRightBtn={() => {}}
           showBorder={true}
         />
         <View
@@ -640,11 +596,11 @@ const ChatScreen = (props: ScreenProps) => {
           keyboardVerticalOffset={
             Platform.OS === 'ios'
               ? isSmallDevice
-                ? normalized(20)
-                : normalized(40)
+                ? normalized(30)
+                : normalized(50)
               : -5
           }
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
           <View style={styles.chatBarStyle}>
             <ChatBar
               onAttachmentPress={() => {

@@ -18,20 +18,13 @@ import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import {AppStrings} from '../../../../Utils/Strings';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
 import {useIsFocused} from '@react-navigation/native';
-import ThreadManager from '../../../../ChatModule/ThreadManger';
 import {useDispatch, useSelector} from 'react-redux';
-import {createThumbnail} from 'react-native-create-thumbnail';
-import {
-  setIsAlertShow,
-  setIsLoader,
-} from '../../../../Redux/reducers/AppReducer';
-import {getVideoCreateObj} from '../../../../Utils/Helper';
-import moment from 'moment';
+import {setIsAlertShow} from '../../../../Redux/reducers/AppReducer';
+import {Routes} from '../../../../Utils/Routes';
 
 const PitchIdeaStepScreen = (props: ScreenProps) => {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const selector = useSelector((AppState: any) => AppState.AppReducer);
   const [stepList, setStepList] = useState([]);
   useEffect(() => {
     if (props?.route?.params?.data?.steps?.length > 0) {
@@ -48,16 +41,8 @@ const PitchIdeaStepScreen = (props: ScreenProps) => {
     });
     setStepList(newArr);
   };
-  const createPostFun = () => {
-    if (!selector?.isNetConnected) {
-      dispatch(
-        setIsAlertShow({
-          value: true,
-          message: AppStrings.Network.internetError,
-        }),
-      );
-      return;
-    }
+
+  const savePitchHandle = () => {
     let findStepIndex = stepList.findIndex(
       (value: any) => value.isSelected == true,
     );
@@ -66,65 +51,26 @@ const PitchIdeaStepScreen = (props: ScreenProps) => {
       if (stepObj?.isSelected) {
         delete stepObj?.isSelected;
       }
-
-      dispatch(setIsLoader(true));
-      ThreadManager.instance.uploadMedia(
-        props?.route?.params?.mediaPath,
-        true,
-        async (url: any) => {
-          if (url != 'error') {
-            let params: any = {};
-            if (url && props?.route?.params?.mediaType == 'video') {
-              createThumbnail({
-                url: url,
-                timeStamp: 10000,
-              })
-                .then(async response => {
-                  params['videoUrl'] = url;
-                  params['pitch_idea'] = {
-                    ...props?.route?.params?.data,
-                    steps: stepObj,
-                  };
-                  await uploadThumnail(response.path, params);
-                })
-                .catch(err => {
-                  dispatch(setIsLoader(false));
-                  console.log('printImgErr ', err);
-                });
-            } else {
-              let userData = getVideoCreateObj(selector?.userData);
-              let postId = ThreadManager.instance.makeid(8);
-              let obj: any = {
-                photoUrl: url,
-                pitch_idea: {
-                  ...props?.route?.params?.data,
-                  steps: stepObj,
-                },
-                videoId: postId,
-                thumbnail: url,
-                like: [],
-                comments: [],
-                creatorData: userData,
-                createdAt: moment
-                  .utc(new Date())
-                  .format(ThreadManager.instance.dateFormater.fullDate),
-              };
-              dispatch(setIsLoader(false));
-              await ThreadManager.instance.createPost(obj, (response: any) => {
-                props?.navigation.pop(3);
-              });
-            }
-          } else {
-            dispatch(setIsLoader(false));
-            dispatch(
-              setIsAlertShow({
-                value: true,
-                message: 'Error while uploading media',
-              }),
-            );
-          }
-        },
-      );
+      if (
+        props?.route?.params?.from == Routes.addVideoTab.pitchListScreen &&
+        props?.route?.params?.atBack
+      ) {
+        props?.route?.params?.atBack({
+          ...props?.route?.params?.data,
+          steps: stepObj,
+        });
+        setTimeout(() => {
+          props?.navigation?.pop(2);
+        }, 1000);
+      } else {
+        props?.navigation.navigate(Routes.addVideoTab.sharePitch, {
+          mediaPath: props?.route?.params?.mediaPath,
+          selectedPitch: {
+            ...props?.route?.params?.data,
+            steps: stepObj,
+          },
+        });
+      }
     } else {
       dispatch(
         setIsAlertShow({
@@ -134,67 +80,24 @@ const PitchIdeaStepScreen = (props: ScreenProps) => {
       );
     }
   };
-  const uploadThumnail = async (path: any, payload: any) => {
-    let obj = {...payload};
-    await ThreadManager.instance
-      .uploadMedia(path, false, async (url: any) => {
-        if (url !== 'error') {
-          let userData = getVideoCreateObj(selector?.userData);
-          let postId = ThreadManager.instance.makeid(8);
-          obj['videoId'] = postId;
-          obj['thumbnail'] = url;
-          obj['like'] = [];
-          obj['comments'] = [];
-          obj['creatorData'] = userData;
-          obj['createdAt'] = moment
-            .utc(new Date())
-            .format(ThreadManager.instance.dateFormater.fullDate);
-          dispatch(setIsLoader(false));
-          await ThreadManager.instance.createPost(obj, (response: any) => {
-            props?.navigation.pop(3);
-          });
-        } else {
-          dispatch(setIsLoader(false));
-          dispatch(
-            setIsAlertShow({
-              value: true,
-              message: 'Error while uploading post',
-            }),
-          );
-        }
-      })
-      .catch(() => {
-        dispatch(setIsLoader(false));
-        dispatch(
-          setIsAlertShow({
-            value: true,
-            message: 'Error while uploading thumbnail',
-          }),
-        );
-      });
-  };
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
-      {props?.route?.params?.mediaPath ? (
-        <CustomHeader
-          title={'Day in the Life'}
-          atBackPress={() => {
-            props?.navigation.goBack();
-          }}
-          atRightBtn={() => {
-            createPostFun();
-          }}
-          rightTxt={'Create Post'}
-        />
-      ) : (
-        <CustomHeader
-          title={'Day in the Life'}
-          atBackPress={() => {
-            props?.navigation.goBack();
-          }}
-        />
-      )}
+
+      <CustomHeader
+        title={'Day in the Life'}
+        atBackPress={() => {
+          props?.navigation.goBack();
+        }}
+        atRightBtn={() => {
+          savePitchHandle();
+        }}
+        rightTxt={
+          props?.route?.params?.from == Routes.addVideoTab.pitchListScreen
+            ? 'Save'
+            : 'Next'
+        }
+      />
 
       <View style={styles.mainContainer}>
         <Text style={styles.topDesTxt}>
@@ -251,7 +154,8 @@ const styles = StyleSheet.create({
     fontSize: normalized(15),
     fontWeight: '400',
     color: AppColors.black.black,
-    marginVertical: normalized(10),
+    marginVertical: normalized(15),
+    width: normalized(250),
   },
   img: {
     height: normalized(154),

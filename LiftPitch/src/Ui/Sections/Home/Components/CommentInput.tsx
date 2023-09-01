@@ -11,21 +11,11 @@ import {
 } from 'react-native';
 import {
   AppColors,
-  AppFonts,
   AppImages,
   hv,
   normalized,
 } from '../../../../Utils/AppConstants';
 import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
-import AppImageViewer from '../../../Components/ProfileView/AppImageView';
-import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlaceHolderComp';
-import {useDispatch} from 'react-redux';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-interface Props {
-  messageTxt: string;
-  onChangeMessage: (val: string) => void;
-  onSendPress: () => void;
-}
 
 const CommentInput = (props: any) => {
   //////// for Tag User in your Comment code--------->
@@ -277,50 +267,6 @@ const CommentInput = (props: any) => {
 
   return (
     <View>
-      {/* {usersList.length != 0 ? (
-        <FlatList
-          keyboardShouldPersistTaps={'always'}
-          style={{maxHeight: hv(310)}}
-          data={usersList}
-          keyExtractor={(item, index) => `${index}`}
-          renderItem={({item, index}) => {
-            return (
-              <TouchableOpacity
-                activeOpacity={1}
-                onPress={() => {
-                  setHashTag(item);
-                }}>
-                <View style={styles.singleUserView}>
-                  {item?.image?.length > 0 ? (
-                    <AppImageViewer
-                      source={{uri: item?.image}}
-                      placeHolder={AppImages.bottomBar.Profile}
-                      style={styles.userProfile}
-                    />
-                  ) : (
-                    <ProfilePlaceHolderComp
-                      index={0}
-                      name={props?.userName ? props?.userName : 'Testing'}
-                      mainStyles={styles.userProfile}
-                      nameStyles={{
-                        fontSize: normalized(16),
-                        fontWeight: '500',
-                      }}
-                    />
-                  )}
-                  <View
-                    style={{
-                      paddingHorizontal: normalized(10),
-                      maxHeight: hv(35),
-                    }}>
-                    <Text style={styles.userName}>{item?.username}</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-            );
-          }}
-        />
-      ) : null} */}
       {props?.isReply ? (
         <View
           style={{

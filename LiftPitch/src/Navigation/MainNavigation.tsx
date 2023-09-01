@@ -12,6 +12,7 @@ import PitchIdeasListScreen from '../Ui/Sections/CreateVideo/Screens/PitchIdeasL
 import PitchIdeaStepScreen from '../Ui/Sections/CreateVideo/Screens/PitchIdeaStepScreen';
 import VideoCreateScreen from '../Ui/Sections/CreateVideo/Screens/VideoCreateScreen';
 import UploadMediaPreviewScreen from '../Ui/Sections/CreateVideo/Screens/UploadMediaPreviewScreen';
+import SharePitchScreen from '../Ui/Sections/CreateVideo/Screens/SharePitchScreen';
 const MainStack = createStackNavigator();
 
 export default function MainNavigation() {
@@ -51,6 +52,10 @@ export default function MainNavigation() {
       <MainStack.Screen
         name={Routes.addVideoTab.pitchIdeaScreen}
         component={PitchIdeaStepScreen}
+      />
+      <MainStack.Screen
+        name={Routes.addVideoTab.sharePitch}
+        component={SharePitchScreen}
       />
     </MainStack.Navigator>
   );

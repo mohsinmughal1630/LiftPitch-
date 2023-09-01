@@ -29,7 +29,7 @@ const UploadMediaPreviewScreen = (props: ScreenProps) => {
             <Image
               source={AppImages.Auth.backIcon}
               resizeMode="contain"
-              style={styles.backIcon}
+              // style={styles.backIcon}
             />
           </View>
         </TouchableWithoutFeedback>
@@ -37,9 +37,16 @@ const UploadMediaPreviewScreen = (props: ScreenProps) => {
         <TouchableWithoutFeedback
           onPress={() => {
             if (mediaType == 'video' && mediaPath) {
-              props?.navigation.navigate(Routes.addVideoTab.pitchListScreen, {
-                mediaPath: mediaPath,
-              });
+              if (props.route?.params?.selectedPitch) {
+                props?.navigation.navigate(Routes.addVideoTab.sharePitch, {
+                  mediaPath: mediaPath,
+                  selectedPitch: props.route?.params?.selectedPitch,
+                });
+              } else {
+                props?.navigation.navigate(Routes.addVideoTab.pitchListScreen, {
+                  mediaPath: mediaPath,
+                });
+              }
             }
           }}>
           <View style={styles.backIconBox}>
@@ -88,7 +95,7 @@ const styles = StyleSheet.create({
   },
   backIconBox: {
     height: 50,
-    width: 60,
+    width: 80,
     justifyContent: 'center',
     alignItems: 'center',
   },

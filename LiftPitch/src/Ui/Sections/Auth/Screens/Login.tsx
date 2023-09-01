@@ -154,7 +154,7 @@ const LoginScreen = (props: ScreenProps) => {
               (socialParams?.first_name ? socialParams.first_name : '') +
               (socialParams?.last_name ? ` ${socialParams.last_name}` : '');
             const paramsObj = {
-              userName: fullname,
+              userName: fullname.toLowerCase(),
               email: socialParams?.email,
               password: socialParams?.token,
               companyName: null,
