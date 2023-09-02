@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   AppColors,
   AppImages,
@@ -21,18 +21,18 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {useCameraDevices, Camera} from 'react-native-vision-camera';
+import { useCameraDevices, Camera } from 'react-native-vision-camera';
 import ImagePicker from 'react-native-image-crop-picker';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
-import {useDispatch, useSelector} from 'react-redux';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setIsAlertShow,
   setIsLoader,
 } from '../../../../Redux/reducers/AppReducer';
 import ThreadManager from '../../../../ChatModule/ThreadManger';
-import {createThumbnail} from 'react-native-create-thumbnail';
+import { createThumbnail } from 'react-native-create-thumbnail';
 import VideoCreateHeader from '../Components/VideoCreateHeader';
-import {getVideoCreateObj} from '../../../../Utils/Helper';
+import { getVideoCreateObj } from '../../../../Utils/Helper';
 import Permissions, {
   PERMISSIONS,
   RESULTS,
@@ -41,7 +41,7 @@ import Permissions, {
 import ConfirmationModal from '../../../Components/CustomModal/ConfirmationModal';
 import VideoRecorderBtn from '../Components/VideoRecorderBtn';
 import VideoTimerPickerPopup from '../Components/VideoTimerPickerPopup';
-import {Routes} from '../../../../Utils/Routes';
+import { Routes } from '../../../../Utils/Routes';
 import VideoSpeedPickerPopup from '../Components/VideoSpeedPickerPopup';
 import CustomFilledBtn from '../../../Components/CustomButtom/CustomButton';
 
@@ -130,7 +130,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
     <View style={AppStyles.MainStyle}>
       {device != null ? (
         <KeyboardAvoidingView
-          style={{flex: 1}}
+          style={{ flex: 1 }}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
           <VideoCreateHeader
@@ -153,7 +153,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
               <>
                 <Image
                   source={AppImages.createVideo.flash}
-                  style={{alignSelf: 'center'}}
+                  style={{ alignSelf: 'center' }}
                 />
                 <Text style={styles.flashTxt}>
                   {flashMode == 'on' ? 'ON' : 'OFF'}
@@ -161,7 +161,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
               </>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.flashCont, {top: normalized(150)}]}
+              style={[styles.flashCont, { top: normalized(150) }]}
               onPress={() => {
                 setShowTimerPopup(true);
               }}>
@@ -169,14 +169,14 @@ const VideoCreateScreen = (props: ScreenProps) => {
                 <Image
                   source={AppImages.createVideo.TimerIcon}
                   style={[
-                    {alignSelf: 'center'},
-                    timerValue !== 0 && {tintColor: AppColors.red.darkRed},
+                    { alignSelf: 'center' },
+                    timerValue !== 0 && { tintColor: AppColors.red.darkRed },
                   ]}
                 />
                 <Text
                   style={[
                     styles.flashTxt,
-                    timerValue !== 0 && {color: AppColors.red.darkRed},
+                    timerValue !== 0 && { color: AppColors.red.darkRed },
                   ]}>
                   {timerValue == 0 ? 'OFF' : `${timerValue} S`}
                 </Text>
@@ -192,7 +192,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
             )}
 
             <TouchableOpacity
-              style={[styles.flashCont, {top: normalized(210)}]}
+              style={[styles.flashCont, { top: normalized(210) }]}
               onPress={() => {
                 setShowSpeedPopup(true);
               }}>
@@ -200,14 +200,14 @@ const VideoCreateScreen = (props: ScreenProps) => {
                 <Image
                   source={AppImages.createVideo.SpeedIcon}
                   style={[
-                    {alignSelf: 'center'},
-                    speedValue !== 1 && {tintColor: AppColors.red.darkRed},
+                    { alignSelf: 'center' },
+                    speedValue !== 1 && { tintColor: AppColors.red.darkRed },
                   ]}
                 />
                 <Text
                   style={[
                     styles.flashTxt,
-                    speedValue !== 1 && {color: AppColors.red.darkRed},
+                    speedValue !== 1 && { color: AppColors.red.darkRed },
                   ]}>
                   {speedValue == 1 ? 'OFF' : `${speedValue} X`}
                 </Text>
@@ -238,13 +238,13 @@ const VideoCreateScreen = (props: ScreenProps) => {
               <TouchableOpacity
                 onPress={() => {
                   dispatch(
-                    setIsAlertShow({value: true, message: 'Pending....'}),
+                    setIsAlertShow({ value: true, message: 'Pending....' }),
                   );
                 }}>
-                <>
+                <View style={styles.singleBottomEndBox}>
                   <Image source={AppImages.createVideo.smileIcon} />
                   <Text style={styles.simpleDesTxt}>Pitch Ideas</Text>
-                </>
+                </View>
               </TouchableOpacity>
               <VideoRecorderBtn
                 onImageClick={() => {
@@ -258,10 +258,10 @@ const VideoCreateScreen = (props: ScreenProps) => {
                 onPress={() => {
                   mediaSelection();
                 }}>
-                <>
+                <View style={styles.singleBottomEndBox}>
                   <Image source={AppImages.createVideo.galleryIcon} />
                   <Text style={styles.simpleDesTxt}>Upload</Text>
-                </>
+                </View>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -330,6 +330,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: AppHorizontalMargin,
     marginVertical: AppHorizontalMargin,
+  },
+  singleBottomEndBox: {
+    alignItems: 'center',
+    width: normalized(60)
   },
   simpleDesTxt: {
     fontSize: normalized(10),
