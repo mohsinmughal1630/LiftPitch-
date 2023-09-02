@@ -1,5 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 import {Collections, CommentActionType} from '../../Utils/Strings';
+import {getUserData} from '../../Utils/AsyncStorage';
 export const addNUpdateCommentReq = async (
   obj: any,
   action: any,
@@ -154,7 +155,6 @@ export const likeNDisListReq = async (
           } else if (action == 'remove') {
             likeArr = likeArr.filter((el: any) => el != userId);
           }
-          console.log('likeArr-------->', likeArr);
           await firestore()
             .collection(Collections.POST_COLLECTION)
             .doc(videoId)
@@ -222,11 +222,14 @@ export const getCommentListingAgainstVideo = async (
 };
 
 export const getUpdatedVideoListing = async (
-  userId: any,
+  currentUserData: any,
+  tab: any,
   limit: any,
   currentPage: any,
   onUpdates: any,
 ) => {
+  console.log('tab------>', tab);
+
   await firestore()
     .collection(Collections.POST_COLLECTION)
     .orderBy('createdAt', 'desc')
@@ -234,12 +237,25 @@ export const getUpdatedVideoListing = async (
     .get()
     .then(snapShot => {
       var list: any = [];
-      snapShot.docs.forEach(doc => {
-        // if (doc.data()?.creatorData?.userId != userId) {
-        list.push(doc.data());
-        // }
+      snapShot?.docs.forEach((doc, index) => {
+        if (tab == 0) {
+          checkIsUserExistInMyFollowerFolloingList(
+            currentUserData,
+            doc.data()?.creatorData?.userId,
+            (result: any) => {
+              if (result) {
+                list = [...list, doc.data()];
+              }
+            },
+          );
+        } else {
+          list.push(doc.data());
+        }
       });
-      onUpdates(list);
+      setTimeout(() => {
+        console.log('list-------->', list?.length);
+        onUpdates(list);
+      }, 1000);
     })
     .catch(() => {
       onUpdates([]);
@@ -254,4 +270,31 @@ export const getVideoListSize = async (onComplete: any) => {
       onComplete(snapShot.docs?.length);
     })
     .catch(() => {});
+};
+
+export const checkIsUserExistInMyFollowerFolloingList = async (
+  currentUser: any,
+  otherUserId: any,
+  onComplete: any,
+) => {
+  let status = false;
+  if (otherUserId == currentUser?.userId) {
+    status = true;
+  } else if (currentUser?.follower?.length > 0) {
+    for (let i = 0; i < currentUser?.follower?.length; i++) {
+      let followerId = currentUser?.follower[i]?.id;
+      if (followerId == otherUserId) {
+        status = true;
+      }
+    }
+  } else if (currentUser?.following?.length > 0) {
+    for (let i = 0; i < currentUser?.following?.length; i++) {
+      let followingId = currentUser?.following[i]?.id;
+      if (followingId == otherUserId) {
+        status = true;
+      }
+    }
+  }
+
+  onComplete(status);
 };

@@ -21,6 +21,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {
   setIsAlertShow,
   setIsLoader,
+  setUserData,
 } from '../../../../Redux/reducers/AppReducer';
 import {AppStrings} from '../../../../Utils/Strings';
 import {
@@ -28,6 +29,8 @@ import {
   getVideoListSize,
 } from '../../../../Network/Services/VideoListingServices';
 import CommonDataManager from '../../../../Utils/CommonManager';
+import {getOtherUserProfile} from '../../../../Network/Services/ProfileServices';
+import {saveUserData} from '../../../../Utils/AsyncStorage';
 
 const VideosHomeScreen = (props: ScreenProps) => {
   const isFocused = useIsFocused();
@@ -38,7 +41,7 @@ const VideosHomeScreen = (props: ScreenProps) => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const counter = useRef(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(10);
   const [videoList, setVideoList] = useState([]);
   const updateCurrentSlideIndex = (e: any) => {
     const contentOffsetY = e.nativeEvent.contentOffset.y;
@@ -48,11 +51,26 @@ const VideosHomeScreen = (props: ScreenProps) => {
 
   useEffect(() => {
     if (isFocused) {
-      fetchVideoListing();
+      initialFun();
     }
   }, []);
+  const initialFun = async () => {
+    dispatch(setIsLoader(true));
+    await getOtherUserProfile(
+      selector?.userData?.userId,
+      async (response: any) => {
+        if (response) {
+          dispatch(setUserData(response));
+          await fetchVideoListing(0, response);
+          if (selector?.isPersisterUser) {
+            await saveUserData(response);
+          }
+        }
+      },
+    );
+  };
 
-  const fetchVideoListing = async () => {
+  const fetchVideoListing = async (tabValue?: any, currentUserData?: any) => {
     if (!selector?.isNetConnected) {
       dispatch(
         setIsAlertShow({
@@ -63,11 +81,12 @@ const VideosHomeScreen = (props: ScreenProps) => {
       return;
     }
     try {
-      if (counter?.current == 1) {
+      if (counter?.current == 1 && !selector?.isLoaderStart) {
         dispatch(setIsLoader(true));
       }
       await getUpdatedVideoListing(
-        selector?.userData?.userId,
+        currentUserData,
+        tabValue != undefined ? tabValue : selectedTab,
         pageSize,
         counter.current,
         async (onResponse: any) => {
@@ -105,7 +124,10 @@ const VideosHomeScreen = (props: ScreenProps) => {
       <StatusBar barStyle={'dark-content'} backgroundColor={'white'} />
       <VideoHeaderSection
         selectedTab={selectedTab}
-        onTabSelect={setSelectedTab}
+        onTabSelect={(val: any) => {
+          setSelectedTab(val);
+          fetchVideoListing(val, selector?.userData);
+        }}
         searchTxt={searchTxt}
         onSearchChange={setSearchTxt}
       />
@@ -131,7 +153,7 @@ const VideosHomeScreen = (props: ScreenProps) => {
           onEndReached={async () => {
             if (counter.current < totalPages) {
               counter.current = counter.current + 1;
-              await fetchVideoListing();
+              await fetchVideoListing(selectedTab, selector?.userData);
             }
           }}
           ListFooterComponent={() => {
