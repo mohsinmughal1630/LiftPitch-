@@ -39,6 +39,8 @@ import {
 import ThreadManager from '../../../../ChatModule/ThreadManger';
 import {Routes} from '../../../../Utils/Routes';
 import {makeObjForChat} from '../../../../Utils/Helper';
+import CommonDataManager from '../../../../Utils/CommonManager';
+import FollowConfirmationModal from '../../Follower/Components/FollowConfirmationModal';
 const ProfileScreen = (props: ScreenProps) => {
   const selector = useSelector((AppState: any) => AppState.AppReducer);
   const params = props?.route?.params;
@@ -49,6 +51,12 @@ const ProfileScreen = (props: ScreenProps) => {
   const [data, setData] = useState<any>(null);
   const {userData} = useSelector((state: AppRootStore) => state.AppReducer);
   const [selectedTab, setSelectedTab] = useState('Feed');
+  const [confModal, setConfModal] = useState<any>({
+    value: false,
+    data: null,
+    type: '',
+  });
+
   const logoutClicked = async () => {
     await ThreadManager.instance.updateUserToken(
       '',
@@ -191,6 +199,7 @@ const ProfileScreen = (props: ScreenProps) => {
       },
     );
   };
+
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
@@ -205,7 +214,16 @@ const ProfileScreen = (props: ScreenProps) => {
           if (profifleType == USER_TYPE.owner) {
             console.log('go to setting Screen');
           } else {
-            followNfollowerFun();
+            setConfModal({
+              value: true,
+              data: {
+                id: data?.userId,
+                userName: data?.userName,
+                description: data?.companyType,
+                profile: data?.companyLogo,
+              },
+              type: isFollow ? 'remove' : 'add',
+            });
           }
         }}
       />
@@ -247,10 +265,33 @@ const ProfileScreen = (props: ScreenProps) => {
           <Text style={styles.bottomBtnTxt}>
             {profifleType == USER_TYPE.owner
               ? 'LogOut'
-              : `Chat with ${data?.userName}`}
+              : `Chat with ${CommonDataManager.getSharedInstance().capitalizeFirstLetter(
+                  data?.userName,
+                )}`}
           </Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
+      {confModal?.value ? (
+        <FollowConfirmationModal
+          onClose={() => {
+            setConfModal({
+              value: false,
+              data: null,
+              type: '',
+            });
+          }}
+          type={confModal?.type}
+          data={confModal?.data}
+          atRightBtnPress={() => {
+            followNfollowerFun();
+            setConfModal({
+              value: false,
+              data: null,
+              type: '',
+            });
+          }}
+        />
+      ) : null}
     </View>
   );
 };

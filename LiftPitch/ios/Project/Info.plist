@@ -72,6 +72,17 @@
 	<string>$(PRODUCT_NAME) needs access to your Microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Kindly grant gallery access to LiftPitch app.</string>
+
+	
+	<key>NSCameraUsageDescription</key>
+    <string>$(PRODUCT_NAME) needs access to your Camera.</string>
+
+    <!-- optionally, if you want to record audio: -->
+     <!-- Add for vision camera--> 
+     <key>NSMicrophoneUsageDescription</key>
+     <string>$(PRODUCT_NAME) needs access to your Microphone.</string>
+    <key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Inter-Black.ttf</string>

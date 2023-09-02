@@ -44,6 +44,7 @@ import ConfirmationModal from '../../../Components/CustomModal/ConfirmationModal
 import DeviceContactsListModal from '../../../Components/CustomModal/DeviceContactsListModal';
 import {openSettings} from 'react-native-permissions';
 import {AppStrings} from '../../../../Utils/Strings';
+import FollowConfirmationModal from '../Components/FollowConfirmationModal';
 
 const FollowerScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
@@ -57,6 +58,11 @@ const FollowerScreen = (props: ScreenProps) => {
   const [showContactsListModal, setShowContactsListModal] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
+  const [confModal, setConfModal] = useState({
+    value: false,
+    data: null,
+    type: '',
+  });
 
   useEffect(() => {
     if (isFocused) {
@@ -96,9 +102,21 @@ const FollowerScreen = (props: ScreenProps) => {
             },
           );
         }
+      } else {
+        setFollowerData([]);
       }
-      if (response?.following) {
-        setFollowingData(response?.following);
+      if (response?.following?.length > 0) {
+        let newArr: any = [];
+        for (let i = 0; i < response?.following?.length; i++) {
+          let singleItem = response?.following[i];
+          newArr.push({
+            ...singleItem,
+            isFollow: true,
+          });
+        }
+        setFollowingData(newArr);
+      } else {
+        setFollowingData([]);
       }
       setTimeout(() => {
         dispatch(setIsLoader(false));
@@ -164,7 +182,7 @@ const FollowerScreen = (props: ScreenProps) => {
         setTimeout(async () => {
           await fetchUserFollowingList();
           dispatch(setIsLoader(false));
-        }, 3000);
+        }, 2000);
       },
     );
   };
@@ -183,9 +201,14 @@ const FollowerScreen = (props: ScreenProps) => {
       );
       return;
     }
-    await searchUserfromFB(selector?.userData?.userId, txt, (response: any) => {
-      setSearchResult(response);
-    });
+
+    await searchUserfromFB(
+      selector?.userData?.userId,
+      txt.toLowerCase(),
+      (response: any) => {
+        setSearchResult(response);
+      },
+    );
   };
   /////
 
@@ -287,7 +310,9 @@ const FollowerScreen = (props: ScreenProps) => {
                                   styles.description,
                                   {color: AppColors.black.black, marginTop: 0},
                                 ]}>
-                                {item?.userName}
+                                {CommonDataManager.getSharedInstance().capitalizeFirstLetter(
+                                  item.userName,
+                                )}
                               </Text>
                             </View>
                             <Text style={styles.msgTxt}>
@@ -368,25 +393,32 @@ const FollowerScreen = (props: ScreenProps) => {
                                     marginTop: 0,
                                   },
                                 ]}>
-                                {item.userName}
+                                {CommonDataManager.getSharedInstance().capitalizeFirstLetter(
+                                  item?.userName,
+                                )}
                               </Text>
                             </View>
                             <Text style={styles.msgTxt}>
                               {item?.description}
                             </Text>
                           </View>
-                          {selectTab == 1 ? (
-                            <TouchableOpacity
-                              activeOpacity={1}
-                              style={styles.followBtn}
-                              onPress={() => {
-                                followNfollowerFun(item);
-                              }}>
-                              <Text style={styles.followBtnTxt}>
-                                {item?.isFollow ? `Following` : `Follow`}
-                              </Text>
-                            </TouchableOpacity>
-                          ) : null}
+                          {/* {selectTab == 1 ? ( */}
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            style={styles.followBtn}
+                            onPress={() => {
+                              setConfModal({
+                                value: true,
+                                data: item,
+                                type: item?.isFollow ? 'remove' : 'add',
+                              });
+                              // followNfollowerFun(item);
+                            }}>
+                            <Text style={styles.followBtnTxt}>
+                              {item?.isFollow ? `Following` : `Follow`}
+                            </Text>
+                          </TouchableOpacity>
+                          {/* ) : null} */}
                         </TouchableOpacity>
                       );
                     }}
@@ -421,6 +453,27 @@ const FollowerScreen = (props: ScreenProps) => {
           list={deviceContactsList}
         />
       )}
+      {confModal?.value ? (
+        <FollowConfirmationModal
+          onClose={() => {
+            setConfModal({
+              value: false,
+              data: null,
+              type: '',
+            });
+          }}
+          type={confModal?.type}
+          data={confModal?.data}
+          atRightBtnPress={async () => {
+            followNfollowerFun(confModal?.data);
+            await setConfModal({
+              value: false,
+              data: null,
+              type: '',
+            });
+          }}
+        />
+      ) : null}
     </View>
   );
 };

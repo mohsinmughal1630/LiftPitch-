@@ -170,13 +170,13 @@ export const searchUserfromFB = async (
   onComplete: any,
 ) => {
   const usersRef = firestore().collection(Collections.Users);
-
   usersRef
     .where('userName', '>=', searchText)
     .where('userName', '<=', searchText + '\uf8ff')
     .get()
     .then(querySnapshot => {
       let results: any = [];
+
       querySnapshot.forEach(doc => {
         if (userId != doc?.data()?.userId) {
           results.push({

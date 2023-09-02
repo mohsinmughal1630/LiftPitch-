@@ -47,7 +47,9 @@ const VideoBottomSection = (props: Props) => {
               <Text
                 style={
                   styles.userName
-                }>{`@${props?.item?.creatorData?.userName}`}</Text>
+                }>{`@${CommonDataManager.getSharedInstance().capitalizeFirstLetter(
+                props?.item?.creatorData?.userName,
+              )}`}</Text>
             </View>
           </View>
           <Text

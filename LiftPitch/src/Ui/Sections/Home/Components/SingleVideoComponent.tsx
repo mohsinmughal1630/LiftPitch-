@@ -159,13 +159,13 @@ const SingleVideoComponent = (props: Props) => {
       );
       return;
     }
+    setIsLike(!isLike);
     await likeNDisListReq(
       selector?.userData?.userId,
       action?.length > 0 ? action : isLike ? 'remove' : 'add',
       props?.item?.videoId,
       (response: any) => {
         if (response != 'error!') {
-          setIsLike(!isLike);
           setLikeCount(response?.length);
         } else {
           dispatch(setIsLoader(false));

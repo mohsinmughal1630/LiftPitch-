@@ -53,14 +53,16 @@ function AppContainer() {
   }, [selector?.updateToken]);
   const setChat = async () => {
     const user = await getUserData();
-    if (user?.userId) {
-      await setUpChat(async (result: any) => {
-        await registerDevice();
-        setTimeout(async () => {
-          ThreadManager.instance.setAppLoaded();
-        }, 3000);
-      });
-    }
+    setTimeout(async () => {
+      if (user?.userId) {
+        await setUpChat(async (result: any) => {
+          await registerDevice();
+          setTimeout(async () => {
+            ThreadManager.instance.setAppLoaded();
+          }, 3000);
+        });
+      }
+    }, 1000);
   };
 
   const registerDevice = async () => {
@@ -81,8 +83,6 @@ function AppContainer() {
     const token = await notifications.getToken();
     if (token) {
       const user = await getUserData();
-      console.log('FCM token------->', token);
-
       await ThreadManager.instance.updateUserToken(
         token,
         user?.userId?.toString(),

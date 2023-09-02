@@ -65,13 +65,32 @@ const PitchIdeasListScreen = (props: ScreenProps) => {
                 activeOpacity={1}
                 style={styles.singleItem}
                 onPress={() => {
-                  props?.navigation.navigate(
-                    Routes.addVideoTab.pitchIdeaScreen,
-                    {
-                      data: item,
-                      mediaPath: props?.route?.params?.mediaPath,
-                    },
-                  );
+                  if (
+                    props?.route?.params?.from ==
+                    Routes.addVideoTab.createVideoScreen
+                  ) {
+                    props?.navigation.navigate(
+                      Routes.addVideoTab.pitchIdeaScreen,
+                      {
+                        data: item,
+                        from: Routes.addVideoTab.pitchListScreen,
+                        atBack: (obj: any) => {
+                          if (props?.route?.params?.atBack) {
+                            props?.route?.params?.atBack(obj);
+                            // props?.navigation?.goBack();
+                          }
+                        },
+                      },
+                    );
+                  } else {
+                    props?.navigation.navigate(
+                      Routes.addVideoTab.pitchIdeaScreen,
+                      {
+                        data: item,
+                        mediaPath: props?.route?.params?.mediaPath,
+                      },
+                    );
+                  }
                 }}>
                 <>
                   <AppImageViewer
@@ -105,7 +124,8 @@ const styles = StyleSheet.create({
     fontSize: normalized(15),
     fontWeight: '400',
     color: AppColors.black.black,
-    marginVertical: normalized(10),
+    marginVertical: normalized(15),
+    width: normalized(250),
   },
   img: {
     height: normalized(85),
@@ -123,6 +143,7 @@ const styles = StyleSheet.create({
   innerCont: {
     justifyContent: 'center',
     flex: 1,
+    marginStart: normalized(10),
   },
   title: {
     fontSize: normalized(13),
