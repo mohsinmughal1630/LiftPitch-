@@ -39,6 +39,7 @@ import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import MediaSelectionModal from '../../../Components/CustomModal/MediaSelectionModal';
 import ChatHeader from '../Components/ChatHeader';
+import {getOtherUserProfile} from '../../../../Network/Services/ProfileServices';
 const ChatScreen = (props: ScreenProps) => {
   const selector = useSelector((AppState: any) => AppState.AppReducer);
   const thread = props?.route?.params?.thread
@@ -54,6 +55,7 @@ const ChatScreen = (props: ScreenProps) => {
   const currentlyVisibleMessages = useRef([]);
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const userId = selector?.userData?.userId?.toString();
+  const [otherUserStatus, setOtherUserStatus] = useState(null);
   const threadSelector = useSelector(
     (AppState: any) => AppState.AppReducer.threadList,
   );
@@ -74,7 +76,29 @@ const ChatScreen = (props: ScreenProps) => {
     }
   }, [props?.route?.params?.thread]);
 
-  const getOtherUpdatedData = async () => {};
+  const getOtherUpdatedData = async () => {
+    let participants = props?.route?.params?.thread
+      ? typeof props?.route?.params?.thread?.participants == 'string'
+        ? JSON.parse(props?.route?.params?.thread?.participants)
+        : props?.route?.params?.thread?.participants
+      : typeof thread.participants == 'string'
+      ? JSON.parse(thread.participants)
+      : thread.participants;
+
+    let otherIndex = participants.findIndex(
+      (value: any) => value.user != userId,
+    );
+    if (otherIndex != -1) {
+      await getOtherUserProfile(
+        participants[otherIndex]?.user,
+        (response: any) => {
+          if (response?.status) {
+            setOtherUserStatus(response?.status);
+          }
+        },
+      );
+    }
+  };
 
   useEffect(() => {
     threadRef.current = thread;
@@ -499,6 +523,7 @@ const ChatScreen = (props: ScreenProps) => {
       <SafeAreaView style={{backgroundColor: AppColors.white.white}} />
       <View style={styles.container}>
         <ChatHeader
+          otherUserStatus={otherUserStatus}
           title={setName()}
           profile={otherUserRef?.current?.userProfileImageUrl}
           atBackPress={() => {

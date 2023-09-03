@@ -67,6 +67,7 @@ const VideoPlayer = (props: Props) => {
         paused={isPaused}
         repeat
         poster={props?.thumbnail}
+        posterStyle={styles.videoStyles}
         pictureInPicture={false}
         onError={(e: any) => {
           setIsLoading(false);

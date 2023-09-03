@@ -41,7 +41,7 @@ const VideosHomeScreen = (props: ScreenProps) => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const counter = useRef(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(2);
   const [videoList, setVideoList] = useState([]);
   const updateCurrentSlideIndex = (e: any) => {
     const contentOffsetY = e.nativeEvent.contentOffset.y;
@@ -84,6 +84,7 @@ const VideosHomeScreen = (props: ScreenProps) => {
       if (counter?.current == 1 && !selector?.isLoaderStart) {
         dispatch(setIsLoader(true));
       }
+
       await getUpdatedVideoListing(
         currentUserData,
         tabValue != undefined ? tabValue : selectedTab,
@@ -108,7 +109,12 @@ const VideosHomeScreen = (props: ScreenProps) => {
             } else {
               arr.push(...onResponse);
             }
-            setVideoList(arr);
+            const newArr: any = arr.filter((obj: any, index: any) => {
+              return (
+                index === arr.findIndex((o: any) => obj?.videoId === o?.videoId)
+              );
+            });
+            setVideoList(newArr);
           }
         },
       );
