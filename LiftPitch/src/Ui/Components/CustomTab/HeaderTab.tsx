@@ -1,6 +1,7 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {AppColors, normalized} from '../../../Utils/AppConstants';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { AppColors, normalized } from '../../../Utils/AppConstants';
+import { AppStyles } from '../../../Utils/AppStyles';
 const HeaderTab = (props: any) => {
   return (
     <View style={[styles.mainContainer, props?.mainStyle]}>
@@ -36,14 +37,14 @@ const styles = StyleSheet.create({
   },
   tabTxt: {
     fontSize: normalized(14),
-    fontWeight: '500',
+    ...AppStyles.textMedium,
     color: AppColors.black.black,
     alignSelf: 'center',
     textAlign: 'center',
   },
   tabTxtSelected: {
     fontSize: normalized(16),
-    fontWeight: '700',
+    ...AppStyles.textSemiBold,
     color: AppColors.black.black,
     alignSelf: 'center',
     textAlign: 'center',

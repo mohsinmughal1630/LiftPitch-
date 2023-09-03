@@ -60,7 +60,6 @@
     "react-native-splash-screen": "^3.2.0",
     "react-native-svg": "^13.13.0",
     "react-native-video": "^5.2.1",
-    "react-native-video-processing": "^1.7.2",
     "react-native-vision-camera": "2.13.0",
     "react-navigation": "^4.4.4",
     "react-redux": "^7.2.4",

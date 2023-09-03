@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Image, LayoutAnimation, StatusBar, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { AppColors, AppImages, normalized } from '../../../../Utils/AppConstants';
-import { AppHorizontalMargin } from '../../../../Utils/AppStyles';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 
 const VideoCreateHeader = (props: any) => {
   return (
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
   musicTxt: {
     fontSize: normalized(13),
-    fontWeight: '600',
+    ...AppStyles.textMedium,
     color: AppColors.white.white,
     paddingStart: normalized(5),
   },
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   switchCameraTxt: {
     fontSize: normalized(10),
-    fontWeight: '600',
+    ...AppStyles.textMedium,
     color: AppColors.white.white,
     marginTop: normalized(3),
   },

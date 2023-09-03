@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   KeyboardAvoidingView,
   Modal,
@@ -9,8 +9,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {AppColors, hv, normalized} from '../../../../Utils/AppConstants';
-import {AppHorizontalMargin} from '../../../../Utils/AppStyles';
+import { AppColors, hv, normalized } from '../../../../Utils/AppConstants';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 import CustomFilledBtn from '../../../Components/CustomButtom/CustomButton';
 
 const ReportReasonModal = (props: any) => {
@@ -42,13 +42,13 @@ const ReportReasonModal = (props: any) => {
               <Text
                 style={{
                   fontSize: normalized(15),
-                  fontWeight: '500',
+                  ...AppStyles.textMedium,
                   color: AppColors.black.black,
                   textAlign: 'center',
                 }}>
                 Reporting Reason
               </Text>
-              <View style={{paddingHorizontal: AppHorizontalMargin}}>
+              <View style={{ paddingHorizontal: AppHorizontalMargin }}>
                 <TextInput
                   multiline
                   style={{
@@ -60,6 +60,7 @@ const ReportReasonModal = (props: any) => {
                     paddingHorizontal: normalized(15),
                     paddingTop: hv(20),
                     marginVertical: normalized(15),
+                    ...AppStyles.textRegular
                   }}
                   scrollEnabled={reportTxt?.length > 10 ? true : false}
                   value={reportTxt}

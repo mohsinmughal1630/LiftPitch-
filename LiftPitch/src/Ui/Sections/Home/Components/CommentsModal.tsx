@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 import moment from 'moment';
 import CommentInput from './CommentInput';
 import LoadingImage from '../../../Components/LoadingImage';
@@ -23,8 +23,8 @@ import {
   normalized,
 } from '../../../../Utils/AppConstants';
 import ThreadManager from '../../../../ChatModule/ThreadManger';
-import {useSelector} from 'react-redux';
-import {CommentActionType} from '../../../../Utils/Strings';
+import { useSelector } from 'react-redux';
+import { CommentActionType } from '../../../../Utils/Strings';
 import {
   Menu,
   MenuOption,
@@ -61,7 +61,7 @@ const CommentsModal = (props: Props) => {
                 }>{`${props.commentsList.length} Comments`}</Text>
               <TouchableOpacity
                 activeOpacity={0.7}
-                style={{padding: normalized(10)}}
+                style={{ padding: normalized(10) }}
                 onPress={() => {
                   props?.onClose();
                 }}>
@@ -74,7 +74,7 @@ const CommentsModal = (props: Props) => {
                 keyExtractor={(item, index) => `${index}`}
                 showsVerticalScrollIndicator={false}
                 data={props?.commentsList}
-                renderItem={({item, index}) => {
+                renderItem={({ item, index }) => {
                   let findedDate = moment(
                     moment(
                       item?.createdAt,
@@ -89,7 +89,7 @@ const CommentsModal = (props: Props) => {
                         <View style={styles.profileImgBox}>
                           {item?.createProfile ? (
                             <LoadingImage
-                              source={{uri: item?.createProfile}}
+                              source={{ uri: item?.createProfile }}
                               viewStyle={{
                                 ...styles.profileImgBox,
                                 backgroundColor: AppColors.white.bgWhite,
@@ -108,9 +108,9 @@ const CommentsModal = (props: Props) => {
                           <View
                             style={[
                               AppStyles.horiCommon,
-                              {justifyContent: 'space-between'},
+                              { justifyContent: 'space-between' },
                             ]}>
-                            <View style={{flex: 1, flexDirection: 'row'}}>
+                            <View style={{ flex: 1, flexDirection: 'row' }}>
                               <Text
                                 style={[
                                   styles.description,
@@ -200,7 +200,7 @@ const CommentsModal = (props: Props) => {
                           </Menu>
 
                           <TouchableOpacity
-                            style={{padding: normalized(5)}}
+                            style={{ padding: normalized(5) }}
                             onPress={() => {
                               setMoreActionBtn(null);
                               setIsReply({
@@ -222,7 +222,7 @@ const CommentsModal = (props: Props) => {
                               }}>
                               <Text style={styles.deleteBtnTxt}>
                                 {moreActionBtn?.actionType ==
-                                CommentActionType.deleteComment
+                                  CommentActionType.deleteComment
                                   ? 'Delete'
                                   : 'Report'}
                               </Text>
@@ -232,149 +232,149 @@ const CommentsModal = (props: Props) => {
                       </View>
                       {item?.reply?.length > 0
                         ? item?.reply.map((el: any, childIndex: any) => {
-                            let findedTime = moment(
-                              moment(
-                                el?.createdAt,
-                                ThreadManager.instance.dateFormater.fullDate,
-                              ),
-                            );
-                            let replyTime = moment(findedTime).fromNow();
-                            return (
-                              <View
-                                style={{
-                                  flex: 1,
-                                  flexDirection: 'row',
-                                  marginVertical: 5,
-                                  marginStart: normalized(50),
-                                  marginEnd: normalized(20),
-                                }}
-                                key={childIndex}>
-                                <View style={styles.profileImgBox}>
-                                  {el?.createProfile ? (
-                                    <LoadingImage
-                                      source={{uri: el?.createProfile}}
-                                      viewStyle={{
-                                        ...styles.profileImgBox,
-                                        backgroundColor:
-                                          AppColors.white.bgWhite,
-                                      }}
-                                      resizeMode="cover"
-                                    />
-                                  ) : (
-                                    <Image
-                                      source={AppImages.bottomBar.Profile}
-                                      resizeMode="contain"
-                                      style={styles.placeholderImg}
-                                    />
-                                  )}
-                                </View>
-                                <View style={styles.contentBox}>
-                                  <View
+                          let findedTime = moment(
+                            moment(
+                              el?.createdAt,
+                              ThreadManager.instance.dateFormater.fullDate,
+                            ),
+                          );
+                          let replyTime = moment(findedTime).fromNow();
+                          return (
+                            <View
+                              style={{
+                                flex: 1,
+                                flexDirection: 'row',
+                                marginVertical: 5,
+                                marginStart: normalized(50),
+                                marginEnd: normalized(20),
+                              }}
+                              key={childIndex}>
+                              <View style={styles.profileImgBox}>
+                                {el?.createProfile ? (
+                                  <LoadingImage
+                                    source={{ uri: el?.createProfile }}
+                                    viewStyle={{
+                                      ...styles.profileImgBox,
+                                      backgroundColor:
+                                        AppColors.white.bgWhite,
+                                    }}
+                                    resizeMode="cover"
+                                  />
+                                ) : (
+                                  <Image
+                                    source={AppImages.bottomBar.Profile}
+                                    resizeMode="contain"
+                                    style={styles.placeholderImg}
+                                  />
+                                )}
+                              </View>
+                              <View style={styles.contentBox}>
+                                <View
+                                  style={[
+                                    AppStyles.horiCommon,
+                                    // {justifyContent: 'space-between'},
+                                  ]}>
+                                  <Text
                                     style={[
-                                      AppStyles.horiCommon,
-                                      // {justifyContent: 'space-between'},
+                                      styles.description,
+                                      {
+                                        color: AppColors.grey.towerGrey,
+                                        marginTop: 0,
+                                      },
                                     ]}>
-                                    <Text
-                                      style={[
-                                        styles.description,
-                                        {
-                                          color: AppColors.grey.towerGrey,
-                                          marginTop: 0,
-                                        },
-                                      ]}>
-                                      {el?.creatorName}{' '}
-                                    </Text>
-                                    <Text
-                                      style={[
-                                        styles.msgTxt,
-                                        {
-                                          color: AppColors.black.simpleLight,
-                                          marginTop: 0,
-                                        },
-                                      ]}>
-                                      {replyTime}
-                                    </Text>
-                                  </View>
-                                  <Text style={styles.msgTxt}>
-                                    {el?.message}
+                                    {el?.creatorName}{' '}
+                                  </Text>
+                                  <Text
+                                    style={[
+                                      styles.msgTxt,
+                                      {
+                                        color: AppColors.black.simpleLight,
+                                        marginTop: 0,
+                                      },
+                                    ]}>
+                                    {replyTime}
                                   </Text>
                                 </View>
-                                <View style={{alignItems: 'center'}}>
-                                  <Menu>
-                                    <MenuTrigger
-                                      style={{
-                                        padding: normalized(5),
-                                      }}
-                                      onPress={() => {
-                                        if (
-                                          selector?.userData?.userId ==
-                                          el?.creatorId
-                                        ) {
-                                          setMoreActionBtn({
-                                            PCommentId: el?.PCommentId,
-                                            commentId: el?.commentId,
-                                            actionType:
-                                              CommentActionType.deleteComment,
-                                            type: 'reply',
-                                          });
-                                        } else {
-                                          let newObj: any = {
-                                            type: 'reply',
-                                            PCommentId: el?.PCommentId,
-                                            commentId: el?.commentId,
-                                            actionType:
-                                              CommentActionType.reportComment,
-                                            reportedTo: {
-                                              name: el?.creatorName,
-                                              userId: el?.creatorId,
-                                              profile: el?.createProfile
-                                                ? item?.createProfile
-                                                : '',
-                                            },
-                                            reportedBy: {
-                                              name: selector?.userData?.userName
-                                                ? selector?.userData?.userName
-                                                : '',
-                                              userId: selector?.userData?.userId
-                                                ? selector?.userData?.userId
-                                                : '',
-                                              profile: selector?.userData
-                                                ?.companyLogo
-                                                ? selector?.userData
-                                                    ?.companyLogo
-                                                : '',
-                                            },
-                                          };
-                                          setMoreActionBtn(newObj);
-                                        }
-                                      }}>
-                                      <Image
-                                        source={AppImages.Common.menuIcon}
-                                        resizeMode="contain"
-                                      />
-                                    </MenuTrigger>
-                                  </Menu>
-                                </View>
-                                {moreActionBtn?.commentId == el?.commentId ? (
-                                  <MenuOptions>
-                                    <MenuOption
-                                      style={styles.deleteBtnCont}
-                                      onSelect={() => {
-                                        props?.delNReportAction(moreActionBtn);
-                                        setMoreActionBtn(null);
-                                      }}>
-                                      <Text style={styles.deleteBtnTxt}>
-                                        {moreActionBtn?.actionType ==
-                                        CommentActionType.deleteComment
-                                          ? 'Delete'
-                                          : 'Report'}
-                                      </Text>
-                                    </MenuOption>
-                                  </MenuOptions>
-                                ) : null}
+                                <Text style={styles.msgTxt}>
+                                  {el?.message}
+                                </Text>
                               </View>
-                            );
-                          })
+                              <View style={{ alignItems: 'center' }}>
+                                <Menu>
+                                  <MenuTrigger
+                                    style={{
+                                      padding: normalized(5),
+                                    }}
+                                    onPress={() => {
+                                      if (
+                                        selector?.userData?.userId ==
+                                        el?.creatorId
+                                      ) {
+                                        setMoreActionBtn({
+                                          PCommentId: el?.PCommentId,
+                                          commentId: el?.commentId,
+                                          actionType:
+                                            CommentActionType.deleteComment,
+                                          type: 'reply',
+                                        });
+                                      } else {
+                                        let newObj: any = {
+                                          type: 'reply',
+                                          PCommentId: el?.PCommentId,
+                                          commentId: el?.commentId,
+                                          actionType:
+                                            CommentActionType.reportComment,
+                                          reportedTo: {
+                                            name: el?.creatorName,
+                                            userId: el?.creatorId,
+                                            profile: el?.createProfile
+                                              ? item?.createProfile
+                                              : '',
+                                          },
+                                          reportedBy: {
+                                            name: selector?.userData?.userName
+                                              ? selector?.userData?.userName
+                                              : '',
+                                            userId: selector?.userData?.userId
+                                              ? selector?.userData?.userId
+                                              : '',
+                                            profile: selector?.userData
+                                              ?.companyLogo
+                                              ? selector?.userData
+                                                ?.companyLogo
+                                              : '',
+                                          },
+                                        };
+                                        setMoreActionBtn(newObj);
+                                      }
+                                    }}>
+                                    <Image
+                                      source={AppImages.Common.menuIcon}
+                                      resizeMode="contain"
+                                    />
+                                  </MenuTrigger>
+                                </Menu>
+                              </View>
+                              {moreActionBtn?.commentId == el?.commentId ? (
+                                <MenuOptions>
+                                  <MenuOption
+                                    style={styles.deleteBtnCont}
+                                    onSelect={() => {
+                                      props?.delNReportAction(moreActionBtn);
+                                      setMoreActionBtn(null);
+                                    }}>
+                                    <Text style={styles.deleteBtnTxt}>
+                                      {moreActionBtn?.actionType ==
+                                        CommentActionType.deleteComment
+                                        ? 'Delete'
+                                        : 'Report'}
+                                    </Text>
+                                  </MenuOption>
+                                </MenuOptions>
+                              ) : null}
+                            </View>
+                          );
+                        })
                         : null}
                     </>
                   );
@@ -397,7 +397,7 @@ const CommentsModal = (props: Props) => {
                     style={{
                       fontSize: normalized(14),
                       color: AppColors.black.black,
-                      fontWeight: '400',
+                      ...AppStyles.textRegular
                     }}>
                     No Comment Found!
                   </Text>
@@ -411,9 +411,9 @@ const CommentsModal = (props: Props) => {
               onChangeMessage={setCommentTxt}
               onSendPress={() => {
                 if (isReply) {
-                  props?.onNewComment({message: commentTxt, isReply: isReply});
+                  props?.onNewComment({ message: commentTxt, isReply: isReply });
                 } else {
-                  props?.onNewComment({message: commentTxt, isReply: null});
+                  props?.onNewComment({ message: commentTxt, isReply: null });
                 }
                 setIsReply(null);
                 setCommentTxt('');
@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: normalized(13),
     color: AppColors.black.black,
-    fontWeight: '600',
+    ...AppStyles.textMedium
   },
   endView: {
     height: 35,
@@ -499,12 +499,13 @@ const styles = StyleSheet.create({
   description: {
     color: AppColors.grey.grey,
     fontSize: normalized(12),
-    fontWeight: '600',
+    ...AppStyles.textMedium
   },
   msgTxt: {
     color: AppColors.black.black,
     fontSize: normalized(12),
-    fontWeight: '400',
+    ...AppStyles.textRegular
+
   },
   deleteBtnCont: {
     backgroundColor: AppColors.white.whiteOp,
@@ -516,7 +517,7 @@ const styles = StyleSheet.create({
   },
   deleteBtnTxt: {
     fontSize: normalized(12),
-    fontWeight: '400',
+    ...AppStyles.textRegular,
     color: AppColors.black.black,
   },
 });

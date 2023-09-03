@@ -1,6 +1,7 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {AppColors, hv, normalized} from '../../../../utils/AppConstants';
+import { StyleSheet, Text, View } from 'react-native';
+import { AppColors, hv, normalized } from '../../../../utils/AppConstants';
+import { AppStyles } from '../../../../Utils/AppStyles';
 
 const NoMoreChat = props => {
   return (
@@ -18,6 +19,7 @@ const styles = StyleSheet.create({
   message: {
     color: AppColors.grey.grey,
     justifyContent: 'center',
+    ...AppStyles.textRegular
   },
 });
 export default NoMoreChat;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { LayoutAnimation, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { AppColors, normalized } from '../../../../Utils/AppConstants';
+import { AppStyles } from '../../../../Utils/AppStyles';
 
 interface Props {
     recordingType: number;
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     singleTxt: {
         color: AppColors.white.white,
         fontSize: normalized(14),
-        fontWeight: '600'
+        ...AppStyles.textMedium
     },
     absoluteBox: {
         backgroundColor: '#808080',

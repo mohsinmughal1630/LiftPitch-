@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   SafeAreaView,
@@ -12,10 +12,10 @@ import {
   PermissionsAndroid,
   Text,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
-import {createThumbnail} from 'react-native-create-thumbnail';
-import DocumentPicker, {types} from 'react-native-document-picker';
+import { createThumbnail } from 'react-native-create-thumbnail';
+import DocumentPicker, { types } from 'react-native-document-picker';
 import moment = require('moment');
 import MyMessage from '../Components/MyMessages';
 import OtherUserMessage from '../Components/OtherUserMessage';
@@ -39,6 +39,7 @@ import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import MediaSelectionModal from '../../../Components/CustomModal/MediaSelectionModal';
 import ChatHeader from '../Components/ChatHeader';
+import { AppStyles } from '../../../../Utils/AppStyles';
 const ChatScreen = (props: ScreenProps) => {
   const selector = useSelector((AppState: any) => AppState.AppReducer);
   const thread = props?.route?.params?.thread
@@ -74,7 +75,7 @@ const ChatScreen = (props: ScreenProps) => {
     }
   }, [props?.route?.params?.thread]);
 
-  const getOtherUpdatedData = async () => {};
+  const getOtherUpdatedData = async () => { };
 
   useEffect(() => {
     threadRef.current = thread;
@@ -259,8 +260,8 @@ const ChatScreen = (props: ScreenProps) => {
         ? JSON.parse(threadRef.current.participants)
         : threadRef.current.participants
       : typeof thread.participants == 'string'
-      ? JSON.parse(thread.participants)
-      : thread.participants;
+        ? JSON.parse(thread.participants)
+        : thread.participants;
     if (participants?.length > 0) {
       let otherUserIndex = participants.findIndex(
         (value: any) => value.user != userId,
@@ -282,8 +283,8 @@ const ChatScreen = (props: ScreenProps) => {
     let currentUserDataPic = currentUserData?.image
       ? currentUserData?.image
       : currentUserData?.profile_image
-      ? currentUserData.profile_image
-      : '';
+        ? currentUserData.profile_image
+        : '';
     let data: any = {
       created: currentDate,
       createdAt: currentDate,
@@ -291,8 +292,8 @@ const ChatScreen = (props: ScreenProps) => {
       senderName: currentUserData?.company_name
         ? currentUserData.company_name
         : currentUserData.full_name
-        ? currentUserData.full_name
-        : '',
+          ? currentUserData.full_name
+          : '',
       senderProfilePictureURL: currentUserDataPic,
       recipientID: otherUserRef?.current?.user,
       recipientName: otherUserRef.current?.userName,
@@ -359,8 +360,8 @@ const ChatScreen = (props: ScreenProps) => {
                 let fullName = currentUserData?.company_name
                   ? currentUserData?.company_name
                   : currentUserData?.userName
-                  ? currentUserData?.userName
-                  : '';
+                    ? currentUserData?.userName
+                    : '';
 
                 ThreadManager.instance.generatePushNotification(
                   threadRef.current,
@@ -424,7 +425,7 @@ const ChatScreen = (props: ScreenProps) => {
     });
   };
   const uploadThumnail = async (path: any, payload: any) => {
-    let obj = {...payload};
+    let obj = { ...payload };
     await ThreadManager.instance.uploadMedia(path, false, (url: any) => {
       if (url !== 'error') {
         obj['thumbnail'] = url;
@@ -452,7 +453,7 @@ const ChatScreen = (props: ScreenProps) => {
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         documentSelection();
       }
-    } catch (e) {}
+    } catch (e) { }
   };
   const documentSelection = async () => {
     DocumentPicker.pick({
@@ -485,9 +486,8 @@ const ChatScreen = (props: ScreenProps) => {
     if (Platform.OS == 'ios') {
       return uri;
     } else {
-      const destPath = `${
-        RNFS.TemporaryDirectoryPath
-      }/${ThreadManager.instance.makeid(5)}`;
+      const destPath = `${RNFS.TemporaryDirectoryPath
+        }/${ThreadManager.instance.makeid(5)}`;
       await RNFS.copyFile(uri, destPath);
       let data = await RNFS.stat(destPath);
       return data.path;
@@ -496,7 +496,7 @@ const ChatScreen = (props: ScreenProps) => {
 
   return (
     <>
-      <SafeAreaView style={{backgroundColor: AppColors.white.white}} />
+      <SafeAreaView style={{ backgroundColor: AppColors.white.white }} />
       <View style={styles.container}>
         <ChatHeader
           title={setName()}
@@ -523,7 +523,7 @@ const ChatScreen = (props: ScreenProps) => {
             stickySectionHeadersEnabled={false}
             sections={visibleMessages}
             keyExtractor={(item, index) => `${index}`}
-            renderItem={({item, index, section}) => {
+            renderItem={({ item, index, section }) => {
               return (
                 <View style={styles.sectionListCon}>
                   {item.type == 'Owner' ? (
@@ -537,9 +537,9 @@ const ChatScreen = (props: ScreenProps) => {
                         selectedUrl.current = item.url;
                         setShowImageView(true);
                       }}
-                      atProfilePress={() => {}}
+                      atProfilePress={() => { }}
                       navigation={props.navigation}
-                      playVideo={(obj: any) => {}}
+                      playVideo={(obj: any) => { }}
                     />
                   ) : (
                     <OtherUserMessage
@@ -554,13 +554,13 @@ const ChatScreen = (props: ScreenProps) => {
                         setShowImageView(true);
                       }}
                       navigation={props.navigation}
-                      playVideo={(obj: any) => {}}
+                      playVideo={(obj: any) => { }}
                     />
                   )}
                 </View>
               );
             }}
-            renderSectionFooter={({section}) => {
+            renderSectionFooter={({ section }) => {
               return (
                 <View
                   style={{
@@ -578,15 +578,16 @@ const ChatScreen = (props: ScreenProps) => {
                       paddingVertical: hv(4),
                       color: AppColors.black.lightBlack,
                       textAlign: 'center',
+                      ...AppStyles.textRegular
                     }}>{`${section.title} (${moment(
-                    section.title,
-                    'YYYY-MM-DD',
-                  ).format('ddd')})`}</Text>
+                      section.title,
+                      'YYYY-MM-DD',
+                    ).format('ddd')})`}</Text>
                   <View style={styles.simpleLine} />
                 </View>
               );
             }}
-            renderSectionHeader={({section}) => {
+            renderSectionHeader={({ section }) => {
               return null;
             }}
           />
@@ -647,7 +648,7 @@ const ChatScreen = (props: ScreenProps) => {
           </View>
         </KeyboardAvoidingView>
       </View>
-      <SafeAreaView style={{backgroundColor: AppColors.white.white}} />
+      <SafeAreaView style={{ backgroundColor: AppColors.white.white }} />
       <Modal visible={showPdf} presentationStyle="fullScreen">
         <PdfView url={selectedUrl.current} onClose={() => setShowPdf(false)} />
       </Modal>

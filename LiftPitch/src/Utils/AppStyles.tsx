@@ -1,5 +1,5 @@
-import {Dimensions, Platform, StatusBar, StyleSheet} from 'react-native';
-import {AppColors, hv, isSmallDevice, normalized} from './AppConstants';
+import { Dimensions, Platform, StatusBar, StyleSheet } from 'react-native';
+import { AppColors, AppFonts, hv, isSmallDevice, normalized } from './AppConstants';
 export const AppHorizontalMargin = normalized(15);
 
 const windowHeight = Dimensions.get('window').height;
@@ -49,6 +49,22 @@ export const AppStyles = StyleSheet.create({
     shadowRadius: 4.68,
 
     elevation: 8,
+  },
+
+  textRegular: {
+    fontFamily: AppFonts.Regular,
+  },
+  textSemiBold: {
+    fontFamily: AppFonts.SemiBold,
+  },
+  textMedium: {
+    fontFamily: AppFonts.Medium,
+  },
+  textBold: {
+    fontFamily: AppFonts.Bold,
+  },
+  textLight: {
+    fontFamily: AppFonts.Light,
   },
   imageCommon: {
     resizeMode: 'contain',

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -16,21 +16,22 @@ import {
   normalized,
 } from '../../../../Utils/AppConstants';
 import VideoHeaderSection from '../Components/VideoHeaderSection';
-import {useIsFocused} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useIsFocused } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   setIsAlertShow,
   setIsLoader,
   setUserData,
 } from '../../../../Redux/reducers/AppReducer';
-import {AppStrings} from '../../../../Utils/Strings';
+import { AppStrings } from '../../../../Utils/Strings';
 import {
   getUpdatedVideoListing,
   getVideoListSize,
 } from '../../../../Network/Services/VideoListingServices';
 import CommonDataManager from '../../../../Utils/CommonManager';
-import {getOtherUserProfile} from '../../../../Network/Services/ProfileServices';
-import {saveUserData} from '../../../../Utils/AsyncStorage';
+import { getOtherUserProfile } from '../../../../Network/Services/ProfileServices';
+import { saveUserData } from '../../../../Utils/AsyncStorage';
+import { AppStyles } from '../../../../Utils/AppStyles';
 
 const VideosHomeScreen = (props: ScreenProps) => {
   const isFocused = useIsFocused();
@@ -138,7 +139,7 @@ const VideosHomeScreen = (props: ScreenProps) => {
           pagingEnabled
           onMomentumScrollEnd={updateCurrentSlideIndex}
           keyExtractor={(item, index) => `${index}`}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
               <SingleVideoComponent
                 navigation={props?.navigation}
@@ -173,11 +174,11 @@ const VideosHomeScreen = (props: ScreenProps) => {
           }}
         />
       ) : selector?.isLoaderStart ? null : (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text
             style={{
               fontSize: normalized(14),
-              fontWeight: '400',
+              ...AppStyles.textRegular
             }}>
             No feeds found!
           </Text>

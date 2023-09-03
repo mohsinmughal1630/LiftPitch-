@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,9 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import {AppImages, normalized} from '../../Utils/AppConstants';
+import { AppImages, normalized } from '../../Utils/AppConstants';
 import ThreadManager from '../../ChatModule/ThreadManger';
+import { AppStyles } from '../../Utils/AppStyles';
 const LocalNotification = (props: any) => {
   const translationY = useSharedValue(-100);
   useEffect(() => {
@@ -69,14 +70,14 @@ const LocalNotification = (props: any) => {
             style={{
               fontSize: normalized(12),
               color: 'black',
-              fontWeight: '500',
+              ...AppStyles.textMedium
             }}>
             {ThreadManager.instance.pushObj._title}
           </Text>
           <Text
             numberOfLines={1}
             style={{
-              fontWeight: '400',
+              ...AppStyles.textRegular,
               fontSize: 12,
               color: 'black',
             }}>

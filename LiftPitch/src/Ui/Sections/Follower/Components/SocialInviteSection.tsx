@@ -66,5 +66,6 @@ const styles = StyleSheet.create({
     title: {
         color: AppColors.black.black,
         fontSize: normalized(14),
+        ...AppStyles.textRegular
     },
 })

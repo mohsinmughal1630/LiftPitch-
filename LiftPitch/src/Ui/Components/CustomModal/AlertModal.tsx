@@ -1,8 +1,9 @@
 import React from 'react';
-import {Modal, StyleSheet, Text, View} from 'react-native';
+import { Modal, StyleSheet, Text, View } from 'react-native';
 import AppStatusBar from '../AppStatusBar';
 import CustomFilledBtn from '../CustomButtom/CustomButton';
-import {AppColors, hv, normalized} from '../../../Utils/AppConstants';
+import { AppColors, hv, normalized } from '../../../Utils/AppConstants';
+import { AppStyles } from '../../../Utils/AppStyles';
 interface Props {
   message: any;
   onPress: any;
@@ -24,7 +25,7 @@ export default function AlertModal(props: Props) {
           <Text style={styles.title}>Alert</Text>
           <Text style={styles.label}>{props.message}</Text>
           <CustomFilledBtn
-            mainContainer={{width: normalized(150), height: normalized(40)}}
+            mainContainer={{ width: normalized(150), height: normalized(40) }}
             label="Ok"
             onPressBtn={() => props?.onPress()}
           />
@@ -53,12 +54,14 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: normalized(14),
+    ...AppStyles.textRegular,
     color: AppColors.black.black,
     marginBottom: hv(20),
     textAlign: 'center',
   },
   title: {
     fontSize: normalized(18),
+    ...AppStyles.textMedium,
     color: AppColors.red.mainColor,
     marginBottom: hv(20),
   },

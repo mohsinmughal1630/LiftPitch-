@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -17,14 +17,15 @@ import {
 import CustomHeader from '../CustomHeader/CustomHeader';
 import {
   AppColors,
+  AppFonts,
   AppImages,
   hv,
   isSmallDevice,
   normalized,
 } from '../../../Utils/AppConstants';
-import {AppStyles} from '../../../Utils/AppStyles';
-import {useSelector} from 'react-redux';
-import {AppRootStore} from '../../../Redux/store/AppStore';
+import { AppStyles } from '../../../Utils/AppStyles';
+import { useSelector } from 'react-redux';
+import { AppRootStore } from '../../../Redux/store/AppStore';
 import CommonDataManager from '../../../Utils/CommonManager';
 
 interface Props {
@@ -33,7 +34,7 @@ interface Props {
 }
 
 const DeviceContactsListModal = (props: Props) => {
-  const {userData} = useSelector((state: AppRootStore) => state.AppReducer);
+  const { userData } = useSelector((state: AppRootStore) => state.AppReducer);
   const [searchTxt, setSearchTxt] = useState('');
   const filteredList = useRef([]);
   const [showSearchBar, setShowSearchBar] = useState(false);
@@ -109,7 +110,7 @@ const DeviceContactsListModal = (props: Props) => {
               data={searchTxt ? filteredList.current : props.list}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
-              renderItem={({item, index}) => (
+              renderItem={({ item, index }) => (
                 <View key={index} style={styles.singleContact}>
                   <View style={styles.textSection}>
                     <Text numberOfLines={1} style={styles.title}>
@@ -135,6 +136,7 @@ const DeviceContactsListModal = (props: Props) => {
                       <Text
                         style={{
                           color: AppColors.white.white,
+                          ...AppStyles.textRegular
                         }}>
                         Invite
                       </Text>
@@ -152,7 +154,7 @@ const DeviceContactsListModal = (props: Props) => {
                   }}>
                   <Text
                     style={{
-                      // ...AppStyles.textRegular,
+                      ...AppStyles.textRegular,
                       color: AppColors.white.white,
                       fontSize: normalized(16),
                     }}>
@@ -199,13 +201,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    // ...AppStyles.textSemiBold,
-    fontWeight: '600',
+    ...AppStyles.textSemiBold,
     color: AppColors.dark.darkLevel1,
     fontSize: normalized(16),
   },
   label: {
-    // ...AppStyles.textRegular,
+    ...AppStyles.textRegular,
     color: AppColors.dark.darkLevel1,
     fontSize: normalized(14),
   },
@@ -227,7 +228,7 @@ const styles = StyleSheet.create({
     tintColor: AppColors.dark.darkLevel1,
   },
   inputContainer: {
-    // fontFamily: AppFonts.Regular,
+    fontFamily: AppFonts.Regular,
     color: AppColors.dark.darkLevel4,
     fontSize: normalized(16),
     flex: 1,

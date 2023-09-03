@@ -115,11 +115,11 @@ const styles = StyleSheet.create({
   selectLocTitle: {
     fontSize: 18,
     color: AppColors.black.black,
-    fontWeight: "600",
+    ...AppStyles.textMedium
   },
   locTitle: {
     fontSize: normalized(4),
-    fontWeight: "600",
+    ...AppStyles.textMedium,
     color: AppColors.black.black,
     marginBottom: hv(5),
   },

@@ -93,7 +93,7 @@ export default ConfirmationModal;
 
 const styles = StyleSheet.create({
   rowTitle: {
-    fontWeight: '800',
+    ...AppStyles.textBold,
     color: AppColors.dark.darkLevel1,
     fontSize: normalized(18),
     alignSelf: 'center',
@@ -101,9 +101,9 @@ const styles = StyleSheet.create({
     maxWidth: '60%',
   },
   rowLabel: {
-    fontWeight: '600',
     color: AppColors.dark.darkLevel1,
     fontSize: normalized(18),
+    ...AppStyles.textMedium,
     alignSelf: 'center',
     textAlign: 'center',
     maxWidth: '80%',
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     borderRadius: 35,
   },
   btnText: {
-    fontWeight: '600',
+    ...AppStyles.textMedium,
     fontSize: normalized(14),
     color: AppColors.white.white,
   },

@@ -18,7 +18,7 @@ import {
 import CommonDataManager from '../../../../Utils/CommonManager';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
 import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlaceHolderComp';
-import {AppHorizontalMargin} from '../../../../Utils/AppStyles';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 
 const FollowConfirmationModal = (props: any) => {
   return (
@@ -35,7 +35,7 @@ const FollowConfirmationModal = (props: any) => {
           <View style={styles.headerRow}>
             {props?.data?.profile?.length > 0 ? (
               <AppImageViewer
-                source={{uri: props?.data?.profile}}
+                source={{ uri: props?.data?.profile }}
                 placeHolder={AppImages.bottomBar.Profile}
                 style={styles.img}
               />
@@ -46,25 +46,25 @@ const FollowConfirmationModal = (props: any) => {
                 mainStyles={styles.img}
                 nameStyles={{
                   fontSize: normalized(16),
-                  fontWeight: '600',
+                  ...AppStyles.textMedium
                 }}
               />
             )}
             <Text style={styles.headingText}>
               {props?.type == 'add'
                 ? CommonDataManager.getSharedInstance().capitalizeFirstLetter(
-                    props?.data?.userName,
-                  )
+                  props?.data?.userName,
+                )
                 : 'Remove follower?'}
             </Text>
             <Text style={styles.desTxt}>
               {props?.type == 'add'
                 ? `Are you sure you want to add ${CommonDataManager.getSharedInstance().capitalizeFirstLetter(
-                    props?.data?.userName,
-                  )} to your following list`
+                  props?.data?.userName,
+                )} to your following list`
                 : `We won't tell ${CommonDataManager.getSharedInstance().capitalizeFirstLetter(
-                    props?.data?.userName,
-                  )} that they were removed from your followers`}
+                  props?.data?.userName,
+                )} that they were removed from your followers`}
             </Text>
           </View>
           <View style={styles.bottomContainer}>
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   },
   headingText: {
     fontSize: normalized(16),
-    fontWeight: '400',
+    ...AppStyles.textRegular,
     color: AppColors.black.black,
   },
   crossView: {
@@ -172,6 +172,7 @@ const styles = StyleSheet.create({
     fontSize: normalized(13),
     marginTop: hv(5),
     textAlign: 'center',
+    ...AppStyles.textRegular
   },
   cancelBtn: {
     height: normalized(45),
@@ -184,7 +185,7 @@ const styles = StyleSheet.create({
   cancelBtnTxt: {
     color: AppColors.black.black,
     fontSize: normalized(14),
-    fontWeight: '500',
+    ...AppStyles.textMedium
   },
   yesBtn: {
     height: normalized(45),
@@ -197,6 +198,6 @@ const styles = StyleSheet.create({
   yesBtnTxt: {
     color: AppColors.white.white,
     fontSize: normalized(14),
-    fontWeight: '500',
+    ...AppStyles.textMedium
   },
 });

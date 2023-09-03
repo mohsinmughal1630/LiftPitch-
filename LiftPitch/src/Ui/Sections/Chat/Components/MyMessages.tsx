@@ -1,7 +1,7 @@
 import moment from 'moment';
-import React, {useEffect, useState} from 'react';
-import {Text, View, Linking, StyleSheet, Image} from 'react-native';
-import {useSelector} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { Text, View, Linking, StyleSheet, Image } from 'react-native';
+import { useSelector } from 'react-redux';
 import Hyperlink from 'react-native-hyperlink';
 import SingleVideoItem from './SingleVideoItem';
 import SingleImageItem from './SingleImageItem';
@@ -12,8 +12,9 @@ import {
   hv,
   normalized,
 } from '../../../../Utils/AppConstants';
+import { AppStyles } from '../../../../Utils/AppStyles';
 
-const MyMessage = ({item, onPdf, onImage, playVideo}: any) => {
+const MyMessage = ({ item, onPdf, onImage, playVideo }: any) => {
   const [messageRead, setMessageRead] = useState(false);
   useEffect(() => {
     checkMessageRead();
@@ -51,7 +52,7 @@ const MyMessage = ({item, onPdf, onImage, playVideo}: any) => {
     return (
       <View style={styles.messageCon}>
         <Hyperlink
-          linkStyle={{color: '#2980b9', fontSize: normalized(16)}}
+          linkStyle={{ color: '#2980b9', fontSize: normalized(16) }}
           onPress={(url, text) => {
             if (item?.callUrl) {
               Linking.canOpenURL(item?.callUrl).then(supported => {
@@ -83,7 +84,7 @@ const MyMessage = ({item, onPdf, onImage, playVideo}: any) => {
     <View>
       <View style={styles.container}>{setContainerComponent()}</View>
       <View style={styles.timeTextCon}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <Text style={styles.timeText}>
             {moment(item?.time, 'HH:mm:ss').format('hh:mm A')}
           </Text>
@@ -120,6 +121,7 @@ const styles = StyleSheet.create({
   message: {
     fontSize: normalized(16),
     color: AppColors.black.black,
+    ...AppStyles.textRegular
   },
   timeTextCon: {
     alignSelf: 'flex-end',
@@ -129,6 +131,7 @@ const styles = StyleSheet.create({
     color: AppColors.black.lightBlack,
     textAlign: 'right',
     marginEnd: normalized(4),
+    ...AppStyles.textRegular
   },
 });
 
