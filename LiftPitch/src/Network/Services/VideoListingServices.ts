@@ -228,8 +228,6 @@ export const getUpdatedVideoListing = async (
   currentPage: any,
   onUpdates: any,
 ) => {
-  console.log('tab------>', tab);
-
   await firestore()
     .collection(Collections.POST_COLLECTION)
     .orderBy('createdAt', 'desc')

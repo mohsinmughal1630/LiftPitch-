@@ -4,6 +4,7 @@ import storage from '@react-native-firebase/storage';
 import {setThreadList} from '../Redux/reducers/AppReducer';
 import {sendPushNotification} from '../Network/Services/GeneralServices';
 import {Collections} from '../Utils/Strings';
+import moment from 'moment';
 
 let CHANNEL_COLLECTION = 'channels';
 let PARTICIPATION_COLLECTION = 'channel_participation';
@@ -78,10 +79,10 @@ class ThreadManager {
     let data = {
       lastMessage: msg,
       name: '',
-      creatorID: sender.id,
+      creatorID: sender?.id,
       channelID: docId,
       id: docId,
-      users: [sender.id, receiver.id],
+      users: [sender?.id, receiver?.id],
     };
     return firestore().collection(CHANNEL_COLLECTION).doc(docId).set(data);
   };
@@ -265,6 +266,9 @@ class ThreadManager {
     msg: any,
     onComplete: any,
   ) => {
+    console.log('sender------->', sender);
+    console.log('receiver------->', receiver);
+
     this.createThread(sender, receiver, docId, msg)
       .then(() => {
         this.createParticipant(sender, receiver, docId)
@@ -272,7 +276,7 @@ class ThreadManager {
             let participantsList = [
               {
                 channel: docId,
-                user: sender.id,
+                user: sender?.id,
                 isAdmin: true,
                 status: 'accept',
                 userName: sender?.username
@@ -282,7 +286,7 @@ class ThreadManager {
               },
               {
                 channel: docId,
-                user: receiver.id,
+                user: receiver?.id,
                 isAdmin: false,
                 status: 'request',
                 userName: receiver?.username
@@ -300,7 +304,8 @@ class ThreadManager {
               users: [sender.id, receiver.id],
               participants: participantsList,
             };
-            this.threadList = [...this.threadList, threadData];
+            this.threadList.push(threadData);
+            // this.threadList = [...this.threadList, threadData];
             onComplete(threadData);
           })
           .catch(error => {
@@ -345,7 +350,7 @@ class ThreadManager {
     let receiverPromise = new Promise((resolve, reject) => {
       let data = {
         channel: docId,
-        user: receiver.id,
+        user: receiver?.id,
         isAdmin: false,
         status: 'request',
         userName: receiver?.username ? receiver?.username : receiver?.firstname,
@@ -614,6 +619,29 @@ class ThreadManager {
       .then(() => {})
       .catch(err => {
         console.log('updateUserToken====>', err);
+      });
+  };
+
+  // SET FIREBASE TOKEN FOR FCM
+  updateUserStatus = async (userId: any, action: any) => {
+    let obj: any = {
+      value: action,
+    };
+    if (action == 'Offline') {
+      let currentDate = moment
+        .utc(new Date())
+        .format(ThreadManager.instance.dateFormater.fullDate);
+      obj['OfflineAt'] = currentDate;
+    }
+    firestore()
+      .collection(Collections.Users)
+      .doc(userId)
+      .update({
+        status: obj,
+      })
+      .then(() => {})
+      .catch(err => {
+        console.log('updateUserStatus====>', err);
       });
   };
 

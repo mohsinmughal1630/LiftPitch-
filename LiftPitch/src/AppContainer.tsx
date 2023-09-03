@@ -4,7 +4,7 @@ import {
   useNavigation,
 } from '@react-navigation/native';
 import React, {useEffect} from 'react';
-import {Platform, SafeAreaView, StyleSheet, View} from 'react-native';
+import {AppState, Platform, SafeAreaView, StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import AlertModal from './Ui/Components/CustomModal/AlertModal';
 import {
@@ -26,6 +26,7 @@ import {Routes} from './Utils/Routes';
 import firestore from '@react-native-firebase/firestore';
 export const navigationRef = createNavigationContainerRef();
 export const navRef = React.createRef();
+import auth from '@react-native-firebase/auth';
 
 function AppContainer() {
   const selector = useSelector((AppState: any) => AppState.AppReducer);
@@ -37,11 +38,42 @@ function AppContainer() {
     if (isFocused && selector?.userData) {
       ThreadManager.instance.setupRedux(selector, dispatch);
       setChat();
+      // setUpdateOnlineStatus();
       return () => {
         ThreadManager.instance.removeThreadObserver();
       };
     }
   }, [selector?.userData]);
+
+  // Add event listener to track app state changes
+  AppState.addEventListener('change', (nextAppState: any) => {
+    if (nextAppState === 'background') {
+      setOfflineStatus();
+    } else if (nextAppState == 'active') {
+      setOnlineStatus();
+    }
+  });
+
+  // Set user's status to "offline"
+  const setOfflineStatus = async () => {
+    const user = await getUserData();
+    if (user?.userId) {
+      await ThreadManager.instance.updateUserStatus(
+        user?.userId?.toString(),
+        'Offline',
+      );
+    }
+  };
+  const setOnlineStatus = async () => {
+    // Set user's status to "online"
+    const user = await getUserData();
+    if (user?.userId) {
+      await ThreadManager.instance.updateUserStatus(
+        user?.userId?.toString(),
+        'Online',
+      );
+    }
+  };
 
   /// for Push Notification------------->
 
@@ -51,6 +83,7 @@ function AppContainer() {
       dispatch(setUpdateFBToken(false));
     }
   }, [selector?.updateToken]);
+
   const setChat = async () => {
     const user = await getUserData();
     setTimeout(async () => {

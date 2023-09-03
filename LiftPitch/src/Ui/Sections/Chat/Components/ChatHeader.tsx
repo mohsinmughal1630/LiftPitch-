@@ -9,12 +9,21 @@ import {
 import {AppHorizontalMargin} from '../../../../Utils/AppStyles';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
 import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlaceHolderComp';
+import moment from 'moment';
+import ThreadManager from '../../../../ChatModule/ThreadManger';
 const ChatHeader = (props: any) => {
+  const getOfflineTime = () => {
+    let findedDate = moment(
+      moment(
+        props?.otherUserStatus?.OfflineAt,
+        ThreadManager.instance.dateFormater.fullDate,
+      ),
+    );
+    let timeDate = findedDate.format(ThreadManager.instance.dateFormater.time);
+    return moment(timeDate, 'HH:mm:ss').format('ddd hh:mm A');
+  };
   return (
     <>
-      {/* {props.showBorder ? (
-        <View style={[styles.line, {marginTop: hv(7)}]} />
-      ) : null} */}
       <View style={[styles.maincontainer, props?.mainStyle]}>
         <>
           <View
@@ -54,7 +63,16 @@ const ChatHeader = (props: any) => {
                 }}
               />
             )}
-            <Text style={styles.title}>{props?.title}</Text>
+            <View>
+              <Text style={styles.title}>{props?.title}</Text>
+              {props?.otherUserStatus?.value ? (
+                <Text style={styles.des}>
+                  {props?.otherUserStatus?.value == 'Online'
+                    ? 'online'
+                    : `Last seen at ${getOfflineTime()}`}
+                </Text>
+              ) : null}
+            </View>
           </View>
 
           {props?.atRightBtn ? (
@@ -99,6 +117,11 @@ const styles = StyleSheet.create({
     color: '#1E1E1F',
     fontSize: normalized(18),
     fontWeight: '500',
+  },
+  des: {
+    color: AppColors.grey.simple,
+    fontSize: normalized(14),
+    fontWeight: '400',
   },
   line: {
     height: 0.8,
