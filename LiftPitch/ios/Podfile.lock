@@ -572,9 +572,9 @@ PODS:
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
   - OpenSSL-Universal (1.1.1100)
-  - Permission-Camera (3.8.4):
+  - Permission-Camera (3.9.0):
     - RNPermissions
-  - Permission-PhotoLibrary (3.8.4):
+  - Permission-PhotoLibrary (3.9.0):
     - RNPermissions
   - PromisesObjC (2.3.1)
   - RCT-Folly (2021.06.28.00-v2):
@@ -963,7 +963,7 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController
-  - RNPermissions (3.8.4):
+  - RNPermissions (3.9.0):
     - React-Core
   - RNReanimated (2.10.0):
     - DoubleConversion
@@ -992,10 +992,10 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.24.0):
+  - RNScreens (3.25.0):
     - React-Core
     - React-RCTImage
-  - RNShare (9.2.4):
+  - RNShare (9.4.0):
     - React-Core
   - RNSVG (13.13.0):
     - React-Core
@@ -1348,8 +1348,8 @@ SPEC CHECKSUMS:
   libwebp: 33dc822fbbf4503668d09f7885bbfedc76c45e96
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  Permission-Camera: 7ec9ee99704766ff9b90198183387a7f5d82b0c1
-  Permission-PhotoLibrary: 6db9318df71ad74e9774cecedde95285f5a32d6a
+  Permission-Camera: 5c332b27becccf9d5467210aa6cf25f4572dca4a
+  Permission-PhotoLibrary: 2f51b28d8e47bf02ca7fb1fd5e08bebfb194767d
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   RCT-Folly: 4d8508a426467c48885f1151029bc15fa5d7b3b8
   RCTRequired: 3e917ea5377751094f38145fdece525aa90545a0
@@ -1405,10 +1405,10 @@ SPEC CHECKSUMS:
   RNGoogleSignin: e64616a4080cf7d83f4b292fad82d174587444e2
   RNIap: b23550f659d4fb63d37e27fd7faf3991f4eb61aa
   RNImageCropPicker: 44e2807bc410741f35d4c45b6586aedfe3da39d2
-  RNPermissions: f1b49dd05fa9b83993cd05a9ee115247944d8f1a
+  RNPermissions: 2e68b2e82a93ad09327dee8822846fead91ca3ad
   RNReanimated: 5bdcbcc3a72aedeee7bb099604262403aa75a1e5
-  RNScreens: b21dc57dfa2b710c30ec600786a3fc223b1b92e7
-  RNShare: 255701a138fcdef6c27dc93724548fd122e91f9e
+  RNScreens: 85d3880b52d34db7b8eeebe2f1a0e807c05e69fa
+  RNShare: df09e4d08ce0b50e32e2b6b9ec0249d7fdc06960
   RNSVG: ed492aaf3af9ca01bc945f7a149d76d62e73ec82
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d

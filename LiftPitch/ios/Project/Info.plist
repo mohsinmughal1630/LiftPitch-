@@ -62,21 +62,20 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to your Camera to upload photos and videos to your feed.</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Kindly grant access to contacts.</string>
+	<string>Kindly grant access to contacts to invite them to your app.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Kindly grant location access to LiftPitch app.</string>
+	<string>Location access is needed in order to update user location in profile settings.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to your Microphone to record videos and share to your feed.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Kindly grant gallery access to LiftPitch app.</string>
+	<string>Kindly grant gallery access to LiftPitch app in order to share your photos and videos to your feed.</string>
 
 	
 	<key>NSCameraUsageDescription</key>
-    <string>$(PRODUCT_NAME) needs access to your Camera.</string>
-
-    <!-- optionally, if you want to record audio: -->
-     <!-- Add for vision camera--> 
-     <key>NSMicrophoneUsageDescription</key>
-     <string>$(PRODUCT_NAME) needs access to your Microphone.</string>
+    <string>$(PRODUCT_NAME) needs access to your Camera in order to share photos and videos to your feed..</string>
     <key>UIUserInterfaceStyle</key>
 	<string>Light</string>
 	<key>UIAppFonts</key>
@@ -127,10 +126,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
-	<array>
-		<string>D2760000850100</string>
-		<string>D2760000850101</string>
-	</array>
 </dict>
 </plist>
