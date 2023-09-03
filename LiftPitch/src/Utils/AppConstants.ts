@@ -1,7 +1,7 @@
-import {StackScreenProps} from '@react-navigation/stack';
-import {Dimensions, Platform, PixelRatio, StatusBar} from 'react-native';
+import { StackScreenProps } from '@react-navigation/stack';
+import { Dimensions, Platform, PixelRatio, StatusBar } from 'react-native';
 import moment from 'moment';
-import {AppStrings} from './Strings';
+import { AppStrings } from './Strings';
 export const platformVersion = Platform.Version;
 export type ScreenProps = StackScreenProps<any, any>;
 export const ScreenSize = Dimensions.get('screen');
@@ -68,6 +68,7 @@ export const AppImages = {
     CloseIcon: require('../Ui/assets/images/CreateVideo/CloseIcon.png'),
     FiltersIcon: require('../Ui/assets/images/CreateVideo/FiltersIcon.png'),
     flash: require('../Ui/assets/images/CreateVideo/flash.png'),
+    flashOn: require('../Ui/assets/images/CreateVideo/FlashOn.png'),
     MagicPenIcon: require('../Ui/assets/images/CreateVideo/MagicPenIcon.png'),
     FlipIcon: require('../Ui/assets/images/CreateVideo/FlipIcon.png'),
     musicIcon: require('../Ui/assets/images/CreateVideo/musicIcon.png'),

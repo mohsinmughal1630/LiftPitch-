@@ -13,13 +13,14 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {AppStyles} from '../../../../Utils/AppStyles';
+import { AppStyles } from '../../../../Utils/AppStyles';
 import Video from 'react-native-video';
-import {Routes} from '../../../../Utils/Routes';
+import { Routes } from '../../../../Utils/Routes';
 
 const UploadMediaPreviewScreen = (props: ScreenProps) => {
   const mediaType = props.route?.params?.mediaType;
   const mediaPath = props.route?.params?.mediaPath;
+  console.log("mediaPath: ", mediaPath);
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
@@ -29,7 +30,7 @@ const UploadMediaPreviewScreen = (props: ScreenProps) => {
             <Image
               source={AppImages.Auth.backIcon}
               resizeMode="contain"
-              // style={styles.backIcon}
+            // style={styles.backIcon}
             />
           </View>
         </TouchableWithoutFeedback>
@@ -67,7 +68,7 @@ const UploadMediaPreviewScreen = (props: ScreenProps) => {
       <View style={styles.subContainer}>
         {mediaType == 'video' ? (
           <Video
-            source={{uri: mediaPath}}
+            source={{ uri: mediaPath }}
             controls={true}
             ignoreSilentSwitch="ignore"
             fullscreen={true}
@@ -75,7 +76,15 @@ const UploadMediaPreviewScreen = (props: ScreenProps) => {
             style={styles.videoStyles}
           />
         ) : (
-          <Text>Image should be displayed instead</Text>
+          <Image source={{
+            uri: `file://${mediaPath}`
+          }}
+            onError={(e) => console.log('err ', e)}
+            style={{
+              width: '100%',
+              height: '100%'
+            }}
+          />
         )}
       </View>
     </View>

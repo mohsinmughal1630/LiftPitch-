@@ -1,49 +1,60 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   LayoutAnimation,
   StyleSheet,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-  PanResponder,
 } from 'react-native';
 import ProgressCircle from 'react-native-progress-circle';
-import {AppColors, normalized} from '../../../../Utils/AppConstants';
-import {AppStyles} from '../../../../Utils/AppStyles';
+import { AppColors, normalized } from '../../../../Utils/AppConstants';
+import { AppStyles } from '../../../../Utils/AppStyles';
 
 interface Props {
+  isImage: boolean;
   onImageClick: () => void;
   onVideRecordingStart: () => void;
   onVideoRecordingEnd: () => void;
+  isVideoRecording: boolean;
 }
 
 const VideoRecorderBtn = (props: Props) => {
-  const [isRecording, setIsRecording] = useState(false);
 
-  const onMediaEnd = () => {
-    setIsRecording(false);
-    if (!isRecording) {
-      props.onImageClick();
-    } else {
-      props.onVideoRecordingEnd();
-    }
-  };
-  const mediaPressed = () => {
-    setIsRecording(true);
-    props.onVideRecordingStart();
-  };
+  // const onMediaEnd = () => {
+  //   setIsRecording(false);
+  //   if (!isRecording) {
+  //     props.onImageClick();
+  //   } else {
+  //     props.onVideoRecordingEnd();
+  //   }
+  // };
+  // const mediaPressed = () => {
+  //   setIsRecording(true);
+  //   props.onVideRecordingStart();
+  // };
 
   return (
-    <TouchableWithoutFeedback
-      onLongPress={mediaPressed}
-      onPressOut={onMediaEnd}>
+    <TouchableOpacity
+      // onLongPress={mediaPressed}
+      // onPressOut={onMediaEnd}
+      onPress={() => {
+        if (props.isImage) {
+          props.onImageClick();
+        } else if (props.isVideoRecording) {
+          props.onVideoRecordingEnd();
+        } else {
+          props.onVideRecordingStart();
+        }
+      }}
+    >
       <View>
-        {isRecording ? (
-          <AnimatedCircle onEnd={onMediaEnd} />
+        {props.isVideoRecording ? (
+          <AnimatedCircle onEnd={props.onVideoRecordingEnd} />
         ) : (
           <View style={styles.stopRecordCont} />
         )}
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 };
 
@@ -85,7 +96,7 @@ export const styles = StyleSheet.create({
 
 export default VideoRecorderBtn;
 
-const AnimatedCircle = ({onEnd}: any) => {
+const AnimatedCircle = ({ onEnd }: any) => {
   const [duration, setDuration] = useState(0);
   const [radius, setRadius] = useState(30);
 
