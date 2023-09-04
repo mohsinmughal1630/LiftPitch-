@@ -42,7 +42,7 @@ const VideosHomeScreen = (props: ScreenProps) => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const counter = useRef(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [pageSize, setPageSize] = useState(2);
+  const [pageSize, setPageSize] = useState(10);
   const [videoList, setVideoList] = useState([]);
   const updateCurrentSlideIndex = (e: any) => {
     const contentOffsetY = e.nativeEvent.contentOffset.y;
@@ -72,20 +72,19 @@ const VideosHomeScreen = (props: ScreenProps) => {
   };
 
   const fetchVideoListing = async (tabValue?: any, currentUserData?: any) => {
-    // if (!selector?.isNetConnected) {
-    //   dispatch(
-    //     setIsAlertShow({
-    //       value: true,
-    //       message: AppStrings.Network.internetError,
-    //     }),
-    //   );
-    //   return;
-    // }
+    if (!selector.isNetConnected) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.internetError,
+        }),
+      );
+      return;
+    }
     try {
       if (counter?.current == 1 && !selector?.isLoaderStart) {
         dispatch(setIsLoader(true));
       }
-
       await getUpdatedVideoListing(
         currentUserData,
         tabValue != undefined ? tabValue : selectedTab,
@@ -115,6 +114,8 @@ const VideosHomeScreen = (props: ScreenProps) => {
                 index === arr.findIndex((o: any) => obj?.videoId === o?.videoId)
               );
             });
+            if (totalPages > 4 && newArr?.length < 5) {
+            }
             setVideoList(newArr);
           }
         },
