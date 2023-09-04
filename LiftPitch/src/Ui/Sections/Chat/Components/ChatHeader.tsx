@@ -1,12 +1,12 @@
-import React, {useRef} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, { useRef } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   AppColors,
   AppImages,
   hv,
   normalized,
 } from '../../../../Utils/AppConstants';
-import {AppHorizontalMargin} from '../../../../Utils/AppStyles';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
 import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlaceHolderComp';
 import moment from 'moment';
@@ -43,23 +43,23 @@ const ChatHeader = (props: any) => {
               }}>
               <Image
                 source={AppImages.Auth.backIcon}
-                style={{tintColor: AppColors.black.black}}
+                style={{ tintColor: AppColors.black.black }}
               />
             </TouchableOpacity>
             {props?.profile?.length > 0 ? (
               <AppImageViewer
-                source={{uri: props?.profile}}
+                source={{ uri: props?.profile }}
                 placeHolder={AppImages.bottomBar.Profile}
-                style={{...styles.img, ...props.imgStyle}}
+                style={{ ...styles.img, ...props.imgStyle }}
               />
             ) : (
               <ProfilePlaceHolderComp
                 index={0}
                 name={props?.title ? props?.title : 'Testing'}
-                mainStyles={{...styles.img, ...props.imgStyle}}
+                mainStyles={{ ...styles.img, ...props.imgStyle }}
                 nameStyles={{
                   fontSize: normalized(16),
-                  fontWeight: '500',
+                  ...AppStyles.textMedium
                 }}
               />
             )}
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
   title: {
     color: '#1E1E1F',
     fontSize: normalized(18),
-    fontWeight: '500',
+    ...AppStyles.textMedium
   },
   des: {
     color: AppColors.grey.simple,
@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
   rightTxt: {
     fontSize: normalized(14),
     color: AppColors.black.black,
+    ...AppStyles.textRegular
   },
   img: {
     height: normalized(40),

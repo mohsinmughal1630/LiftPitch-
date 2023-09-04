@@ -57,7 +57,7 @@ const ProgressModal = (props: Props) => {
                     }, boxBgStyles]} />
                     <Text style={{
                         color: AppColors.primaryPurple,
-                        fontWeight: '600',
+                        ...AppStyles.textMedium,
                         fontSize: normalized(20),
                         marginRight: -10,
                         zIndex: 2

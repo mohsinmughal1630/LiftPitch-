@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AppColors,
   AppImages,
@@ -14,14 +14,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
-import {AppStrings, Collections} from '../../../../Utils/Strings';
+import { AppStrings, Collections } from '../../../../Utils/Strings';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
-import {useIsFocused} from '@react-navigation/native';
+import { useIsFocused } from '@react-navigation/native';
 
 import firestore from '@react-native-firebase/firestore';
-import {Routes} from '../../../../Utils/Routes';
+import { Routes } from '../../../../Utils/Routes';
 
 const PitchIdeasListScreen = (props: ScreenProps) => {
   const [ideasList, setIdeasList] = useState([]);
@@ -59,7 +59,7 @@ const PitchIdeasListScreen = (props: ScreenProps) => {
           showsVerticalScrollIndicator={false}
           data={ideasList}
           keyExtractor={(item, index) => `${index}`}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
               <TouchableOpacity
                 activeOpacity={1}
@@ -96,7 +96,7 @@ const PitchIdeasListScreen = (props: ScreenProps) => {
                   <AppImageViewer
                     source={
                       item?.hero_image_url
-                        ? {uri: item?.hero_image_url}
+                        ? { uri: item?.hero_image_url }
                         : AppImages.bottomBar.Profile
                     }
                     placeHolder={AppImages.bottomBar.Profile}
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   },
   topDesTxt: {
     fontSize: normalized(15),
-    fontWeight: '400',
+    ...AppStyles.textRegular,
     color: AppColors.black.black,
     marginVertical: normalized(15),
     width: normalized(250),
@@ -147,13 +147,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: normalized(13),
-    fontWeight: '700',
+    ...AppStyles.textSemiBold,
     color: AppColors.black.black,
     top: normalized(-10),
   },
   itemDes: {
     fontSize: normalized(11),
-    fontWeight: '400',
+    ...AppStyles.textRegular,
     color: AppColors.grey.greyLevel1,
   },
 });

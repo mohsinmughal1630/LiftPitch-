@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, Image, TextInput} from 'react-native';
+import { View, StyleSheet, Image, TextInput } from 'react-native';
 import {
   AppColors,
   AppFonts,
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   input: {
     width: '87%',
     height: normalized(48),
-    fontFamily: AppFonts.PoppinsRegular,
+    fontFamily: AppFonts.Regular,
     fontSize: 14,
   },
 });

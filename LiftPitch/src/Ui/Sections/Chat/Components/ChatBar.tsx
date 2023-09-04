@@ -14,6 +14,7 @@ import {
   isLargeWidth,
   normalized,
 } from '../../../../Utils/AppConstants';
+import { AppStyles } from '../../../../Utils/AppStyles';
 
 const ChatBar = (props: any) => {
   return (
@@ -47,7 +48,7 @@ const ChatBar = (props: any) => {
           multiline={true}
           textAlignVertical={'top'}
         />
-        <View style={{flex: 1}} />
+        <View style={{ flex: 1 }} />
         <TouchableOpacity
           activeOpacity={1}
           style={styles.inputBtn}
@@ -57,7 +58,7 @@ const ChatBar = (props: any) => {
           <Image
             resizeMode="contain"
             source={AppImages.Chat.Attachment}
-            style={{width: 14, height: 22, marginTop: 5}}
+            style={{ width: 14, height: 22, marginTop: 5 }}
           />
         </TouchableOpacity>
         {/* <TouchableOpacity
@@ -77,7 +78,7 @@ const ChatBar = (props: any) => {
         }}>
         <Image
           source={AppImages.Chat.SendIcon}
-          style={{tintColor: AppColors.white.white}}
+          style={{ tintColor: AppColors.white.white }}
         />
       </TouchableOpacity>
     </View>
@@ -105,7 +106,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: normalized(5),
     width: normalized(200),
     fontSize: normalized(14),
+    ...AppStyles.textRegular,
     color: AppColors.black.black,
+    ...AppStyles.textRegular
   },
 
   sendBtn: {

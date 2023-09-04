@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -11,8 +11,8 @@ import {
   StatusBar,
   Alert,
 } from 'react-native';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {request, PERMISSIONS} from 'react-native-permissions';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { request, PERMISSIONS } from 'react-native-permissions';
 import {
   AppColors,
   ScreenSize,
@@ -22,8 +22,8 @@ import {
   maxImageSizeInBytes,
   normalized,
 } from '../../../Utils/AppConstants';
-import {AppStrings} from '../../../Utils/Strings';
-import {uploadMedia} from '../../../Network/Services/GeneralServices';
+import { AppStrings } from '../../../Utils/Strings';
+import { uploadMedia } from '../../../Network/Services/GeneralServices';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -32,8 +32,9 @@ import Animated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import {useDispatch} from 'react-redux';
-import {setIsAlertShow} from '../../../Redux/reducers/AppReducer';
+import { useDispatch } from 'react-redux';
+import { setIsAlertShow } from '../../../Redux/reducers/AppReducer';
+import { AppStyles } from '../../../Utils/AppStyles';
 
 interface Props {
   onClose: () => void;
@@ -175,6 +176,7 @@ const styles = StyleSheet.create({
   headingText: {
     fontSize: normalized(16),
     color: AppColors.black.black,
+    ...AppStyles.textMedium
   },
   crossView: {
     height: normalized(40),
@@ -218,6 +220,7 @@ const styles = StyleSheet.create({
     fontSize: normalized(12),
     marginTop: hv(10),
     textAlign: 'center',
+    ...AppStyles.textRegular
   },
 });
 
@@ -228,7 +231,7 @@ const LoadingLine = () => {
   const offsetX = useSharedValue(0);
   useEffect(() => {
     offsetX.value = withRepeat(
-      withTiming(lineFullWidth - innerLineWidth, {duration: 1000}),
+      withTiming(lineFullWidth - innerLineWidth, { duration: 1000 }),
       -1,
       true,
     );

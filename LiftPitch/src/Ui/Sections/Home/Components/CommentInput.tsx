@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, { useRef, useState } from 'react';
 import {
   FlatList,
   Image,
@@ -15,7 +15,7 @@ import {
   hv,
   normalized,
 } from '../../../../Utils/AppConstants';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 
 const CommentInput = (props: any) => {
   //////// for Tag User in your Comment code--------->
@@ -283,14 +283,14 @@ const CommentInput = (props: any) => {
             style={{
               color: AppColors.grey.towerGrey,
               fontSize: normalized(13),
-              fontWeight: '300',
+              ...AppStyles.textLight
             }}>
             Replying to{' '}
             <Text
               style={{
                 color: AppColors.black.black,
                 fontSize: normalized(13),
-                fontWeight: '400',
+                ...AppStyles.textRegular
               }}>
               {props?.isReply?.creatorName}
             </Text>
@@ -301,7 +301,7 @@ const CommentInput = (props: any) => {
             }}>
             <Image
               source={AppImages.createVideo.CloseIcon}
-              style={{tintColor: AppColors.black.black}}
+              style={{ tintColor: AppColors.black.black }}
             />
           </TouchableOpacity>
         </View>
@@ -315,7 +315,7 @@ const CommentInput = (props: any) => {
           placeholderTextColor={AppColors.grey.dimGrey}
           value={props.messageTxt}
           onChangeText={props.onChangeMessage}
-          style={[styles.input, {marginLeft: 10}]}
+          style={[styles.input, { marginLeft: 10 }]}
         />
         <TouchableWithoutFeedback
           onPress={props.onSendPress}
@@ -323,7 +323,7 @@ const CommentInput = (props: any) => {
           <View
             style={[
               styles.sendImgBox,
-              props.messageTxt.trim() == '' && {opacity: 0.7},
+              props.messageTxt.trim() == '' && { opacity: 0.7 },
             ]}>
             <Image
               source={AppImages.Common.Send}
@@ -358,6 +358,7 @@ const styles = StyleSheet.create({
   input: {
     color: AppColors.black.black,
     fontSize: normalized(14),
+    ...AppStyles.textRegular,
     flex: 1,
     height: '100%',
   },
@@ -398,7 +399,8 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 14,
-    fontWeight: '600',
+
+    ...AppStyles.textBold,
     flex: 1,
   },
 });

@@ -1,17 +1,17 @@
-import React, {useRef} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, { useRef } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   AppColors,
   AppImages,
   hv,
   normalized,
 } from '../../../Utils/AppConstants';
-import {AppHorizontalMargin} from '../../../Utils/AppStyles';
+import { AppHorizontalMargin, AppStyles } from '../../../Utils/AppStyles';
 const CustomHeader = (props: any) => {
   return (
     <>
       {props.showBorder ? (
-        <View style={[styles.line, {marginTop: hv(7)}]} />
+        <View style={[styles.line, { marginTop: hv(7) }]} />
       ) : null}
       <View style={[styles.maincontainer, props?.mainStyle]}>
         <>
@@ -32,13 +32,13 @@ const CustomHeader = (props: any) => {
                 }}>
                 <Image
                   source={AppImages.Auth.backIcon}
-                  style={{tintColor: AppColors.black.black}}
+                  style={{ tintColor: AppColors.black.black }}
                 />
               </TouchableOpacity>
               <Text style={styles.title}>{props?.title}</Text>
             </View>
           ) : (
-            <View style={{margin: 10}} />
+            <View style={{ margin: 10 }} />
           )}
           {props?.atBackPress ? null : (
             <Text style={styles.title}>{props?.title}</Text>
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   title: {
     color: '#1E1E1F',
     fontSize: normalized(18),
-    fontWeight: '500',
+    ...AppStyles.textMedium
   },
   line: {
     height: 0.5,
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   rightTxt: {
     fontSize: normalized(14),
     color: AppColors.black.black,
-    fontWeight: '500',
+    ...AppStyles.textMedium
   },
 });
 export default CustomHeader;

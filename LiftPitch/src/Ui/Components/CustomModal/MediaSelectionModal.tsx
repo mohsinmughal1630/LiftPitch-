@@ -18,6 +18,7 @@ import {
   mediaSelectionConstants,
   normalized,
 } from '../../../Utils/AppConstants';
+import { AppStyles } from '../../../Utils/AppStyles';
 
 const MediaSelectionModal = (props: any) => {
   return (
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
   headingText: {
     fontSize: normalized(16),
     color: AppColors.black.black,
-    fontWeight: '400',
+    ...AppStyles.textRegular
   },
   crossView: {
     height: normalized(40),
@@ -141,5 +142,6 @@ const styles = StyleSheet.create({
     fontSize: normalized(12),
     marginTop: hv(10),
     textAlign: 'center',
+    ...AppStyles.textRegular
   },
 });

@@ -1,16 +1,17 @@
-import React, {useState} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, { useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import SocialBox from './SocialBox';
 import {
   AppColors,
+  AppFonts,
   AppImages,
   normalized,
   singleVideoItemType,
 } from '../../../../Utils/AppConstants';
-import {AppStyles} from '../../../../Utils/AppStyles';
+import { AppStyles } from '../../../../Utils/AppStyles';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import LoadingImage from '../../../Components/LoadingImage';
-import {Routes} from '../../../../Utils/Routes';
+import { Routes } from '../../../../Utils/Routes';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
 import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlaceHolderComp';
 interface Props {
@@ -31,7 +32,9 @@ const VideoBottomSection = (props: Props) => {
   const [showMore, setShowMore] = useState(false);
   return (
     <View style={styles.mainContainer}>
-      <View style={AppStyles.mainContainer}>
+      <View style={[AppStyles.mainContainer, {
+        justifyContent: 'flex-end'
+      }]}>
         <View>
           <Text
             onPress={() =>
@@ -48,15 +51,15 @@ const VideoBottomSection = (props: Props) => {
                 style={
                   styles.userName
                 }>{`@${CommonDataManager.getSharedInstance().capitalizeFirstLetter(
-                props?.item?.creatorData?.userName,
-              )}`}</Text>
+                  props?.item?.creatorData?.userName,
+                )}`}</Text>
             </View>
           </View>
           <Text
             style={{
               ...styles.descriptionText,
               fontSize: normalized(14),
-              fontWeight: '500',
+              ...AppStyles.textMedium
             }}>
             {props?.item?.pitch_idea?.name}
           </Text>
@@ -72,7 +75,7 @@ const VideoBottomSection = (props: Props) => {
               onPress={() => setShowMore(!showMore)}
               style={[
                 styles.linkText,
-                {color: AppColors.blue.seeMoreBlue},
+                { color: AppColors.blue.seeMoreBlue },
               ]}>{` Show ${showMore ? 'Less' : 'More'}`}</Text>
           )}
           <Text
@@ -96,8 +99,8 @@ const VideoBottomSection = (props: Props) => {
           }}>
           {profileImg?.length > 0 ? (
             <AppImageViewer
-              source={{uri: profileImg}}
-              style={{...styles.profileImgBox, marginBottom: 0}}
+              source={{ uri: profileImg }}
+              style={{ ...styles.profileImgBox, marginBottom: 0 }}
               resizeMode="cover"
             />
           ) : (
@@ -111,7 +114,7 @@ const VideoBottomSection = (props: Props) => {
               mainStyles={styles.profileImgBox}
               nameStyles={{
                 fontSize: normalized(16),
-                fontWeight: '500',
+                ...AppStyles.textMedium
               }}
             />
           )}
@@ -146,7 +149,7 @@ const VideoBottomSection = (props: Props) => {
               style={{
                 color: AppColors.white.white,
                 fontSize: normalized(14),
-                fontWeight: '500',
+                ...AppStyles.textMedium
               }}>
               {props?.likeCount}
             </Text>
@@ -175,12 +178,12 @@ const styles = StyleSheet.create({
     color: AppColors.white.white,
     fontSize: normalized(13),
     marginVertical: 2,
-    fontWeight: '600',
+    ...AppStyles.textSemiBold
   },
   descriptionText: {
     color: AppColors.white.white,
     fontSize: normalized(13),
-    fontWeight: '400',
+    ...AppStyles.textRegular
   },
   bottomBox: {
     ...AppStyles.horiCommon,
@@ -212,6 +215,6 @@ const styles = StyleSheet.create({
   userName: {
     color: AppColors.white.white,
     fontSize: normalized(14),
-    fontWeight: '900',
+    fontFamily: AppFonts.ExtraBold
   },
 });

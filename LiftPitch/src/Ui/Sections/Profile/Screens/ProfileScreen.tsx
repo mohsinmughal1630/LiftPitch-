@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   AppColors,
   ScreenProps,
@@ -17,19 +17,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
-import {useDispatch, useSelector} from 'react-redux';
-import {logoutRequest} from '../../../../Network/Services/AuthServices';
-import {AppRootStore} from '../../../../Redux/store/AppStore';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutRequest } from '../../../../Network/Services/AuthServices';
+import { AppRootStore } from '../../../../Redux/store/AppStore';
 import {
   setIsAlertShow,
   setIsLoader,
   setIsPersisterUser,
   setUserData,
 } from '../../../../Redux/reducers/AppReducer';
-import {saveUserData} from '../../../../Utils/AsyncStorage';
+import { saveUserData } from '../../../../Utils/AsyncStorage';
 import ProfileHeader from '../../../Components/CustomHeader/ProfileHeader';
-import {AppStrings, USER_TYPE} from '../../../../Utils/Strings';
+import { AppStrings, USER_TYPE } from '../../../../Utils/Strings';
 import ProfileCustomTab from '../../../Components/CustomTab/ProfileCustomTab';
 import {
   checkUserFollowState,
@@ -37,8 +37,8 @@ import {
   getOtherUserProfile,
 } from '../../../../Network/Services/ProfileServices';
 import ThreadManager from '../../../../ChatModule/ThreadManger';
-import {Routes} from '../../../../Utils/Routes';
-import {makeObjForChat} from '../../../../Utils/Helper';
+import { Routes } from '../../../../Utils/Routes';
+import { makeObjForChat } from '../../../../Utils/Helper';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import FollowConfirmationModal from '../../Follower/Components/FollowConfirmationModal';
 const ProfileScreen = (props: ScreenProps) => {
@@ -49,7 +49,7 @@ const ProfileScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
   const [isFollow, setIsFollow] = useState(false);
   const [data, setData] = useState<any>(null);
-  const {userData} = useSelector((state: AppRootStore) => state.AppReducer);
+  const { userData } = useSelector((state: AppRootStore) => state.AppReducer);
   const [selectedTab, setSelectedTab] = useState('Feed');
   const [confModal, setConfModal] = useState<any>({
     value: false,
@@ -228,7 +228,7 @@ const ProfileScreen = (props: ScreenProps) => {
         }}
       />
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
         <ScrollView
@@ -236,7 +236,7 @@ const ProfileScreen = (props: ScreenProps) => {
           showsVerticalScrollIndicator={false}>
           <View style={styles.mainContainer}>
             <ProfileCustomTab
-              mainStyle={{marginVertical: normalized(20)}}
+              mainStyle={{ marginVertical: normalized(20) }}
               list={
                 profifleType == USER_TYPE.owner
                   ? profileTabArr
@@ -247,8 +247,12 @@ const ProfileScreen = (props: ScreenProps) => {
                 setSelectedTab(el?.txt);
               }}
             />
-            <View style={{flex: 1, justifyContent: 'center'}}>
-              <Text>{selectedTab}</Text>
+            <View style={{ flex: 1, justifyContent: 'center' }}>
+              <Text style={{
+                color: 'black',
+                fontSize: normalized(12),
+                ...AppStyles.textRegular
+              }}>{selectedTab}</Text>
             </View>
           </View>
         </ScrollView>
@@ -266,8 +270,8 @@ const ProfileScreen = (props: ScreenProps) => {
             {profifleType == USER_TYPE.owner
               ? 'LogOut'
               : `Chat with ${CommonDataManager.getSharedInstance().capitalizeFirstLetter(
-                  data?.userName,
-                )}`}
+                data?.userName,
+              )}`}
           </Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -308,7 +312,7 @@ const styles = StyleSheet.create({
   },
   dummyTxt: {
     fontSize: normalized(14),
-    fontWeight: '500',
+    ...AppStyles.textMedium,
     color: AppColors.red.mainColor,
   },
   bottomBtn: {
@@ -326,7 +330,7 @@ const styles = StyleSheet.create({
   bottomBtnTxt: {
     color: AppColors.white.white,
     fontSize: normalized(13),
-    fontWeight: '500',
+    ...AppStyles.textMedium
   },
 });
 export default ProfileScreen;

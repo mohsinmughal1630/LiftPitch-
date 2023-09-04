@@ -9,6 +9,7 @@ import {
 import {
   Image,
   KeyboardAvoidingView,
+  LayoutAnimation,
   PermissionsAndroid,
   Platform,
   ScrollView,
@@ -32,7 +33,8 @@ import VideoTimerPickerPopup from '../Components/VideoTimerPickerPopup';
 import { Routes } from '../../../../Utils/Routes';
 import VideoSpeedPickerPopup from '../Components/VideoSpeedPickerPopup';
 import RecordingTypeToggle from '../Components/RecordingTypeToggle';
-import Video from 'react-native-video-processing';
+import { useIsFocused } from '@react-navigation/native';
+import CountDownTimer from '../Components/<CountDownTimer';
 
 const VideoCreateScreen = (props: ScreenProps) => {
   const cameraRef = useRef<any>({});
@@ -94,9 +96,8 @@ const VideoCreateScreen = (props: ScreenProps) => {
       setIsVideoRecording(true);
       cameraRef?.current?.startRecording({
         flash: flashMode,
+        speedValue: 3,
         onRecordingFinished: async (video: any) => {
-          const result = await convertVideo(video.path);
-          console.log("result: ", result);
           props.navigation.push(Routes.addVideoTab.uploadMediaPreviewScreen, {
             mediaType: 'video',
             mediaPath: video?.path,
@@ -121,24 +122,6 @@ const VideoCreateScreen = (props: ScreenProps) => {
     }
   };
 
-  const convertVideo = async (inputPath: string) => {
-    try {
-      var RNFS = require('react-native-fs');
-      var outputPath = RNFS.DocumentDirectoryPath + '/converted-video.mp4';
-
-      const options = {
-        speed: 2, // Set the desired playback speed here (e.g., 2.0 for 2x)
-      };
-
-      const result = await Video.speed(inputPath, outputPath, options);
-      console.log('Video conversion successful');
-      return result;
-    } catch (error) {
-      console.error('Video conversion failed', error);
-      return null;
-    }
-  };
-
   const onImageClick = async () => {
     try {
       const photo = await cameraRef.current.takePhoto({
@@ -155,6 +138,32 @@ const VideoCreateScreen = (props: ScreenProps) => {
       console.log('Image click error ', e);
     }
   }
+  const [startInterval, setStartInterval] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+
+  useEffect(() => {
+    var timerInterval: any;
+    if (startInterval) {
+      timerInterval = setInterval(() => {
+        if (countdown > 0) {
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+          setCountdown(countdown - 1);
+        } else {
+          if (recordingTypeIndex == 0) {
+            onImageClick()
+          } else {
+            handleStartRecordVideo();
+          }
+          clearInterval(timerInterval);
+          setStartInterval(false);
+        }
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(timerInterval);
+    };
+  }, [countdown, startInterval]);
 
   return (
     <View style={AppStyles.MainStyle}>
@@ -177,6 +186,12 @@ const VideoCreateScreen = (props: ScreenProps) => {
         <ScrollView
           contentContainerStyle={styles.containerStyle}
           showsVerticalScrollIndicator={false}>
+          {
+            countdown > 0 &&
+            <CountDownTimer
+              counterValue={countdown}
+            />
+          }
           {
             !isVideoRecording &&
             <TouchableOpacity
@@ -320,8 +335,22 @@ const VideoCreateScreen = (props: ScreenProps) => {
               />
               <VideoRecorderBtn
                 isImage={recordingTypeIndex == 0}
-                onImageClick={onImageClick}
-                onVideRecordingStart={handleStartRecordVideo}
+                onImageClick={() => {
+                  if (timerValue > 0) {
+                    setCountdown(timerValue);
+                    setStartInterval(true);
+                  } else {
+                    onImageClick()
+                  }
+                }}
+                onVideRecordingStart={() => {
+                  if (timerValue > 0) {
+                    setCountdown(timerValue);
+                    setStartInterval(true);
+                  } else {
+                    handleStartRecordVideo();
+                  }
+                }}
                 onVideoRecordingEnd={handleStopRecordedVideo}
                 isVideoRecording={isVideoRecording}
               />
@@ -367,7 +396,7 @@ const styles = StyleSheet.create({
   },
   dummyTxt: {
     fontSize: normalized(14),
-    fontWeight: '500',
+    ...AppStyles.textMedium,
     color: AppColors.red.mainColor,
   },
   flashCont: {
@@ -379,7 +408,7 @@ const styles = StyleSheet.create({
   flashTxt: {
     alignSelf: 'center',
     fontSize: normalized(10),
-    fontWeight: '600',
+    ...AppStyles.textMedium,
     color: AppColors.white.white,
     marginTop: normalized(3),
   },
@@ -400,13 +429,13 @@ const styles = StyleSheet.create({
   },
   simpleDesTxt: {
     fontSize: normalized(10),
-    fontWeight: '400',
+    ...AppStyles.textRegular,
     color: AppColors.white.white,
   },
   permissionBtn: {
     color: AppColors.red.mainColor,
     fontSize: normalized(12),
-    fontWeight: '400',
+    ...AppStyles.textRegular,
     marginVertical: normalized(10),
   },
   emptyCont: {

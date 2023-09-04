@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Image,
   Pressable,
@@ -9,7 +9,8 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {AppColors, AppImages, hv, normalized} from '../../../Utils/AppConstants';
+import { AppColors, AppImages, hv, normalized } from '../../../Utils/AppConstants';
+import { AppStyles } from '../../../Utils/AppStyles';
 interface Props {
   value: string | undefined,
   onPress: () => void;
@@ -19,25 +20,26 @@ interface Props {
 }
 const PressableInput = (props: Props) => {
   return (
-     <TouchableWithoutFeedback onPress={props.onPress} disabled={props.value ? true : false}>
-       <View style={[styles.inputContainer, props.container]}>
-            <Text style={{
-               color: props.value ? 'black' : AppColors.grey.placeholderGrey,
-               flex: 1
-            }}>{props.value ? props.value : 'Company Address'}</Text>
+    <TouchableWithoutFeedback onPress={props.onPress} disabled={props.value ? true : false}>
+      <View style={[styles.inputContainer, props.container]}>
+        <Text style={{
+          color: props.value ? 'black' : AppColors.grey.placeholderGrey,
+          flex: 1,
+          ...AppStyles.textRegular
+        }}>{props.value ? props.value : 'Company Address'}</Text>
 
         {props.value ? (
           <TouchableWithoutFeedback onPress={props.onClear}>
-          <View style={styles.crossBox}>
-            <Image
-              source={AppImages.Common.CloseIcon}
-              style={styles.crossImg}
-            />
-          </View>
-        </TouchableWithoutFeedback>
+            <View style={styles.crossBox}>
+              <Image
+                source={AppImages.Common.CloseIcon}
+                style={styles.crossImg}
+              />
+            </View>
+          </TouchableWithoutFeedback>
         ) : null}
       </View>
-     </TouchableWithoutFeedback>
+    </TouchableWithoutFeedback>
   );
 }
 const styles = StyleSheet.create({
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
   errorMsg: {
     marginTop: hv(1),
     color: 'red',
-    fontWeight: '500',
+    ...AppStyles.textMedium,
     fontSize: normalized(12),
     marginLeft: normalized(2),
   },

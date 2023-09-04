@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React from 'react';
-import {Linking, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Hyperlink from 'react-native-hyperlink';
 import SingleVideoItem from './SingleVideoItem';
 import SingleImageItem from './SingleImageItem';
@@ -13,6 +13,7 @@ import {
 } from '../../../../Utils/AppConstants';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
 import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlaceHolderComp';
+import { AppStyles } from '../../../../Utils/AppStyles';
 const OtherUserMessage = ({
   item,
   onPdf,
@@ -51,7 +52,7 @@ const OtherUserMessage = ({
     return (
       <View style={styles.messageCon}>
         <Hyperlink
-          linkStyle={{color: '#2980b9', fontSize: normalized(16)}}
+          linkStyle={{ color: '#2980b9', fontSize: normalized(16) }}
           onPress={(url, text) => {
             if (item?.callUrl) {
               console.log('item?.callUrl=====>', item?.callUrl);
@@ -112,6 +113,7 @@ const styles = StyleSheet.create({
   message: {
     fontSize: normalized(14),
     color: AppColors.black.lightBlack,
+    ...AppStyles.textRegular
   },
   timeTextCon: {
     alignSelf: 'flex-start',
@@ -121,7 +123,7 @@ const styles = StyleSheet.create({
     fontSize: normalized(11),
     color: AppColors.black.lightBlack,
     marginStart: normalized(4),
-    fontWeight: '400',
+    ...AppStyles.textRegular
   },
   image: {
     width: normalized(35),

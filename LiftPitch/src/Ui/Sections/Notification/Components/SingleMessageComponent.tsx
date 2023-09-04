@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import {
 } from '../../../../Utils/AppConstants';
 import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlaceHolderComp';
 import LinearGradient from 'react-native-linear-gradient';
+import { AppStyles } from '../../../../Utils/AppStyles';
 
 export default function SingleMessageComponent(props: any) {
   const [time, setTime] = useState('');
@@ -51,7 +52,7 @@ export default function SingleMessageComponent(props: any) {
       <Pressable onPress={props.onPressProfile}>
         {props?.profileImage?.length > 0 ? (
           <AppImageViewer
-            source={{uri: props?.profileImage}}
+            source={{ uri: props?.profileImage }}
             placeHolder={AppImages.bottomBar.Profile}
             style={styles.profilePic}
           />
@@ -63,7 +64,7 @@ export default function SingleMessageComponent(props: any) {
             nameStyles={{
               fontSize: normalized(14),
               color: AppColors.white.white,
-              fontWeight: '400',
+              ...AppStyles.textRegular
             }}
           />
         )}
@@ -83,8 +84,8 @@ export default function SingleMessageComponent(props: any) {
           <Text style={styles.timeStyle}>{time}</Text>
           {count > 0 ? (
             <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 0, y: 0.8}}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 0.8 }}
               colors={colorsList}
               style={styles.countView}>
               {count?.length > 99 ? (
@@ -130,14 +131,14 @@ const styles = StyleSheet.create({
     color: AppColors.black.black,
     textAlign: 'left',
     lineHeight: hv(21),
-    fontWeight: '700',
+    ...AppStyles.textSemiBold
   },
   designation: {
     fontSize: normalized(13),
     color: AppColors.grey.gray,
     textAlign: 'left',
     lineHeight: hv(19),
-    fontWeight: '400',
+    ...AppStyles.textRegular,
     width: '90%',
   },
   editIcon: {
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
   countTxt: {
     color: AppColors.white.white,
     fontSize: normalized(11),
-    fontWeight: '400',
+    ...AppStyles.textRegular,
   },
   countTimeCont: {
     justifyContent: 'space-around',
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
     marginLeft: normalized(-10),
     marginTop: hv(-3),
     color: AppColors.grey.gray,
-    fontWeight: '400',
+    ...AppStyles.textRegular,
     textAlign: 'center',
   },
 });

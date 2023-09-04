@@ -118,7 +118,16 @@ export const AppImages = {
     MailInvite: require('../Ui/assets/images/Followers/MailInvite.png'),
   },
 };
-export const AppFonts = {};
+export const AppFonts = {
+  Regular: 'Poppins-Regular',
+  Medium: 'Poppins-Medium',
+  Bold: 'Poppins-Bold',
+  ExtraBold: 'Poppins-ExtraBold',
+  Light: 'Poppins-Light',
+  Italic: 'Poppins-Italic',
+  ItalicLight: 'Poppins-LightItalic',
+  SemiBold: 'Poppins-SemiBold',
+};
 export const mediaSelectionConstants = [
   {
     id: 1,

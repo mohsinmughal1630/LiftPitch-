@@ -60,6 +60,7 @@ const VideoHeaderSection = (props: Props) => {
                   color: 'black',
                   fontSize: normalized(14),
                   flex: 1,
+                  ...AppStyles.textRegular
                 }}
                 returnKeyType="search"
                 onSubmitEditing={toggleSearch}
@@ -144,7 +145,7 @@ const styles = StyleSheet.create({
   tabTxt: {
     color: AppColors.white.white,
     fontSize: normalized(16),
-    fontWeight: '700',
+    ...AppStyles.textSemiBold
   },
   searchBox: {
     height: 35,

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   AppColors,
   AppImages,
@@ -17,19 +17,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SimpleInput from '../../../Components/CustomInput/SimpleInput';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
 import {
   setIsAlertShow,
   setIsLoader,
 } from '../../../../Redux/reducers/AppReducer';
-import {AppStrings} from '../../../../Utils/Strings';
+import { AppStrings } from '../../../../Utils/Strings';
 import ThreadManager from '../../../../ChatModule/ThreadManger';
-import {createThumbnail} from 'react-native-create-thumbnail';
-import {getVideoCreateObj} from '../../../../Utils/Helper';
+import { createThumbnail } from 'react-native-create-thumbnail';
+import { getVideoCreateObj } from '../../../../Utils/Helper';
 import moment from 'moment';
 const SharePitchScreen = (props: ScreenProps) => {
   const selectedPitch = props?.route?.params?.selectedPitch;
@@ -48,7 +48,7 @@ const SharePitchScreen = (props: ScreenProps) => {
     if (props?.route?.params?.selectedPitch) {
       setDescription(
         props?.route?.params?.selectedPitch?.description +
-          props?.route?.params?.selectedPitch?.steps?.description,
+        props?.route?.params?.selectedPitch?.steps?.description,
       );
     }
   }, [props?.route?.params]);
@@ -109,7 +109,7 @@ const SharePitchScreen = (props: ScreenProps) => {
     );
   };
   const uploadThumnail = async (path: any, payload: any) => {
-    let obj = {...payload};
+    let obj = { ...payload };
     await ThreadManager.instance
       .uploadMedia(path, false, async (url: any) => {
         if (url !== 'error') {
@@ -166,7 +166,7 @@ const SharePitchScreen = (props: ScreenProps) => {
           createPostFun();
         }}
         rightTxt={'Share'}
-        rigthBtnStyle={{color: AppColors.blue.lightBlue}}
+        rigthBtnStyle={{ color: AppColors.blue.lightBlue }}
       />
       <View style={styles.mainContainer}>
         <View
@@ -176,7 +176,7 @@ const SharePitchScreen = (props: ScreenProps) => {
             alignItems: 'center',
           }}>
           <AppImageViewer
-            source={{uri: selectedPitch?.hero_image_url}}
+            source={{ uri: selectedPitch?.hero_image_url }}
             placeHolder={AppImages.bottomBar.Profile}
             style={styles.pitchImg}
           />
@@ -203,7 +203,7 @@ const SharePitchScreen = (props: ScreenProps) => {
           returnKeyType={'next'}
           placeHold={'Add Hashtag/Keywords..'}
           container={styles.inputMainCont}
-          textInputStyle={{width: normalized(270)}}
+          textInputStyle={{ width: normalized(270) }}
           setValue={(txt: any) => {
             setHastTagError('');
             setHastTag(txt);
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
   },
   topDesTxt: {
     fontSize: normalized(15),
-    fontWeight: '400',
+    ...AppStyles.textRegular,
     color: AppColors.black.black,
     marginVertical: normalized(10),
   },
@@ -261,13 +261,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: normalized(13),
-    fontWeight: '700',
+    ...AppStyles.textSemiBold,
     color: AppColors.black.black,
     top: normalized(-10),
   },
   itemDes: {
     fontSize: normalized(11),
-    fontWeight: '400',
+    ...AppStyles.textRegular,
     color: AppColors.grey.greyLevel1,
   },
   inputMainCont: {
@@ -277,7 +277,7 @@ const styles = StyleSheet.create({
   errorMsg: {
     marginTop: hv(1),
     color: 'red',
-    fontWeight: '500',
+    ...AppStyles.textMedium,
     fontSize: normalized(12),
     marginLeft: normalized(2),
   },
@@ -295,6 +295,8 @@ const styles = StyleSheet.create({
     borderColor: AppColors.black.simpleLight,
     paddingHorizontal: normalized(15),
     paddingTop: hv(20),
+    ...AppStyles.textRegular,
+    color: AppColors.black.black
   },
 });
 export default SharePitchScreen;

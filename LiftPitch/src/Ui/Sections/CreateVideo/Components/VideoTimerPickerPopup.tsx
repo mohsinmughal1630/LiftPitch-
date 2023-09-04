@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Image, LayoutAnimation, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { AppColors, AppImages, ScreenSize, normalized } from '../../../../Utils/AppConstants';
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { AppStyles } from '../../../../Utils/AppStyles';
 
 interface Props {
     onClose: () => void;
@@ -54,7 +55,7 @@ const VideoTimerPickerPopup = (props: Props) => {
                                 <Text style={{
                                     color: isActive ? AppColors.red.darkRed : AppColors.black.black,
                                     fontSize: normalized(12),
-                                    fontWeight: '600'
+                                    ...AppStyles.textMedium
                                 }}>{item == 0 ? 'OFF' : `${item} s`}</Text>
                             </View>
                         </TouchableWithoutFeedback>

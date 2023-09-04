@@ -1,7 +1,8 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {AppColors, normalized} from '../../../Utils/AppConstants';
+import { StyleSheet, Text, View } from 'react-native';
+import { AppColors, normalized } from '../../../Utils/AppConstants';
 import CommonDataManager from '../../../Utils/CommonManager';
+import { AppStyles } from '../../../Utils/AppStyles';
 
 const ProfilePlaceHolderComp = (props: any) => {
   return (
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'center',
     fontSize: normalized(16),
-    fontWeight: '500',
+    ...AppStyles.textMedium
   },
 });
 export default ProfilePlaceHolderComp;

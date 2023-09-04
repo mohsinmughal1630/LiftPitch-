@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { AppColors, normalized } from '../../../../Utils/AppConstants';
+import { AppStyles } from '../../../../Utils/AppStyles';
 const SocialBtn = (props: any) => {
   return (
     <TouchableOpacity
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: normalized(13),
-    fontWeight: '500',
+    ...AppStyles.textMedium,
     color: AppColors.black.black,
   },
   mainContainer: {

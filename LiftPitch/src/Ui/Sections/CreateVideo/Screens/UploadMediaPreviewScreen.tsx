@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   title: {
     color: AppColors.black.black,
     fontSize: normalized(16),
-    fontWeight: '600',
+    ...AppStyles.textSemiBold
   },
   subContainer: {
     flex: 1,
