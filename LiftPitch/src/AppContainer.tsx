@@ -23,10 +23,8 @@ import {getUserData} from './Utils/AsyncStorage';
 import {setUpChat} from './Utils/Helper';
 import LocalNotification from './Ui/Components/LocalNotification';
 import {Routes} from './Utils/Routes';
-import firestore from '@react-native-firebase/firestore';
 export const navigationRef = createNavigationContainerRef();
 export const navRef = React.createRef();
-import auth from '@react-native-firebase/auth';
 
 function AppContainer() {
   const selector = useSelector((AppState: any) => AppState.AppReducer);
@@ -38,7 +36,6 @@ function AppContainer() {
     if (isFocused && selector?.userData) {
       ThreadManager.instance.setupRedux(selector, dispatch);
       setChat();
-      // setUpdateOnlineStatus();
       return () => {
         ThreadManager.instance.removeThreadObserver();
       };
