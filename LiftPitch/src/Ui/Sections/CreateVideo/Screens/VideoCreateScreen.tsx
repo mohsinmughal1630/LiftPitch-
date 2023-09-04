@@ -96,7 +96,6 @@ const VideoCreateScreen = (props: ScreenProps) => {
       setIsVideoRecording(true);
       cameraRef?.current?.startRecording({
         flash: flashMode,
-        speedValue: 3,
         onRecordingFinished: async (video: any) => {
           props.navigation.push(Routes.addVideoTab.uploadMediaPreviewScreen, {
             mediaType: 'video',
