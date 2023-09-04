@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -7,8 +7,8 @@ import {
   View,
 } from 'react-native';
 import Video from 'react-native-video';
-import { AppColors, AppImages } from '../../../../Utils/AppConstants';
-import { AppStyles } from '../../../../Utils/AppStyles';
+import {AppColors, AppImages} from '../../../../Utils/AppConstants';
+import {AppStyles} from '../../../../Utils/AppStyles';
 
 interface Props {
   url: string;
@@ -56,11 +56,10 @@ const VideoPlayer = (props: Props) => {
           ) : null}
         </View>
       </TouchableWithoutFeedback>
-
       <Video
         onLoadStart={() => setIsLoading(true)}
         onLoad={() => setIsLoading(false)}
-        source={{ uri: props.url }}
+        source={{uri: props.url}}
         minLoadRetryCount={3}
         controls={false}
         ignoreSilentSwitch="ignore"
@@ -68,7 +67,7 @@ const VideoPlayer = (props: Props) => {
         repeat
         poster={props?.thumbnail}
         posterStyle={styles.videoStyles}
-        posterResizeMode='cover'
+        posterResizeMode="cover"
         pictureInPicture={false}
         onError={(e: any) => {
           setIsLoading(false);

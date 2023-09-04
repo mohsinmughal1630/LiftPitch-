@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   AppColors,
   AppImages,
@@ -13,14 +13,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
+import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
-import { AppStrings } from '../../../../Utils/Strings';
+import {AppStrings} from '../../../../Utils/Strings';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
-import { useIsFocused } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import { setIsAlertShow } from '../../../../Redux/reducers/AppReducer';
-import { Routes } from '../../../../Utils/Routes';
+import {useIsFocused} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {setIsAlertShow} from '../../../../Redux/reducers/AppReducer';
+import {Routes} from '../../../../Utils/Routes';
 
 const PitchIdeaStepScreen = (props: ScreenProps) => {
   const isFocused = useIsFocused();
@@ -65,6 +65,7 @@ const PitchIdeaStepScreen = (props: ScreenProps) => {
       } else {
         props?.navigation.navigate(Routes.addVideoTab.sharePitch, {
           mediaPath: props?.route?.params?.mediaPath,
+          mediaType: props?.route?.params?.mediaType,
           selectedPitch: {
             ...props?.route?.params?.data,
             steps: stepObj,
@@ -107,7 +108,7 @@ const PitchIdeaStepScreen = (props: ScreenProps) => {
           showsVerticalScrollIndicator={false}
           data={stepList}
           keyExtractor={(item, index) => `${index}`}
-          renderItem={({ item, index }) => {
+          renderItem={({item, index}) => {
             return (
               <TouchableOpacity
                 activeOpacity={1}
@@ -124,7 +125,7 @@ const PitchIdeaStepScreen = (props: ScreenProps) => {
                   <AppImageViewer
                     source={
                       item?.image_url
-                        ? { uri: item?.image_url }
+                        ? {uri: item?.image_url}
                         : AppImages.bottomBar.Profile
                     }
                     placeHolder={AppImages.bottomBar.Profile}

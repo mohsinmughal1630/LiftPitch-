@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   AppColors,
   AppImages,
@@ -18,9 +18,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useCameraDevices, Camera } from 'react-native-vision-camera';
+import {useCameraDevices, Camera} from 'react-native-vision-camera';
 import ImagePicker from 'react-native-image-crop-picker';
-import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
+import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import VideoCreateHeader from '../Components/VideoCreateHeader';
 import Permissions, {
   PERMISSIONS,
@@ -30,10 +30,10 @@ import Permissions, {
 import ConfirmationModal from '../../../Components/CustomModal/ConfirmationModal';
 import VideoRecorderBtn from '../Components/VideoRecorderBtn';
 import VideoTimerPickerPopup from '../Components/VideoTimerPickerPopup';
-import { Routes } from '../../../../Utils/Routes';
+import {Routes} from '../../../../Utils/Routes';
 import VideoSpeedPickerPopup from '../Components/VideoSpeedPickerPopup';
 import RecordingTypeToggle from '../Components/RecordingTypeToggle';
-import { useIsFocused } from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import CountDownTimer from '../Components/<CountDownTimer';
 
 const VideoCreateScreen = (props: ScreenProps) => {
@@ -49,7 +49,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
 
   const [showSpeedPopup, setShowSpeedPopup] = useState(false);
   const [speedValue, setSpeedValue] = useState<number>(1);
-  const [recordingTypeIndex, setRecordingTypeIndex] = useState(0)
+  const [recordingTypeIndex, setRecordingTypeIndex] = useState(0);
   const [isVideoRecording, setIsVideoRecording] = useState(false);
 
   useEffect(() => {
@@ -72,20 +72,15 @@ const VideoCreateScreen = (props: ScreenProps) => {
   const mediaSelection = () => {
     ImagePicker.openPicker({
       multiple: false,
-      mediaType: 'video',
+      mediaType: recordingTypeIndex == 0 ? 'photo' : 'video',
       compressImageQuality: 0.5,
       durationLimit: 30,
     })
       .then(images => {
-        let video = false;
-        video = images.mime.toLocaleLowerCase().includes('video');
-        if (video) {
-          props.navigation.push(Routes.addVideoTab.uploadMediaPreviewScreen, {
-            mediaType: video ? 'video' : 'photo',
-            mediaPath: images?.path,
-            selectedPitch: selectedPitchObj,
-          });
-        }
+        props.navigation.push(Routes.addVideoTab.uploadMediaPreviewScreen, {
+          mediaPath: images?.path,
+          selectedPitch: selectedPitchObj,
+        });
       })
       .catch(e => console.log('Err ', e));
   };
@@ -98,7 +93,6 @@ const VideoCreateScreen = (props: ScreenProps) => {
         flash: flashMode,
         onRecordingFinished: async (video: any) => {
           props.navigation.push(Routes.addVideoTab.uploadMediaPreviewScreen, {
-            mediaType: 'video',
             mediaPath: video?.path,
             selectedPitch: selectedPitchObj,
           });
@@ -128,7 +122,6 @@ const VideoCreateScreen = (props: ScreenProps) => {
       });
       if (photo?.path) {
         props.navigation.push(Routes.addVideoTab.uploadMediaPreviewScreen, {
-          mediaType: 'photo',
           mediaPath: photo?.path,
           selectedPitch: selectedPitchObj,
         });
@@ -136,7 +129,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
     } catch (e) {
       console.log('Image click error ', e);
     }
-  }
+  };
   const [startInterval, setStartInterval] = useState(false);
   const [countdown, setCountdown] = useState(0);
 
@@ -149,7 +142,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
           setCountdown(countdown - 1);
         } else {
           if (recordingTypeIndex == 0) {
-            onImageClick()
+            onImageClick();
           } else {
             handleStartRecordVideo();
           }
@@ -168,7 +161,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
     <View style={AppStyles.MainStyle}>
       {/* {device != null ? ( */}
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
         <VideoCreateHeader
@@ -185,14 +178,8 @@ const VideoCreateScreen = (props: ScreenProps) => {
         <ScrollView
           contentContainerStyle={styles.containerStyle}
           showsVerticalScrollIndicator={false}>
-          {
-            countdown > 0 &&
-            <CountDownTimer
-              counterValue={countdown}
-            />
-          }
-          {
-            !isVideoRecording &&
+          {countdown > 0 && <CountDownTimer counterValue={countdown} />}
+          {!isVideoRecording && (
             <TouchableOpacity
               style={styles.flashCont}
               disabled={deviceDir !== 'back'}
@@ -201,27 +188,38 @@ const VideoCreateScreen = (props: ScreenProps) => {
               }}>
               <>
                 <Image
-                  source={AppImages.createVideo[flashMode == 'on' ? 'flashOn' : 'flash']}
+                  source={
+                    AppImages.createVideo[
+                      flashMode == 'on' ? 'flashOn' : 'flash'
+                    ]
+                  }
                   style={{
                     alignSelf: 'center',
                     height: 20,
                     width: 20,
-                    tintColor: flashMode == 'on' ? AppColors.red.darkRed : 'white',
-                    resizeMode: 'contain'
+                    tintColor:
+                      flashMode == 'on' ? AppColors.red.darkRed : 'white',
+                    resizeMode: 'contain',
                   }}
                 />
-                <Text style={[styles.flashTxt, {
-                  color: flashMode == 'on' ? AppColors.red.darkRed : AppColors.white.white
-                }]}>
+                <Text
+                  style={[
+                    styles.flashTxt,
+                    {
+                      color:
+                        flashMode == 'on'
+                          ? AppColors.red.darkRed
+                          : AppColors.white.white,
+                    },
+                  ]}>
                   {flashMode == 'on' ? 'ON' : 'OFF'}
                 </Text>
               </>
             </TouchableOpacity>
-          }
-          {
-            !isVideoRecording &&
+          )}
+          {!isVideoRecording && (
             <TouchableOpacity
-              style={[styles.flashCont, { top: normalized(150) }]}
+              style={[styles.flashCont, {top: normalized(150)}]}
               onPress={() => {
                 setShowTimerPopup(true);
               }}>
@@ -229,20 +227,20 @@ const VideoCreateScreen = (props: ScreenProps) => {
                 <Image
                   source={AppImages.createVideo.TimerIcon}
                   style={[
-                    { alignSelf: 'center' },
-                    timerValue !== 0 && { tintColor: AppColors.red.darkRed },
+                    {alignSelf: 'center'},
+                    timerValue !== 0 && {tintColor: AppColors.red.darkRed},
                   ]}
                 />
                 <Text
                   style={[
                     styles.flashTxt,
-                    timerValue !== 0 && { color: AppColors.red.darkRed },
+                    timerValue !== 0 && {color: AppColors.red.darkRed},
                   ]}>
                   {timerValue == 0 ? 'OFF' : `${timerValue} S`}
                 </Text>
               </>
             </TouchableOpacity>
-          }
+          )}
 
           {showTimerPopup && (
             <VideoTimerPickerPopup
@@ -252,10 +250,9 @@ const VideoCreateScreen = (props: ScreenProps) => {
             />
           )}
 
-          {
-            recordingTypeIndex == 1 && !isVideoRecording &&
+          {recordingTypeIndex == 1 && !isVideoRecording && (
             <TouchableOpacity
-              style={[styles.flashCont, { top: normalized(210) }]}
+              style={[styles.flashCont, {top: normalized(210)}]}
               onPress={() => {
                 setShowSpeedPopup(true);
               }}>
@@ -263,20 +260,20 @@ const VideoCreateScreen = (props: ScreenProps) => {
                 <Image
                   source={AppImages.createVideo.SpeedIcon}
                   style={[
-                    { alignSelf: 'center' },
-                    speedValue !== 1 && { tintColor: AppColors.red.darkRed },
+                    {alignSelf: 'center'},
+                    speedValue !== 1 && {tintColor: AppColors.red.darkRed},
                   ]}
                 />
                 <Text
                   style={[
                     styles.flashTxt,
-                    speedValue !== 1 && { color: AppColors.red.darkRed },
+                    speedValue !== 1 && {color: AppColors.red.darkRed},
                   ]}>
                   {speedValue == 1 ? 'OFF' : `${speedValue} X`}
                 </Text>
               </>
             </TouchableOpacity>
-          }
+          )}
 
           {showSpeedPopup && (
             <VideoSpeedPickerPopup
@@ -286,8 +283,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
             />
           )}
 
-          {
-            device &&
+          {device && (
             <Camera
               ref={cameraRef}
               style={StyleSheet.absoluteFill}
@@ -299,7 +295,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
               preset="medium"
               zoom={device?.neutralZoom}
             />
-          }
+          )}
 
           <View style={styles.bottomCont}>
             <TouchableOpacity
@@ -321,12 +317,12 @@ const VideoCreateScreen = (props: ScreenProps) => {
                       ? AppImages.createVideo.doneIcon
                       : AppImages.createVideo.smileIcon
                   }
-                  style={{ height: normalized(30), width: normalized(30) }}
+                  style={{height: normalized(30), width: normalized(30)}}
                 />
                 <Text style={styles.simpleDesTxt}>Pitch Ideas</Text>
               </View>
             </TouchableOpacity>
-            <View style={{ alignItems: 'center' }}>
+            <View style={{alignItems: 'center'}}>
               <RecordingTypeToggle
                 recordingType={recordingTypeIndex}
                 onRecordingTypeChage={setRecordingTypeIndex}
@@ -339,7 +335,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
                     setCountdown(timerValue);
                     setStartInterval(true);
                   } else {
-                    onImageClick()
+                    onImageClick();
                   }
                 }}
                 onVideRecordingStart={() => {
@@ -367,21 +363,19 @@ const VideoCreateScreen = (props: ScreenProps) => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-      {
-        showConfirmationModal && (
-          <ConfirmationModal
-            content={
-              'You need to enable camera and voice permissions first. Do you want to enable them from settings now?'
-            }
-            onClose={() => setShowConfirmationModal(false)}
-            onConfirm={() => {
-              setShowConfirmationModal(false);
-              openSettings().catch(e => console.log('some problem ', e));
-            }}
-          />
-        )
-      }
-    </View >
+      {showConfirmationModal && (
+        <ConfirmationModal
+          content={
+            'You need to enable camera and voice permissions first. Do you want to enable them from settings now?'
+          }
+          onClose={() => setShowConfirmationModal(false)}
+          onConfirm={() => {
+            setShowConfirmationModal(false);
+            openSettings().catch(e => console.log('some problem ', e));
+          }}
+        />
+      )}
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -424,7 +418,7 @@ const styles = StyleSheet.create({
   },
   singleBottomEndBox: {
     alignItems: 'center',
-    width: normalized(60)
+    width: normalized(60),
   },
   simpleDesTxt: {
     fontSize: normalized(10),

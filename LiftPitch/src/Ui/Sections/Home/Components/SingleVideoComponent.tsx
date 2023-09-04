@@ -26,6 +26,7 @@ import {
 } from '../../../../Redux/reducers/AppReducer';
 import moment from 'moment';
 import ReportReasonModal from './ReportReasonModal';
+import ImageViewCompo from './ImageViewCompo';
 
 interface Props {
   navigation: any;
@@ -57,7 +58,7 @@ const SingleVideoComponent = (props: Props) => {
         setIsLike(true);
       }
     }
-  }, [props]);
+  }, []);
 
   const getCommentList = async () => {
     if (!selector.isNetConnected) {
@@ -159,13 +160,13 @@ const SingleVideoComponent = (props: Props) => {
       );
       return;
     }
-    setIsLike(!isLike);
     await likeNDisListReq(
       selector?.userData?.userId,
       action?.length > 0 ? action : isLike ? 'remove' : 'add',
       props?.item?.videoId,
       (response: any) => {
         if (response != 'error!') {
+          setIsLike(!isLike);
           setLikeCount(response?.length);
         } else {
           dispatch(setIsLoader(false));
@@ -178,12 +179,17 @@ const SingleVideoComponent = (props: Props) => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.innerContainer}>
-        <VideoPlayer
-          thumbnail={props?.item?.thumbnail}
-          url={props?.item?.videoUrl}
-          currentVideoIndex={props.currentVideoIndex}
-          index={props?.index}
-        />
+        {props?.item?.videoUrl ? (
+          <VideoPlayer
+            thumbnail={props?.item?.thumbnail}
+            url={props?.item?.videoUrl}
+            currentVideoIndex={props.currentVideoIndex}
+            index={props?.index}
+          />
+        ) : (
+          <ImageViewCompo url={props?.item?.photoUrl} index={props?.index} />
+        )}
+
         <VideoBottomSection
           index={props?.index}
           likeCount={likeCount}

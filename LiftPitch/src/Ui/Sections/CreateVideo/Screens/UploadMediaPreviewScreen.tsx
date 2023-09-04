@@ -13,14 +13,14 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { AppStyles } from '../../../../Utils/AppStyles';
+import {AppStyles} from '../../../../Utils/AppStyles';
 import Video from 'react-native-video';
-import { Routes } from '../../../../Utils/Routes';
+import {Routes} from '../../../../Utils/Routes';
 
 const UploadMediaPreviewScreen = (props: ScreenProps) => {
   const mediaType = props.route?.params?.mediaType;
   const mediaPath = props.route?.params?.mediaPath;
-  console.log("mediaPath: ", mediaPath);
+  console.log('mediaPath: ', mediaPath);
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
@@ -30,21 +30,37 @@ const UploadMediaPreviewScreen = (props: ScreenProps) => {
             <Image
               source={AppImages.Auth.backIcon}
               resizeMode="contain"
-            // style={styles.backIcon}
+              // style={styles.backIcon}
             />
           </View>
         </TouchableWithoutFeedback>
         <Text style={styles.title}>Media Preview Screen</Text>
         <TouchableWithoutFeedback
           onPress={() => {
-            if (mediaType == 'video' && mediaPath) {
+            let splitPath = mediaPath.split('.');
+            if (splitPath[splitPath?.length - 1] == 'mp4') {
               if (props.route?.params?.selectedPitch) {
                 props?.navigation.navigate(Routes.addVideoTab.sharePitch, {
+                  mediaType: 'video',
                   mediaPath: mediaPath,
                   selectedPitch: props.route?.params?.selectedPitch,
                 });
               } else {
                 props?.navigation.navigate(Routes.addVideoTab.pitchListScreen, {
+                  mediaType: 'video',
+                  mediaPath: mediaPath,
+                });
+              }
+            } else {
+              if (props.route?.params?.selectedPitch) {
+                props?.navigation.navigate(Routes.addVideoTab.sharePitch, {
+                  mediaType: 'photo',
+                  mediaPath: mediaPath,
+                  selectedPitch: props.route?.params?.selectedPitch,
+                });
+              } else {
+                props?.navigation.navigate(Routes.addVideoTab.pitchListScreen, {
+                  mediaType: 'photo',
                   mediaPath: mediaPath,
                 });
               }
@@ -68,7 +84,7 @@ const UploadMediaPreviewScreen = (props: ScreenProps) => {
       <View style={styles.subContainer}>
         {mediaType == 'video' ? (
           <Video
-            source={{ uri: mediaPath }}
+            source={{uri: mediaPath}}
             controls={true}
             ignoreSilentSwitch="ignore"
             fullscreen={true}
@@ -76,13 +92,14 @@ const UploadMediaPreviewScreen = (props: ScreenProps) => {
             style={styles.videoStyles}
           />
         ) : (
-          <Image source={{
-            uri: `file://${mediaPath}`
-          }}
-            onError={(e) => console.log('err ', e)}
+          <Image
+            source={{
+              uri: `file://${mediaPath}`,
+            }}
+            onError={e => console.log('err ', e)}
             style={{
               width: '100%',
-              height: '100%'
+              height: '100%',
             }}
           />
         )}
@@ -115,7 +132,7 @@ const styles = StyleSheet.create({
   title: {
     color: AppColors.black.black,
     fontSize: normalized(16),
-    ...AppStyles.textSemiBold
+    ...AppStyles.textSemiBold,
   },
   subContainer: {
     flex: 1,

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Image,
   LayoutAnimation,
@@ -7,8 +7,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { AppColors, AppImages, normalized } from '../../../../Utils/AppConstants';
-import { AppStyles } from '../../../../Utils/AppStyles';
+import {AppColors, AppImages, normalized} from '../../../../Utils/AppConstants';
+import {AppStyles} from '../../../../Utils/AppStyles';
 
 interface Props {
   onClose: () => void;
@@ -71,7 +71,7 @@ const VideoSpeedPickerPopup = (props: Props) => {
                     ? AppColors.red.darkRed
                     : AppColors.black.black,
                   fontSize: normalized(12),
-                  ...AppStyles.textMedium
+                  ...AppStyles.textMedium,
                 }}>
                 {item} x
               </Text>
@@ -107,6 +107,6 @@ const styles = StyleSheet.create({
   arrowImg: {
     height: 20,
     width: 20,
-    transform: [{ rotate: '-90deg' }],
+    transform: [{rotate: '-90deg'}],
   },
 });

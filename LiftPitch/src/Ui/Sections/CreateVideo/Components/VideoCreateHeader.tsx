@@ -1,7 +1,16 @@
-import React, { useState } from 'react';
-import { Image, LayoutAnimation, StatusBar, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { AppColors, AppImages, normalized } from '../../../../Utils/AppConstants';
-import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
+import React, {useState} from 'react';
+import {
+  Image,
+  LayoutAnimation,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import {AppColors, AppImages, normalized} from '../../../../Utils/AppConstants';
+import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 
 const VideoCreateHeader = (props: any) => {
   return (
@@ -19,8 +28,7 @@ const VideoCreateHeader = (props: any) => {
           <Text style={styles.musicTxt}>Sounds</Text>
         </>
       </TouchableOpacity> */}
-      {
-        !props.isVideoRecording &&
+      {!props.isVideoRecording && (
         <TouchableOpacity
           style={styles.switchCameraCont}
           onPress={() => {
@@ -33,7 +41,7 @@ const VideoCreateHeader = (props: any) => {
             <Text style={styles.switchCameraTxt}>Flip</Text>
           </>
         </TouchableOpacity>
-      }
+      )}
     </View>
   );
 };
