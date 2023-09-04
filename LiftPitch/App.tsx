@@ -20,6 +20,8 @@ import NetInfo from '@react-native-community/netinfo';
 import SplashScreen from 'react-native-splash-screen';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import CommonDataManager from './src/Utils/CommonManager';
+import { notifications } from 'react-native-firebase-push-notifications'
+
 const App = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: AppRootStore) => state);
@@ -30,9 +32,17 @@ const App = () => {
     });
     fetchUser();
     onAppStart();
+    // requestPermission();
   }, []);
 
   LogBox.ignoreLogs(['ViewPropTypes will be removed']);
+
+  const requestPermission = async () => {
+    const permissionResult = await notifications.hasPermission();
+    console.log("permissionResult: ", permissionResult);
+    const result = await notifications.requestPermission()
+    console.log('notifictions result ', result);
+  }
 
   const fetchUser = async () => {
     let userDataa = await getUserData();
