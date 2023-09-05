@@ -1,5 +1,5 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {normalized} from '../../Utils/AppConstants';
+import { createSlice } from '@reduxjs/toolkit';
+import { normalized } from '../../Utils/AppConstants';
 
 export interface IReduxState {
   userData: any;
@@ -19,7 +19,7 @@ const initialState: IReduxState = {
   bottomBarHeight: normalized(80),
   isNetConnected: false,
   isLoaderStart: false,
-  isAlertShow: {value: false, message: ''},
+  isAlertShow: { value: false, message: '' },
   isPersisterUser: false,
   threadList: [],
   updateToken: false,

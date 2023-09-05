@@ -6,9 +6,9 @@ import {
   PermissionsAndroid,
   Platform,
 } from 'react-native';
-import {AppColors, normalized, ScreenProps} from './AppConstants';
-import {AppStrings} from './Strings';
-import {SocialTypeStrings} from './AppEnums';
+import { AppColors, normalized, ScreenProps } from './AppConstants';
+import { AppStrings } from './Strings';
+import { SocialTypeStrings } from './AppEnums';
 import {
   appleLoginRequest,
   facebookLoginRequest,
@@ -24,8 +24,8 @@ import {
   loginRequest,
   userSignupRequest,
 } from '../Network/Services/AuthServices';
-import {saveUserData} from './AsyncStorage';
-import {Routes} from './Routes';
+import { saveUserData } from './AsyncStorage';
+import { Routes } from './Routes';
 import RNFS, {
   DownloadBeginCallbackResult,
   DownloadProgressCallbackResult,
@@ -68,7 +68,7 @@ export default class CommonDataManager {
       this._translations = [];
       const localTranslaionsData = require('../Utils/translation.json');
       this._translations = localTranslaionsData;
-    } catch (e) {}
+    } catch (e) { }
   };
   setReduxReducer = (select: any, dispatch: any) => {
     this.selector = select;
@@ -390,12 +390,12 @@ export default class CommonDataManager {
     return str.length < 25
       ? normalized(22)
       : str.length < 35
-      ? normalized(20)
-      : str.length < 40
-      ? normalized(18)
-      : str.length < 45
-      ? normalized(16)
-      : normalized(14);
+        ? normalized(20)
+        : str.length < 40
+          ? normalized(18)
+          : str.length < 45
+            ? normalized(16)
+            : normalized(14);
   };
 
   openNativeMaps = (loc: any, addressLabel: string) => {
@@ -459,8 +459,8 @@ export default class CommonDataManager {
       return arr.length == 0
         ? '-'
         : arr.length == 1
-        ? txt.charAt(0).toUpperCase()
-        : arr[0].charAt(0).toUpperCase() + arr[1].charAt(0).toUpperCase();
+          ? txt.charAt(0).toUpperCase()
+          : arr[0].charAt(0).toUpperCase() + arr[1].charAt(0).toUpperCase();
     } else {
       return '';
     }
@@ -472,19 +472,19 @@ export default class CommonDataManager {
       obj['uri'] = image?.uri
         ? image?.uri
         : image?.sourceURL
-        ? image?.sourceURL
-        : image?.path;
+          ? image?.sourceURL
+          : image?.path;
       obj['name'] = image?.filename
         ? image?.filename
         : image?.fileName
-        ? image?.fileName
-        : image?.name
-        ? image?.name
-        : image?.path
-        ? image?.path?.split('/')[image?.path?.split('/')?.length - 1]
-        : image?.sourceURL?.split('/')[
-            image?.sourceURL?.split('/')?.length - 1
-          ];
+          ? image?.fileName
+          : image?.name
+            ? image?.name
+            : image?.path
+              ? image?.path?.split('/')[image?.path?.split('/')?.length - 1]
+              : image?.sourceURL?.split('/')[
+              image?.sourceURL?.split('/')?.length - 1
+              ];
       obj['type'] = image?.type ? image?.type : image.mime;
     }
     return obj;
@@ -561,7 +561,7 @@ export default class CommonDataManager {
         fromUrl: videoUrl,
         toFile: downloadDest,
         discretionary: true,
-        begin: () => {}, // onBegin: (res: DownloadBeginCallbackResult) => void,
+        begin: () => { }, // onBegin: (res: DownloadBeginCallbackResult) => void,
         progress: onProgress,
       };
 
@@ -589,8 +589,13 @@ export default class CommonDataManager {
 
   shareVideo = async (videoUrl: string) => {
     try {
+      const localUri = `${RNFS.DocumentDirectoryPath}/shared-video.mp4`;
+      const response = await RNFS.downloadFile({
+        fromUrl: videoUrl,
+        toFile: localUri,
+      });
       const filePath =
-        Platform.OS == 'ios' ? videoUrl : `content://${videoUrl}`;
+        Platform.OS == 'ios' ? localUri : `content://${localUri}`;
       let shareOptions = {
         title: 'Check out my video',
         message: 'Check out my video!',
@@ -598,17 +603,35 @@ export default class CommonDataManager {
         type: 'video/mp4',
         subject: 'Check out my video!',
       };
-      setTimeout(() => {
-        Share.open(shareOptions)
-          .then((res: any) => console.log('res:', res))
-          .catch((err: any) => console.log('err', err));
-      }, 1500);
-      // };
-      // })
+      // await setTimeout(async () => {
+      await Share.open(shareOptions)
+        .then((res: any) => console.log('res:', res))
+        .catch((err: any) => console.log('err', err));
+      // }, 1500);
     } catch (e) {
       console.log('Error sharing video ', e);
     }
   };
+
+  shareImage = async (imageUrl: string) => {
+    const localUri = `${RNFS.DocumentDirectoryPath}/shared-image.jpg`;
+    const response = await RNFS.downloadFile({
+      fromUrl: imageUrl,
+      toFile: localUri,
+    });
+    console.log("response: ", response);
+    await RNFS.readFile(Platform.OS == 'android' ? localUri : `file://${localUri}`, "base64")
+      .then(async (base64String) => {
+        console.log("base64 image => ", base64String);
+        await Share.open({
+          url: `data:image/jpeg;base64,${base64String}`,
+        });
+      })
+      .catch((error) => {
+        console.error("Error reading image:", error);
+      });
+  }
+
   paginationLogic = (totalCount: number, limit: number) => {
     let totalPages = 0;
     return (totalPages = Math.ceil(totalCount / limit));

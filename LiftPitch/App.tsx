@@ -8,17 +8,17 @@
  * @format
  */
 
-import React, {useEffect, useState} from 'react';
-import {LogBox, StatusBar, View} from 'react-native';
-import {Provider, useDispatch, useSelector} from 'react-redux';
-import store, {AppRootStore} from './src/Redux/store/AppStore';
-import {NavigationContainer} from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import { LogBox, StatusBar, View } from 'react-native';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import store, { AppRootStore } from './src/Redux/store/AppStore';
+import { NavigationContainer } from '@react-navigation/native';
 import AppContainer from './src/AppContainer';
-import {getUserData} from './src/Utils/AsyncStorage';
-import {setNetState, setUserData} from './src/Redux/reducers/AppReducer';
+import { getUserData } from './src/Utils/AsyncStorage';
+import { setNetState, setUserData } from './src/Redux/reducers/AppReducer';
 import NetInfo from '@react-native-community/netinfo';
 import SplashScreen from 'react-native-splash-screen';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import CommonDataManager from './src/Utils/CommonManager';
 const App = () => {
   const dispatch = useDispatch();
@@ -31,6 +31,8 @@ const App = () => {
         '959745604605-863co3a05bgf69rbjgo9q2km031g4r9t.apps.googleusercontent.com',
     });
     fetchUser();
+    onAppStart();
+    // requestPermission();
   }, []);
 
   LogBox.ignoreLogs(['ViewPropTypes will be removed']);
@@ -62,7 +64,7 @@ const App = () => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       <StatusBar
         animated={true}
         backgroundColor="#fff"
