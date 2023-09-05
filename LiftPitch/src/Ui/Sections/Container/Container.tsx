@@ -33,8 +33,8 @@ const Container = ({ navigation }) => {
           { borderRadius: 20 },
           Platform.OS == 'android'
             ? {
-              height: Dimensions.get('screen').height - (currentTab !== 0 ? diff : statusBarHeight) - selector.bottomBarHeight,
-              // height: Dimensions.get('screen').height - diff - selector.bottomBarHeight,
+              // height: Dimensions.get('screen').height - (currentTab !== 0 ? diff : statusBarHeight) - selector.bottomBarHeight,
+              height: Dimensions.get('screen').height - diff - selector.bottomBarHeight,
             }
             : { flex: 1 },
         ]}>

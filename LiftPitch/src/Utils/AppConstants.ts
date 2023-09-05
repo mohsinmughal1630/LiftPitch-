@@ -757,12 +757,12 @@ export interface ILocation {
 //   }
 //   return Dimensions.get('window').height;
 // };
-export const calculateWindowHeight = (type: 'status' | 'diff') => {
+export const calculateWindowHeight = () => {
   const diff =
     Dimensions.get('screen').height - Dimensions.get('window').height;
   const statusHeight = StatusBar?.currentHeight || 0;
   return (
-    Dimensions.get('screen').height - (type == 'diff' ? diff : statusHeight)
+    Dimensions.get('screen').height - (2 > 3 ? diff : statusHeight)
   );
 };
 

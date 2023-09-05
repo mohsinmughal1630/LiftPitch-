@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Platform, StyleSheet, View } from 'react-native';
+import { Dimensions, Platform, StyleSheet, View } from 'react-native';
 import {
   AppColors,
   calculateWindowHeight,
@@ -275,12 +275,15 @@ const SingleVideoComponent = (props: Props) => {
 
 export default SingleVideoComponent;
 
+const diff =
+  Dimensions.get('screen').height - Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: AppColors.black.black,
     height:
       Platform.OS == 'android'
-        ? calculateWindowHeight() - normalized(80)
+        ? Dimensions.get('screen').height - diff - normalized(80)
         : deviceHeight - normalized(80),
   },
   innerContainer: {
