@@ -14,9 +14,8 @@ import {
 import { useSelector } from 'react-redux';
 import BottomBar from '../../Components/BottomBar/BottomBar';
 const Container = ({ navigation }) => {
-  const [state, dispatch] = useReducer(containerReducer, containerInitialState);
   const selector = useSelector((AppState: any) => AppState.AppReducer);
-
+  const { currentTab } = selector;
   const statusBarHeight = StatusBar.currentHeight || 0;
 
   const diff =
@@ -34,19 +33,18 @@ const Container = ({ navigation }) => {
           { borderRadius: 20 },
           Platform.OS == 'android'
             ? {
-              height: Dimensions.get('screen').height - (state.selectedTab !== 0 ? diff : statusBarHeight) - selector.bottomBarHeight,
+              height: Dimensions.get('screen').height - (currentTab !== 0 ? diff : statusBarHeight) - selector.bottomBarHeight,
               // height: Dimensions.get('screen').height - diff - selector.bottomBarHeight,
             }
             : { flex: 1 },
         ]}>
-        {setContainerStack(state.selectedTab)}
+        {setContainerStack(currentTab)}
       </View>
 
       <BottomBar
         bottomBarList={BottomBarList}
-        dispatch={dispatch}
         navigation={navigation}
-        tab={state.selectedTab}
+        tab={currentTab}
       />
     </View>
   );

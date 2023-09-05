@@ -3,11 +3,10 @@ import React from 'react';
 import { View } from 'react-native';
 import Bar from './Bar';
 import { AppColors, normalized } from '../../../Utils/AppConstants';
-import { containerStateEnum } from '../../Sections/Container/State';
 import { setTab } from '../../../Redux/reducers/AppReducer';
 import { Routes } from '../../../Utils/Routes';
-const BottomBar = ({ bottomBarList, dispatch, navigation, tab }: any) => {
-  const redux_Dispatch = useDispatch();
+const BottomBar = ({ bottomBarList, navigation, tab }: any) => {
+  const dispatch = useDispatch();
   const selector = useSelector((AppState: any) => AppState.AppReducer);
   return (
     <View
@@ -53,8 +52,7 @@ const BottomBar = ({ bottomBarList, dispatch, navigation, tab }: any) => {
                   navigation.push(Routes.addVideoTab.createVideoScreen);
                   return;
                 }
-                dispatch({ type: containerStateEnum.changeTab, data: index });
-                redux_Dispatch(setTab(index));
+                dispatch(setTab(index));
               }}
             />
           </View>

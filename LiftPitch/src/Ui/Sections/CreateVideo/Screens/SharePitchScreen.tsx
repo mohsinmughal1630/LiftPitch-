@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   AppColors,
   AppImages,
@@ -6,21 +6,24 @@ import {
   hv,
   normalized,
 } from '../../../../Utils/AppConstants';
-import {SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
+import { SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SimpleInput from '../../../Components/CustomInput/SimpleInput';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
 import {
   setIsAlertShow,
   setIsLoader,
+  setTab,
 } from '../../../../Redux/reducers/AppReducer';
-import {AppStrings} from '../../../../Utils/Strings';
+import { AppStrings } from '../../../../Utils/Strings';
 import ThreadManager from '../../../../ChatModule/ThreadManger';
-import {createThumbnail} from 'react-native-create-thumbnail';
-import {getVideoCreateObj} from '../../../../Utils/Helper';
+import { createThumbnail } from 'react-native-create-thumbnail';
+import { getVideoCreateObj } from '../../../../Utils/Helper';
 import moment from 'moment';
+import CommonDataManager from '../../../../Utils/CommonManager';
+import { Routes } from '../../../../Utils/Routes';
 const SharePitchScreen = (props: ScreenProps) => {
   const selectedPitch = props?.route?.params?.selectedPitch;
   const dispatch = useDispatch();
@@ -38,7 +41,7 @@ const SharePitchScreen = (props: ScreenProps) => {
     if (props?.route?.params?.selectedPitch) {
       setDescription(
         props?.route?.params?.selectedPitch?.description +
-          props?.route?.params?.selectedPitch?.steps?.description,
+        props?.route?.params?.selectedPitch?.steps?.description,
       );
     }
   }, [props?.route?.params]);
@@ -105,7 +108,9 @@ const SharePitchScreen = (props: ScreenProps) => {
             };
             dispatch(setIsLoader(false));
             await ThreadManager.instance.createPost(obj, (response: any) => {
-              props?.navigation.pop(4);
+              // props?.navigation.pop(4);
+              dispatch(setTab(0));
+              CommonDataManager.getSharedInstance().resetToScreen(props.navigation, Routes.Container.Container);
             });
           }
         } else {
@@ -121,7 +126,7 @@ const SharePitchScreen = (props: ScreenProps) => {
     );
   };
   const uploadThumnail = async (path: any, payload: any) => {
-    let obj = {...payload};
+    let obj = { ...payload };
     await ThreadManager.instance
       .uploadMedia(path, false, async (url: any) => {
         if (url !== 'error') {
@@ -138,7 +143,9 @@ const SharePitchScreen = (props: ScreenProps) => {
 
           dispatch(setIsLoader(false));
           await ThreadManager.instance.createPost(obj, (response: any) => {
-            props?.navigation.pop(4);
+            // props?.navigation.pop(4);
+            dispatch(setTab(0));
+            CommonDataManager.getSharedInstance().resetToScreen(props.navigation, Routes.Container.Container);
           });
         } else {
           dispatch(setIsLoader(false));
@@ -177,7 +184,7 @@ const SharePitchScreen = (props: ScreenProps) => {
           createPostFun();
         }}
         rightTxt={'Share'}
-        rigthBtnStyle={{color: AppColors.blue.lightBlue}}
+        rigthBtnStyle={{ color: AppColors.blue.lightBlue }}
       />
       <View style={styles.mainContainer}>
         <View
@@ -187,7 +194,7 @@ const SharePitchScreen = (props: ScreenProps) => {
             alignItems: 'center',
           }}>
           <AppImageViewer
-            source={{uri: selectedPitch?.hero_image_url}}
+            source={{ uri: selectedPitch?.hero_image_url }}
             placeHolder={AppImages.bottomBar.Profile}
             style={styles.pitchImg}
           />
@@ -214,7 +221,7 @@ const SharePitchScreen = (props: ScreenProps) => {
           returnKeyType={'next'}
           placeHold={'Add Hashtag/Keywords..'}
           container={styles.inputMainCont}
-          textInputStyle={{width: normalized(270)}}
+          textInputStyle={{ width: normalized(270) }}
           setValue={(txt: any) => {
             setHastTagError('');
             setHastTag(txt);

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   AppColors,
   AppImages,
@@ -18,9 +18,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useCameraDevices, Camera} from 'react-native-vision-camera';
+import { useCameraDevices, Camera } from 'react-native-vision-camera';
 import ImagePicker from 'react-native-image-crop-picker';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 import VideoCreateHeader from '../Components/VideoCreateHeader';
 import Permissions, {
   PERMISSIONS,
@@ -30,13 +30,15 @@ import Permissions, {
 import ConfirmationModal from '../../../Components/CustomModal/ConfirmationModal';
 import VideoRecorderBtn from '../Components/VideoRecorderBtn';
 import VideoTimerPickerPopup from '../Components/VideoTimerPickerPopup';
-import {Routes} from '../../../../Utils/Routes';
+import { Routes } from '../../../../Utils/Routes';
 import VideoSpeedPickerPopup from '../Components/VideoSpeedPickerPopup';
 import RecordingTypeToggle from '../Components/RecordingTypeToggle';
-import {useIsFocused} from '@react-navigation/native';
-import CountDownTimer from '../Components/<CountDownTimer';
+import CountDownTimer from '../Components/CountDownTimer';
+import { useDispatch } from 'react-redux';
+import { setTab } from '../../../../Redux/reducers/AppReducer';
 
 const VideoCreateScreen = (props: ScreenProps) => {
+  const dispatch = useDispatch();
   const cameraRef = useRef<any>({});
   const devices: any = useCameraDevices();
   const [deviceDir, setDeviceDir] = useState('back');
@@ -161,7 +163,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
     <View style={AppStyles.MainStyle}>
       {/* {device != null ? ( */}
       <KeyboardAvoidingView
-        style={{flex: 1}}
+        style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
         <VideoCreateHeader
@@ -171,6 +173,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
             setDeviceDir(val);
           }}
           onClose={() => {
+            dispatch(setTab(0));
             props.navigation.goBack();
           }}
           isVideoRecording={isVideoRecording}
@@ -190,7 +193,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
                 <Image
                   source={
                     AppImages.createVideo[
-                      flashMode == 'on' ? 'flashOn' : 'flash'
+                    flashMode == 'on' ? 'flashOn' : 'flash'
                     ]
                   }
                   style={{
@@ -219,7 +222,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
           )}
           {!isVideoRecording && (
             <TouchableOpacity
-              style={[styles.flashCont, {top: normalized(150)}]}
+              style={[styles.flashCont, { top: normalized(150) }]}
               onPress={() => {
                 setShowTimerPopup(true);
               }}>
@@ -227,14 +230,14 @@ const VideoCreateScreen = (props: ScreenProps) => {
                 <Image
                   source={AppImages.createVideo.TimerIcon}
                   style={[
-                    {alignSelf: 'center'},
-                    timerValue !== 0 && {tintColor: AppColors.red.darkRed},
+                    { alignSelf: 'center' },
+                    timerValue !== 0 && { tintColor: AppColors.red.darkRed },
                   ]}
                 />
                 <Text
                   style={[
                     styles.flashTxt,
-                    timerValue !== 0 && {color: AppColors.red.darkRed},
+                    timerValue !== 0 && { color: AppColors.red.darkRed },
                   ]}>
                   {timerValue == 0 ? 'OFF' : `${timerValue} S`}
                 </Text>
@@ -250,9 +253,9 @@ const VideoCreateScreen = (props: ScreenProps) => {
             />
           )}
 
-          {recordingTypeIndex == 1 && !isVideoRecording && (
+          {/* {recordingTypeIndex == 1 && !isVideoRecording && (
             <TouchableOpacity
-              style={[styles.flashCont, {top: normalized(210)}]}
+              style={[styles.flashCont, { top: normalized(210) }]}
               onPress={() => {
                 setShowSpeedPopup(true);
               }}>
@@ -260,20 +263,20 @@ const VideoCreateScreen = (props: ScreenProps) => {
                 <Image
                   source={AppImages.createVideo.SpeedIcon}
                   style={[
-                    {alignSelf: 'center'},
-                    speedValue !== 1 && {tintColor: AppColors.red.darkRed},
+                    { alignSelf: 'center' },
+                    speedValue !== 1 && { tintColor: AppColors.red.darkRed },
                   ]}
                 />
                 <Text
                   style={[
                     styles.flashTxt,
-                    speedValue !== 1 && {color: AppColors.red.darkRed},
+                    speedValue !== 1 && { color: AppColors.red.darkRed },
                   ]}>
                   {speedValue == 1 ? 'OFF' : `${speedValue} X`}
                 </Text>
               </>
             </TouchableOpacity>
-          )}
+          )} */}
 
           {showSpeedPopup && (
             <VideoSpeedPickerPopup
@@ -317,12 +320,12 @@ const VideoCreateScreen = (props: ScreenProps) => {
                       ? AppImages.createVideo.doneIcon
                       : AppImages.createVideo.smileIcon
                   }
-                  style={{height: normalized(30), width: normalized(30)}}
+                  style={{ height: normalized(30), width: normalized(30) }}
                 />
                 <Text style={styles.simpleDesTxt}>Pitch Ideas</Text>
               </View>
             </TouchableOpacity>
-            <View style={{alignItems: 'center'}}>
+            <View style={{ alignItems: 'center' }}>
               <RecordingTypeToggle
                 recordingType={recordingTypeIndex}
                 onRecordingTypeChage={setRecordingTypeIndex}

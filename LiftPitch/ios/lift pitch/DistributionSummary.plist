@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>LiftPitch.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>1</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>2468FB21B01EF6BCB57E90EAD8C40DE3119F567C</string>
+				<key>dateExpires</key>
+				<string>31/08/2024</string>
+				<key>type</key>
+				<string>Apple Distribution</string>
+			</dict>
+			<key>embeddedBinaries</key>
+			<array>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>0.11.0</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>2468FB21B01EF6BCB57E90EAD8C40DE3119F567C</string>
+						<key>dateExpires</key>
+						<string>31/08/2024</string>
+						<key>type</key>
+						<string>Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>hermes.framework</string>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>862FS8Y4T5</string>
+						<key>name</key>
+						<string>Jim Lovell</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>0.11.0</string>
+				</dict>
+			</array>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>862FS8Y4T5.com.liftpitch</string>
+				<key>aps-environment</key>
+				<string>production</string>
+				<key>com.apple.developer.applesignin</key>
+				<array>
+					<string>Default</string>
+				</array>
+				<key>com.apple.developer.associated-domains</key>
+				<array/>
+				<key>com.apple.developer.team-identifier</key>
+				<string>862FS8Y4T5</string>
+				<key>get-task-allow</key>
+				<false/>
+				<key>keychain-access-groups</key>
+				<array>
+					<string>862FS8Y4T5.com.liftpitch</string>
+				</array>
+			</dict>
+			<key>name</key>
+			<string>Project.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>657f0901-9cb7-4931-8031-d944bc6658ea</string>
+				<key>dateExpires</key>
+				<string>31/08/2024</string>
+				<key>name</key>
+				<string>Liftpitch - Adhoc Profile</string>
+			</dict>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>862FS8Y4T5</string>
+				<key>name</key>
+				<string>Jim Lovell</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>1.0</string>
+		</dict>
+	</array>
+</dict>
+</plist>

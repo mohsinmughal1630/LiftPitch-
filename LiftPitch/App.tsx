@@ -32,7 +32,7 @@ const App = () => {
     });
     fetchUser();
     onAppStart();
-    // requestPermission();
+    requestPermission();
   }, []);
 
   LogBox.ignoreLogs(['ViewPropTypes will be removed']);

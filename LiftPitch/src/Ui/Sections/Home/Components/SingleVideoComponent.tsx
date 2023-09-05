@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import {Platform, StyleSheet, View} from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import {
   AppColors,
   calculateWindowHeight,
@@ -13,13 +13,13 @@ import VideoPlayer from './VideoPlayer';
 import VideoBottomSection from './VideoBottomSection';
 import CommentsModal from './CommentsModal';
 import ThreadManager from '../../../../ChatModule/ThreadManger';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   addNUpdateCommentReq,
   getCommentListingAgainstVideo,
   likeNDisListReq,
 } from '../../../../Network/Services/VideoListingServices';
-import {AppStrings, CommentActionType} from '../../../../Utils/Strings';
+import { AppStrings, CommentActionType } from '../../../../Utils/Strings';
 import {
   setIsAlertShow,
   setIsLoader,
@@ -27,6 +27,7 @@ import {
 import moment from 'moment';
 import ReportReasonModal from './ReportReasonModal';
 import ImageViewCompo from './ImageViewCompo';
+import CommonDataManager from '../../../../Utils/CommonManager';
 
 interface Props {
   navigation: any;
@@ -119,7 +120,7 @@ const SingleVideoComponent = (props: Props) => {
           setCommentsList(response);
         } else {
           dispatch(setIsLoader(false));
-          dispatch(setIsAlertShow({value: true, message: response}));
+          dispatch(setIsAlertShow({ value: true, message: response }));
         }
       },
     );
@@ -145,7 +146,7 @@ const SingleVideoComponent = (props: Props) => {
           setCommentsList(response);
         } else {
           dispatch(setIsLoader(false));
-          dispatch(setIsAlertShow({value: true, message: response}));
+          dispatch(setIsAlertShow({ value: true, message: response }));
         }
       },
     );
@@ -170,7 +171,7 @@ const SingleVideoComponent = (props: Props) => {
           setLikeCount(response?.length);
         } else {
           dispatch(setIsLoader(false));
-          dispatch(setIsAlertShow({value: true, message: response}));
+          dispatch(setIsAlertShow({ value: true, message: response }));
         }
       },
     );
@@ -199,10 +200,16 @@ const SingleVideoComponent = (props: Props) => {
           }}
           navigation={props?.navigation}
           item={props.item}
-          onOptionClick={(val: string) => {
+          onOptionClick={async (val: string) => {
             if (val == 'comment') {
               getCommentList();
               setShowComments(true);
+            } else if (val == 'share') {
+              if (props?.item?.videoUrl) {
+                await CommonDataManager.getSharedInstance().shareVideo(props?.item?.videoUrl)
+              } else {
+                await CommonDataManager.getSharedInstance().shareImage(props?.item?.photoUrl)
+              }
             }
           }}
         />
@@ -220,7 +227,7 @@ const SingleVideoComponent = (props: Props) => {
             } else if (obj?.actionType == CommentActionType.reportComment) {
               setShowComments(false);
               setTimeout(() => {
-                setReportingReasonModal({value: true, data: obj});
+                setReportingReasonModal({ value: true, data: obj });
               }, 500);
             }
           }}
@@ -249,14 +256,14 @@ const SingleVideoComponent = (props: Props) => {
         <ReportReasonModal
           value={reportingReasonModal?.value}
           onClose={() => {
-            setReportingReasonModal({value: false, data: null});
+            setReportingReasonModal({ value: false, data: null });
           }}
           atSubmit={async (val: any) => {
             let newObj: any = {
               ...reportingReasonModal?.data,
               reason: val,
             };
-            setReportingReasonModal({value: false, data: null});
+            setReportingReasonModal({ value: false, data: null });
 
             await deleteNReportReq(newObj, CommentActionType.reportComment);
           }}
