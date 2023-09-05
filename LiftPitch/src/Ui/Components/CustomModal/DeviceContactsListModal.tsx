@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -23,9 +23,9 @@ import {
   isSmallDevice,
   normalized,
 } from '../../../Utils/AppConstants';
-import { AppStyles } from '../../../Utils/AppStyles';
-import { useSelector } from 'react-redux';
-import { AppRootStore } from '../../../Redux/store/AppStore';
+import {AppStyles} from '../../../Utils/AppStyles';
+import {useSelector} from 'react-redux';
+import {AppRootStore} from '../../../Redux/store/AppStore';
 import CommonDataManager from '../../../Utils/CommonManager';
 
 interface Props {
@@ -34,7 +34,7 @@ interface Props {
 }
 
 const DeviceContactsListModal = (props: Props) => {
-  const { userData } = useSelector((state: AppRootStore) => state.AppReducer);
+  const {userData} = useSelector((state: AppRootStore) => state.AppReducer);
   const [searchTxt, setSearchTxt] = useState('');
   const filteredList = useRef([]);
   const [showSearchBar, setShowSearchBar] = useState(false);
@@ -110,7 +110,7 @@ const DeviceContactsListModal = (props: Props) => {
               data={searchTxt ? filteredList.current : props.list}
               keyExtractor={(item, index) => index.toString()}
               showsVerticalScrollIndicator={false}
-              renderItem={({ item, index }) => (
+              renderItem={({item, index}) => (
                 <View key={index} style={styles.singleContact}>
                   <View style={styles.textSection}>
                     <Text numberOfLines={1} style={styles.title}>
@@ -136,7 +136,7 @@ const DeviceContactsListModal = (props: Props) => {
                       <Text
                         style={{
                           color: AppColors.white.white,
-                          ...AppStyles.textRegular
+                          ...AppStyles.textRegular,
                         }}>
                         Invite
                       </Text>

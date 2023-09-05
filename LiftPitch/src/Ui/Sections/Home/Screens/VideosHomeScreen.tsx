@@ -40,7 +40,7 @@ const VideosHomeScreen = (props: ScreenProps) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [searchTxt, setSearchTxt] = useState('');
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const counter = useRef(1);
+  const counter = useRef<any>(1);
   const [totalPages, setTotalPages] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [videoList, setVideoList] = useState([]);
@@ -114,8 +114,6 @@ const VideosHomeScreen = (props: ScreenProps) => {
                 index === arr.findIndex((o: any) => obj?.videoId === o?.videoId)
               );
             });
-            if (totalPages > 4 && newArr?.length < 5) {
-            }
             setVideoList(newArr);
           }
         },
@@ -133,6 +131,8 @@ const VideosHomeScreen = (props: ScreenProps) => {
       <VideoHeaderSection
         selectedTab={selectedTab}
         onTabSelect={(val: any) => {
+          setVideoList([]);
+          counter.current = 1;
           setSelectedTab(val);
           fetchVideoListing(val, selector?.userData);
         }}
