@@ -20,7 +20,7 @@ import {Routes} from '../../../../Utils/Routes';
 const UploadMediaPreviewScreen = (props: ScreenProps) => {
   const mediaType = props.route?.params?.mediaType;
   const mediaPath = props.route?.params?.mediaPath;
-  console.log('mediaPath: ', mediaPath);
+  console.log('mediaPath: ', mediaPath, mediaType);
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
@@ -38,7 +38,9 @@ const UploadMediaPreviewScreen = (props: ScreenProps) => {
         <TouchableWithoutFeedback
           onPress={() => {
             let splitPath = mediaPath.split('.');
-            if (splitPath[splitPath?.length - 1] == 'mp4') {
+            // if (splitPath[splitPath?.length - 1] == 'mp4') {
+              if (mediaType == 'video') {
+              
               if (props.route?.params?.selectedPitch) {
                 props?.navigation.navigate(Routes.addVideoTab.sharePitch, {
                   mediaType: 'video',
@@ -87,7 +89,7 @@ const UploadMediaPreviewScreen = (props: ScreenProps) => {
             source={{uri: mediaPath}}
             controls={true}
             ignoreSilentSwitch="ignore"
-            fullscreen={true}
+            // fullscreen={true}
             resizeMode="contain"
             style={styles.videoStyles}
           />

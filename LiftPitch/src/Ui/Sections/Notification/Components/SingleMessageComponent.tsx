@@ -81,7 +81,7 @@ export default function SingleMessageComponent(props: any) {
           </Text>
         </View>
         <View style={styles.countTimeCont}>
-          <Text style={styles.timeStyle}>{time}</Text>
+          <Text style={styles.timeStyle} numberOfLines={1} ellipsizeMode="tail">{time}</Text>
           {count > 0 ? (
             <LinearGradient
               start={{ x: 0, y: 0 }}

@@ -72,15 +72,15 @@ const VideosHomeScreen = (props: ScreenProps) => {
   };
 
   const fetchVideoListing = async (tabValue?: any, currentUserData?: any) => {
-    if (!selector.isNetConnected) {
-      dispatch(
-        setIsAlertShow({
-          value: true,
-          message: AppStrings.Network.internetError,
-        }),
-      );
-      return;
-    }
+    // if (!selector.isNetConnected) {
+    //   dispatch(
+    //     setIsAlertShow({
+    //       value: true,
+    //       message: AppStrings.Network.internetError,
+    //     }),
+    //   );
+    //   return;
+    // }
     try {
       if (counter?.current == 1 && !selector?.isLoaderStart) {
         dispatch(setIsLoader(true));
@@ -114,14 +114,22 @@ const VideosHomeScreen = (props: ScreenProps) => {
                 index === arr.findIndex((o: any) => obj?.videoId === o?.videoId)
               );
             });
+            dispatch(setIsLoader(false));
+
             setVideoList(newArr);
+          
+
+          }else{
+            dispatch(setIsLoader(false));
           }
         },
       );
     } catch (e) {
       console.log('error video listing----> ', e);
-    } finally {
       dispatch(setIsLoader(false));
+
+    } finally {
+      // dispatch(setIsLoader(false));
     }
   };
 
@@ -180,7 +188,7 @@ const VideosHomeScreen = (props: ScreenProps) => {
             );
           }}
         />
-      ) : selector?.isLoaderStart ? null : (
+      ) : selector.isLoaderStart? null : (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text
             style={{

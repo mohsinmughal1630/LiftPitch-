@@ -35,7 +35,7 @@ import VideoSpeedPickerPopup from '../Components/VideoSpeedPickerPopup';
 import RecordingTypeToggle from '../Components/RecordingTypeToggle';
 import CountDownTimer from '../Components/CountDownTimer';
 import { useDispatch } from 'react-redux';
-import { setTab } from '../../../../Redux/reducers/AppReducer';
+import { setIsLoader, setTab } from '../../../../Redux/reducers/AppReducer';
 
 const VideoCreateScreen = (props: ScreenProps) => {
   const dispatch = useDispatch();
@@ -54,8 +54,15 @@ const VideoCreateScreen = (props: ScreenProps) => {
   const [recordingTypeIndex, setRecordingTypeIndex] = useState(0);
   const [isVideoRecording, setIsVideoRecording] = useState(false);
 
+  const [showScreen, setShowScreen] = useState(false)
   useEffect(() => {
     getPermissions();
+    dispatch(setIsLoader(true));
+
+    setTimeout(()=>{
+      setShowScreen(true)
+      dispatch(setIsLoader(false));
+    }, 500)
   }, []);
 
   const getPermissions = async () => {
@@ -80,6 +87,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
     })
       .then(images => {
         props.navigation.push(Routes.addVideoTab.uploadMediaPreviewScreen, {
+          mediaType: recordingTypeIndex == 0 ? 'photo' : 'video',
           mediaPath: images?.path,
           selectedPitch: selectedPitchObj,
         });
@@ -94,7 +102,9 @@ const VideoCreateScreen = (props: ScreenProps) => {
       cameraRef?.current?.startRecording({
         flash: flashMode,
         onRecordingFinished: async (video: any) => {
+          console.log("showVIDEO pAT - > " , video)
           props.navigation.push(Routes.addVideoTab.uploadMediaPreviewScreen, {
+            mediaType: recordingTypeIndex == 0 ? 'photo' : 'video',
             mediaPath: video?.path,
             selectedPitch: selectedPitchObj,
           });
@@ -124,6 +134,7 @@ const VideoCreateScreen = (props: ScreenProps) => {
       });
       if (photo?.path) {
         props.navigation.push(Routes.addVideoTab.uploadMediaPreviewScreen, {
+          mediaType: recordingTypeIndex == 0 ? 'photo' : 'video',
           mediaPath: photo?.path,
           selectedPitch: selectedPitchObj,
         });
@@ -162,210 +173,215 @@ const VideoCreateScreen = (props: ScreenProps) => {
   return (
     <View style={AppStyles.MainStyle}>
       {/* {device != null ? ( */}
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
-        <VideoCreateHeader
-          cameraStatus={deviceDir}
-          switchCamera={(val: any) => {
-            setFlashMode('off');
-            setDeviceDir(val);
-          }}
-          onClose={() => {
-            dispatch(setTab(0));
-            props.navigation.goBack();
-          }}
-          isVideoRecording={isVideoRecording}
-        />
-        <ScrollView
-          contentContainerStyle={styles.containerStyle}
-          showsVerticalScrollIndicator={false}>
-          {countdown > 0 && <CountDownTimer counterValue={countdown} />}
-          {!isVideoRecording && (
-            <TouchableOpacity
-              style={styles.flashCont}
-              disabled={deviceDir !== 'back'}
-              onPress={() => {
-                setFlashMode(flashMode == 'on' ? 'off' : 'on');
-              }}>
-              <>
-                <Image
-                  source={
-                    AppImages.createVideo[
-                    flashMode == 'on' ? 'flashOn' : 'flash'
-                    ]
-                  }
-                  style={{
-                    alignSelf: 'center',
-                    height: 20,
-                    width: 20,
-                    tintColor:
-                      flashMode == 'on' ? AppColors.red.darkRed : 'white',
-                    resizeMode: 'contain',
-                  }}
-                />
-                <Text
-                  style={[
-                    styles.flashTxt,
+      {
+        showScreen && (
+          <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
+          <VideoCreateHeader
+            cameraStatus={deviceDir}
+            switchCamera={(val: any) => {
+              setFlashMode('off');
+              setDeviceDir(val);
+            }}
+            onClose={() => {
+              dispatch(setTab(0));
+              props.navigation.goBack();
+            }}
+            isVideoRecording={isVideoRecording}
+          />
+          <ScrollView
+            contentContainerStyle={styles.containerStyle}
+            showsVerticalScrollIndicator={false}>
+            {countdown > 0 && <CountDownTimer counterValue={countdown} />}
+            {!isVideoRecording && (
+              <TouchableOpacity
+                style={styles.flashCont}
+                disabled={deviceDir !== 'back'}
+                onPress={() => {
+                  setFlashMode(flashMode == 'on' ? 'off' : 'on');
+                }}>
+                <>
+                  <Image
+                    source={
+                      AppImages.createVideo[
+                      flashMode == 'on' ? 'flashOn' : 'flash'
+                      ]
+                    }
+                    style={{
+                      alignSelf: 'center',
+                      height: 20,
+                      width: 20,
+                      tintColor:
+                        flashMode == 'on' ? AppColors.red.darkRed : 'white',
+                      resizeMode: 'contain',
+                    }}
+                  />
+                  <Text
+                    style={[
+                      styles.flashTxt,
+                      {
+                        color:
+                          flashMode == 'on'
+                            ? AppColors.red.darkRed
+                            : AppColors.white.white,
+                      },
+                    ]}>
+                    {flashMode == 'on' ? 'ON' : 'OFF'}
+                  </Text>
+                </>
+              </TouchableOpacity>
+            )}
+            {!isVideoRecording && (
+              <TouchableOpacity
+                style={[styles.flashCont, { top: normalized(150) }]}
+                onPress={() => {
+                  setShowTimerPopup(true);
+                }}>
+                <>
+                  <Image
+                    source={AppImages.createVideo.TimerIcon}
+                    style={[
+                      { alignSelf: 'center' },
+                      timerValue !== 0 && { tintColor: AppColors.red.darkRed },
+                    ]}
+                  />
+                  <Text
+                    style={[
+                      styles.flashTxt,
+                      timerValue !== 0 && { color: AppColors.red.darkRed },
+                    ]}>
+                    {timerValue == 0 ? 'OFF' : `${timerValue} S`}
+                  </Text>
+                </>
+              </TouchableOpacity>
+            )}
+  
+            {showTimerPopup && (
+              <VideoTimerPickerPopup
+                currentTimer={timerValue}
+                onSelectTimer={setTimerValue}
+                onClose={() => setShowTimerPopup(false)}
+              />
+            )}
+  
+            {/* {recordingTypeIndex == 1 && !isVideoRecording && (
+              <TouchableOpacity
+                style={[styles.flashCont, { top: normalized(210) }]}
+                onPress={() => {
+                  setShowSpeedPopup(true);
+                }}>
+                <>
+                  <Image
+                    source={AppImages.createVideo.SpeedIcon}
+                    style={[
+                      { alignSelf: 'center' },
+                      speedValue !== 1 && { tintColor: AppColors.red.darkRed },
+                    ]}
+                  />
+                  <Text
+                    style={[
+                      styles.flashTxt,
+                      speedValue !== 1 && { color: AppColors.red.darkRed },
+                    ]}>
+                    {speedValue == 1 ? 'OFF' : `${speedValue} X`}
+                  </Text>
+                </>
+              </TouchableOpacity>
+            )} */}
+  
+            {showSpeedPopup && (
+              <VideoSpeedPickerPopup
+                currentSpeed={speedValue}
+                onSelectSpeed={setSpeedValue}
+                onClose={() => setShowSpeedPopup(false)}
+              />
+            )}
+  
+            {device && (
+              <Camera
+                ref={cameraRef}
+                style={StyleSheet.absoluteFill}
+                device={device}
+                isActive={true}
+                photo={recordingTypeIndex == 0}
+                video={recordingTypeIndex == 1}
+                audio={recordingTypeIndex == 1}
+                preset="medium"
+                zoom={device?.neutralZoom}
+              />
+            )}
+  
+            <View style={styles.bottomCont}>
+              <TouchableOpacity
+                onPress={() => {
+                  props?.navigation?.navigate(
+                    Routes.addVideoTab.pitchListScreen,
                     {
-                      color:
-                        flashMode == 'on'
-                          ? AppColors.red.darkRed
-                          : AppColors.white.white,
+                      atBack: (val: any) => {
+                        setSelectedPitchObj(val);
+                      },
+                      from: Routes.addVideoTab.createVideoScreen,
                     },
-                  ]}>
-                  {flashMode == 'on' ? 'ON' : 'OFF'}
-                </Text>
-              </>
-            </TouchableOpacity>
-          )}
-          {!isVideoRecording && (
-            <TouchableOpacity
-              style={[styles.flashCont, { top: normalized(150) }]}
-              onPress={() => {
-                setShowTimerPopup(true);
-              }}>
-              <>
-                <Image
-                  source={AppImages.createVideo.TimerIcon}
-                  style={[
-                    { alignSelf: 'center' },
-                    timerValue !== 0 && { tintColor: AppColors.red.darkRed },
-                  ]}
+                  );
+                }}>
+                <View style={styles.singleBottomEndBox}>
+                  <Image
+                    source={
+                      selectedPitchObj
+                        ? AppImages.createVideo.doneIcon
+                        : AppImages.createVideo.smileIcon
+                    }
+                    style={{ height: normalized(30), width: normalized(30) }}
+                  />
+                  <Text style={styles.simpleDesTxt}>Pitch Ideas</Text>
+                </View>
+              </TouchableOpacity>
+              <View style={{ alignItems: 'center' }}>
+                <RecordingTypeToggle
+                  recordingType={recordingTypeIndex}
+                  onRecordingTypeChage={setRecordingTypeIndex}
+                  disabled={isVideoRecording}
                 />
-                <Text
-                  style={[
-                    styles.flashTxt,
-                    timerValue !== 0 && { color: AppColors.red.darkRed },
-                  ]}>
-                  {timerValue == 0 ? 'OFF' : `${timerValue} S`}
-                </Text>
-              </>
-            </TouchableOpacity>
-          )}
-
-          {showTimerPopup && (
-            <VideoTimerPickerPopup
-              currentTimer={timerValue}
-              onSelectTimer={setTimerValue}
-              onClose={() => setShowTimerPopup(false)}
-            />
-          )}
-
-          {/* {recordingTypeIndex == 1 && !isVideoRecording && (
-            <TouchableOpacity
-              style={[styles.flashCont, { top: normalized(210) }]}
-              onPress={() => {
-                setShowSpeedPopup(true);
-              }}>
-              <>
-                <Image
-                  source={AppImages.createVideo.SpeedIcon}
-                  style={[
-                    { alignSelf: 'center' },
-                    speedValue !== 1 && { tintColor: AppColors.red.darkRed },
-                  ]}
+                <VideoRecorderBtn
+                  isImage={recordingTypeIndex == 0}
+                  onImageClick={() => {
+                    if (timerValue > 0) {
+                      setCountdown(timerValue);
+                      setStartInterval(true);
+                    } else {
+                      onImageClick();
+                    }
+                  }}
+                  onVideRecordingStart={() => {
+                    if (timerValue > 0) {
+                      setCountdown(timerValue);
+                      setStartInterval(true);
+                    } else {
+                      handleStartRecordVideo();
+                    }
+                  }}
+                  onVideoRecordingEnd={handleStopRecordedVideo}
+                  isVideoRecording={isVideoRecording}
                 />
-                <Text
-                  style={[
-                    styles.flashTxt,
-                    speedValue !== 1 && { color: AppColors.red.darkRed },
-                  ]}>
-                  {speedValue == 1 ? 'OFF' : `${speedValue} X`}
-                </Text>
-              </>
-            </TouchableOpacity>
-          )} */}
-
-          {showSpeedPopup && (
-            <VideoSpeedPickerPopup
-              currentSpeed={speedValue}
-              onSelectSpeed={setSpeedValue}
-              onClose={() => setShowSpeedPopup(false)}
-            />
-          )}
-
-          {device && (
-            <Camera
-              ref={cameraRef}
-              style={StyleSheet.absoluteFill}
-              device={device}
-              isActive={true}
-              photo={recordingTypeIndex == 0}
-              video={recordingTypeIndex == 1}
-              audio={recordingTypeIndex == 1}
-              preset="medium"
-              zoom={device?.neutralZoom}
-            />
-          )}
-
-          <View style={styles.bottomCont}>
-            <TouchableOpacity
-              onPress={() => {
-                props?.navigation?.navigate(
-                  Routes.addVideoTab.pitchListScreen,
-                  {
-                    atBack: (val: any) => {
-                      setSelectedPitchObj(val);
-                    },
-                    from: Routes.addVideoTab.createVideoScreen,
-                  },
-                );
-              }}>
-              <View style={styles.singleBottomEndBox}>
-                <Image
-                  source={
-                    selectedPitchObj
-                      ? AppImages.createVideo.doneIcon
-                      : AppImages.createVideo.smileIcon
-                  }
-                  style={{ height: normalized(30), width: normalized(30) }}
-                />
-                <Text style={styles.simpleDesTxt}>Pitch Ideas</Text>
               </View>
-            </TouchableOpacity>
-            <View style={{ alignItems: 'center' }}>
-              <RecordingTypeToggle
-                recordingType={recordingTypeIndex}
-                onRecordingTypeChage={setRecordingTypeIndex}
-                disabled={isVideoRecording}
-              />
-              <VideoRecorderBtn
-                isImage={recordingTypeIndex == 0}
-                onImageClick={() => {
-                  if (timerValue > 0) {
-                    setCountdown(timerValue);
-                    setStartInterval(true);
-                  } else {
-                    onImageClick();
-                  }
-                }}
-                onVideRecordingStart={() => {
-                  if (timerValue > 0) {
-                    setCountdown(timerValue);
-                    setStartInterval(true);
-                  } else {
-                    handleStartRecordVideo();
-                  }
-                }}
-                onVideoRecordingEnd={handleStopRecordedVideo}
-                isVideoRecording={isVideoRecording}
-              />
+              <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => {
+                  mediaSelection();
+                }}>
+                <View style={styles.singleBottomEndBox}>
+                  <Image source={AppImages.createVideo.galleryIcon} />
+                  <Text style={styles.simpleDesTxt}>Upload</Text>
+                </View>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={() => {
-                mediaSelection();
-              }}>
-              <View style={styles.singleBottomEndBox}>
-                <Image source={AppImages.createVideo.galleryIcon} />
-                <Text style={styles.simpleDesTxt}>Upload</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+        )
+      }
+    
       {showConfirmationModal && (
         <ConfirmationModal
           content={
