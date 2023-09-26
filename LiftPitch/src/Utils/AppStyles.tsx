@@ -1,5 +1,11 @@
-import { Dimensions, Platform, StatusBar, StyleSheet } from 'react-native';
-import { AppColors, AppFonts, hv, isSmallDevice, normalized } from './AppConstants';
+import {Dimensions, Platform, StatusBar, StyleSheet} from 'react-native';
+import {
+  AppColors,
+  AppFonts,
+  hv,
+  isSmallDevice,
+  normalized,
+} from './AppConstants';
 export const AppHorizontalMargin = normalized(15);
 
 const windowHeight = Dimensions.get('window').height;

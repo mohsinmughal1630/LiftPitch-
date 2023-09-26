@@ -1,25 +1,40 @@
 import React from 'react';
-import { Image, StyleSheet, TextInput, View } from 'react-native';
-import { AppColors, AppImages, normalized } from '../../../Utils/AppConstants';
-import { AppStyles } from '../../../Utils/AppStyles';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import {AppColors, AppImages, normalized} from '../../../Utils/AppConstants';
+import {AppHorizontalMargin, AppStyles} from '../../../Utils/AppStyles';
 const CustomSearchBar = (props: any) => {
   return (
-    <View style={[styles.mainContainer, props?.mainStyle]}>
+    <TouchableOpacity
+      activeOpacity={1}
+      style={[styles.mainContainer, props?.mainStyle]}
+      onPress={() => {
+        props?.atPress();
+      }}>
       <Image
         source={AppImages.Common.HeaderSearch}
         resizeMode="contain"
         style={styles.sendImg}
       />
-      <TextInput
-        placeholder={props?.placeHolder}
-        placeholderTextColor={AppColors.grey.dimGrey}
-        value={props?.value}
-        onChangeText={(txt: any) => {
-          props?.atChangeTxt(txt);
-        }}
-        style={[styles.input, { marginLeft: 10 }]}
-      />
-    </View>
+
+      <Text
+        style={[
+          styles.input,
+          {
+            marginStart: normalized(13),
+            color: AppColors.grey.dimGrey,
+            alignSelf: 'center',
+          },
+        ]}>
+        {props?.placeHolder}
+      </Text>
+    </TouchableOpacity>
   );
 };
 
@@ -28,20 +43,21 @@ export default CustomSearchBar;
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: AppColors.white.white,
-    height: normalized(55),
     paddingHorizontal: normalized(10),
-    ...AppStyles.horiCommon,
+    flexDirection: 'row',
     width: '100%',
     borderRadius: normalized(10),
     borderWidth: 1,
     borderColor: AppColors.grey.simple,
+    alignItems: 'center',
+    padding: AppHorizontalMargin,
   },
   input: {
     color: AppColors.black.black,
     fontSize: normalized(14),
     flex: 1,
     height: '100%',
-    ...AppStyles.textRegular
+    ...AppStyles.textRegular,
   },
   sendImgBox: {
     paddingHorizontal: normalized(10),

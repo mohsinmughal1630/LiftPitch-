@@ -1,7 +1,7 @@
-import { StackScreenProps } from '@react-navigation/stack';
-import { Dimensions, Platform, PixelRatio, StatusBar } from 'react-native';
+import {StackScreenProps} from '@react-navigation/stack';
+import {Dimensions, Platform, PixelRatio, StatusBar} from 'react-native';
 import moment from 'moment';
-import { AppStrings } from './Strings';
+import {AppStrings} from './Strings';
 export const platformVersion = Platform.Version;
 export type ScreenProps = StackScreenProps<any, any>;
 export const ScreenSize = Dimensions.get('screen');
@@ -165,6 +165,7 @@ export const AppColors = {
     bgWhite: '#F7FBF9',
     silverWhite: '#EBE4D9',
     creamy: '#ffe3e3',
+    simple: '#f2f6fc',
   },
   black: {
     black: '#000000',
@@ -761,9 +762,7 @@ export const calculateWindowHeight = () => {
   const diff =
     Dimensions.get('screen').height - Dimensions.get('window').height;
   const statusHeight = StatusBar?.currentHeight || 0;
-  return (
-    Dimensions.get('screen').height - (2 > 3 ? diff : statusHeight)
-  );
+  return Dimensions.get('screen').height - (2 > 3 ? diff : statusHeight);
 };
 
 export const makeid = (length: number) => {

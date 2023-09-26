@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
-import { Dimensions, Platform, StyleSheet, View } from 'react-native';
+import {Dimensions, Platform, StyleSheet, View} from 'react-native';
 import {
   AppColors,
   calculateWindowHeight,
@@ -13,13 +13,13 @@ import VideoPlayer from './VideoPlayer';
 import VideoBottomSection from './VideoBottomSection';
 import CommentsModal from './CommentsModal';
 import ThreadManager from '../../../../ChatModule/ThreadManger';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   addNUpdateCommentReq,
   getCommentListingAgainstVideo,
   likeNDisListReq,
 } from '../../../../Network/Services/VideoListingServices';
-import { AppStrings, CommentActionType } from '../../../../Utils/Strings';
+import {AppStrings, CommentActionType} from '../../../../Utils/Strings';
 import {
   setIsAlertShow,
   setIsLoader,
@@ -34,6 +34,7 @@ interface Props {
   item: singleVideoItemType;
   currentVideoIndex: number;
   index: number;
+  mainStyle: any;
 }
 
 const SingleVideoComponent = (props: Props) => {
@@ -120,7 +121,7 @@ const SingleVideoComponent = (props: Props) => {
           setCommentsList(response);
         } else {
           dispatch(setIsLoader(false));
-          dispatch(setIsAlertShow({ value: true, message: response }));
+          dispatch(setIsAlertShow({value: true, message: response}));
         }
       },
     );
@@ -146,7 +147,7 @@ const SingleVideoComponent = (props: Props) => {
           setCommentsList(response);
         } else {
           dispatch(setIsLoader(false));
-          dispatch(setIsAlertShow({ value: true, message: response }));
+          dispatch(setIsAlertShow({value: true, message: response}));
         }
       },
     );
@@ -171,14 +172,14 @@ const SingleVideoComponent = (props: Props) => {
           setLikeCount(response?.length);
         } else {
           dispatch(setIsLoader(false));
-          dispatch(setIsAlertShow({ value: true, message: response }));
+          dispatch(setIsAlertShow({value: true, message: response}));
         }
       },
     );
   };
 
   return (
-    <View style={styles.mainContainer}>
+    <View style={[styles.mainContainer, props?.mainStyle]}>
       <View style={styles.innerContainer}>
         {props?.item?.videoUrl ? (
           <VideoPlayer
@@ -206,9 +207,13 @@ const SingleVideoComponent = (props: Props) => {
               setShowComments(true);
             } else if (val == 'share') {
               if (props?.item?.videoUrl) {
-                await CommonDataManager.getSharedInstance().shareVideo(props?.item?.videoUrl)
+                await CommonDataManager.getSharedInstance().shareVideo(
+                  props?.item?.videoUrl,
+                );
               } else {
-                await CommonDataManager.getSharedInstance().shareImage(props?.item?.photoUrl)
+                await CommonDataManager.getSharedInstance().shareImage(
+                  props?.item?.photoUrl,
+                );
               }
             }
           }}
@@ -227,7 +232,7 @@ const SingleVideoComponent = (props: Props) => {
             } else if (obj?.actionType == CommentActionType.reportComment) {
               setShowComments(false);
               setTimeout(() => {
-                setReportingReasonModal({ value: true, data: obj });
+                setReportingReasonModal({value: true, data: obj});
               }, 500);
             }
           }}
@@ -256,14 +261,14 @@ const SingleVideoComponent = (props: Props) => {
         <ReportReasonModal
           value={reportingReasonModal?.value}
           onClose={() => {
-            setReportingReasonModal({ value: false, data: null });
+            setReportingReasonModal({value: false, data: null});
           }}
           atSubmit={async (val: any) => {
             let newObj: any = {
               ...reportingReasonModal?.data,
               reason: val,
             };
-            setReportingReasonModal({ value: false, data: null });
+            setReportingReasonModal({value: false, data: null});
 
             await deleteNReportReq(newObj, CommentActionType.reportComment);
           }}
@@ -275,8 +280,7 @@ const SingleVideoComponent = (props: Props) => {
 
 export default SingleVideoComponent;
 
-const diff =
-  Dimensions.get('screen').height - Dimensions.get('window').height;
+const diff = Dimensions.get('screen').height - Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   mainContainer: {
