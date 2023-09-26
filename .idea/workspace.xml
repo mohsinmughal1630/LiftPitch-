@@ -2,18 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2eaf7a17-ddfb-403d-9033-05c2c13ae758" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/LiftPitch/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/LiftPitch/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiftPitch/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/LiftPitch/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiftPitch/android/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/LiftPitch/android/app/src/main/res/values/colors.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiftPitch/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/LiftPitch/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiftPitch/android/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/LiftPitch/android/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiftPitch/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/LiftPitch/ios/Podfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiftPitch/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/LiftPitch/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiftPitch/ios/Project/AppDelegate.m" beforeDir="false" afterPath="$PROJECT_DIR$/LiftPitch/ios/Project/AppDelegate.m" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiftPitch/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/LiftPitch/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiftPitch/src/Ui/Sections/CreateVideo/Screens/VideoCreateScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/LiftPitch/src/Ui/Sections/CreateVideo/Screens/VideoCreateScreen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiftPitch/src/Ui/Sections/Home/Components/CommentInput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/LiftPitch/src/Ui/Sections/Home/Components/CommentInput.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LiftPitch/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/LiftPitch/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LiftPitch/android/app/src/main/assets/index.android.bundle" beforeDir="false" afterPath="$PROJECT_DIR$/LiftPitch/android/app/src/main/assets/index.android.bundle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LiftPitch/src/Ui/Sections/Home/Components/SingleVideoComponent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/LiftPitch/src/Ui/Sections/Home/Components/SingleVideoComponent.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

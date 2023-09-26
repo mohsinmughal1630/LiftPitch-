@@ -31,10 +31,10 @@ import CommonDataManager from '../../../../Utils/CommonManager';
 
 interface Props {
   navigation: any;
-  item: singleVideoItemType;
+  item: any;
   currentVideoIndex: number;
   index: number;
-  mainStyle: any;
+  mainStyle?: any;
 }
 
 const SingleVideoComponent = (props: Props) => {
