@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   View,
@@ -9,24 +9,24 @@ import {
   FlatList,
   Text,
 } from 'react-native';
-import { useIsFocused } from '@react-navigation/native';
+import {useIsFocused} from '@react-navigation/native';
 import {
   AppColors,
   ScreenProps,
   hv,
   normalized,
 } from '../../../../Utils/AppConstants';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   setIsAlertShow,
   setIsLoader,
 } from '../../../../Redux/reducers/AppReducer';
-import { filterListAndSorted, setUpChat } from '../../../../Utils/Helper';
-import { AppStyles } from '../../../../Utils/AppStyles';
+import {filterListAndSorted, setUpChat} from '../../../../Utils/Helper';
+import {AppStyles} from '../../../../Utils/AppStyles';
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import SingleMessageComponent from '../Components/SingleMessageComponent';
-import { Routes } from '../../../../Utils/Routes';
-import { AppStrings } from '../../../../Utils/Strings';
+import {Routes} from '../../../../Utils/Routes';
+import {AppStrings} from '../../../../Utils/Strings';
 import CommonDataManager from '../../../../Utils/CommonManager';
 
 const NotificationScreen = (props: ScreenProps) => {
@@ -88,20 +88,20 @@ const NotificationScreen = (props: ScreenProps) => {
   };
 
   return (
-    <View style={{ ...AppStyles.MainStyle }}>
+    <View style={{...AppStyles.MainStyle}}>
       <SafeAreaView />
       <CustomHeader
         // atBackPress={() => {
         //   props?.navigation.goBack();
         // }}
         title={`Message’s`}
-        mainStyle={{ height: hv(60) }}
+        mainStyle={{height: hv(60)}}
         placeHolder={'Search.....'}
         atRightBtn={() => {
           toggleEffect();
           setSearchInput('');
         }}
-        atFocus={() => { }}
+        atFocus={() => {}}
         atBlur={() => {
           toggleEffect();
           setSearchInput('');
@@ -115,17 +115,17 @@ const NotificationScreen = (props: ScreenProps) => {
         showBorder={true}
       />
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? hv(3) : hv(30)}>
         <View style={styles.flatListContainer}>
           {chatList?.length > 0 ? (
             <FlatList
               data={searchInput?.length > 0 ? searchData : chatList}
-              style={{ flex: 1 }}
+              style={{flex: 1}}
               showsVerticalScrollIndicator={false}
               keyExtractor={(item, index) => `${index}`}
-              renderItem={({ item, index }) => {
+              renderItem={({item, index}) => {
                 if (item?.participants?.length > 0) {
                   let findedIndex = item?.participants.findIndex(
                     (value: any) => value.user == selector?.userData?.userId,
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   emptyTxt: {
     fontSize: normalized(14),
     color: AppColors.black.black,
-    ...AppStyles.textMedium
+    ...AppStyles.textMedium,
   },
 });
 

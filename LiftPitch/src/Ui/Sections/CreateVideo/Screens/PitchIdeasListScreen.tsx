@@ -69,6 +69,7 @@ const PitchIdeasListScreen = (props: ScreenProps) => {
                     props?.route?.params?.from ==
                     Routes.addVideoTab.createVideoScreen
                   ) {
+                    console.log("tere????")
                     props?.navigation.navigate(
                       Routes.addVideoTab.pitchIdeaScreen,
                       {
@@ -83,6 +84,9 @@ const PitchIdeasListScreen = (props: ScreenProps) => {
                       },
                     );
                   } else {
+
+                    console.log("tere????", props?.route?.params?.mediaType)
+
                     props?.navigation.navigate(
                       Routes.addVideoTab.pitchIdeaScreen,
                       {

@@ -1,15 +1,15 @@
-import React, { useRef } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, {useRef} from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {
   AppColors,
   AppImages,
   hv,
   normalized,
 } from '../../../Utils/AppConstants';
-import { AppHorizontalMargin, AppStyles } from '../../../Utils/AppStyles';
+import {AppHorizontalMargin, AppStyles} from '../../../Utils/AppStyles';
 import AppImageViewer from '../ProfileView/AppImageView';
 import ProfilePlaceHolderComp from '../ProfileView/ProfilePlaceHolderComp';
-import { USER_TYPE } from '../../../Utils/Strings';
+import {USER_TYPE} from '../../../Utils/Strings';
 import CommonDataManager from '../../../Utils/CommonManager';
 const ProfileHeader = (props: any) => {
   return (
@@ -32,18 +32,18 @@ const ProfileHeader = (props: any) => {
 
         {props?.data?.companyLogo?.length > 0 ? (
           <AppImageViewer
-            source={{ uri: props?.data?.companyLogo }}
+            source={{uri: props?.data?.companyLogo}}
             placeHolder={AppImages.bottomBar.Profile}
-            style={{ ...styles.img, ...props.imgStyle }}
+            style={{...styles.img, ...props.imgStyle}}
           />
         ) : (
           <ProfilePlaceHolderComp
             index={props.index}
             name={props?.data?.userName ? props?.data?.userName : 'Testing'}
-            mainStyles={{ ...styles.img, ...props.imgStyle }}
+            mainStyles={{...styles.img, ...props.imgStyle}}
             nameStyles={{
               fontSize: normalized(16),
-              ...AppStyles.textMedium
+              ...AppStyles.textMedium,
             }}
           />
         )}
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   title: {
     color: '#1E1E1F',
     fontSize: normalized(18),
-    ...AppStyles.textMedium
+    ...AppStyles.textMedium,
   },
   line: {
     height: 0.5,

@@ -6,9 +6,9 @@ import {
   PermissionsAndroid,
   Platform,
 } from 'react-native';
-import { AppColors, normalized, ScreenProps } from './AppConstants';
-import { AppStrings } from './Strings';
-import { SocialTypeStrings } from './AppEnums';
+import {AppColors, normalized, ScreenProps} from './AppConstants';
+import {AppStrings} from './Strings';
+import {SocialTypeStrings} from './AppEnums';
 import {
   appleLoginRequest,
   facebookLoginRequest,
@@ -24,8 +24,8 @@ import {
   loginRequest,
   userSignupRequest,
 } from '../Network/Services/AuthServices';
-import { saveUserData } from './AsyncStorage';
-import { Routes } from './Routes';
+import {saveUserData} from './AsyncStorage';
+import {Routes} from './Routes';
 import RNFS, {
   DownloadBeginCallbackResult,
   DownloadProgressCallbackResult,
@@ -68,7 +68,7 @@ export default class CommonDataManager {
       this._translations = [];
       const localTranslaionsData = require('../Utils/translation.json');
       this._translations = localTranslaionsData;
-    } catch (e) { }
+    } catch (e) {}
   };
   setReduxReducer = (select: any, dispatch: any) => {
     this.selector = select;
@@ -390,12 +390,12 @@ export default class CommonDataManager {
     return str.length < 25
       ? normalized(22)
       : str.length < 35
-        ? normalized(20)
-        : str.length < 40
-          ? normalized(18)
-          : str.length < 45
-            ? normalized(16)
-            : normalized(14);
+      ? normalized(20)
+      : str.length < 40
+      ? normalized(18)
+      : str.length < 45
+      ? normalized(16)
+      : normalized(14);
   };
 
   openNativeMaps = (loc: any, addressLabel: string) => {
@@ -459,8 +459,8 @@ export default class CommonDataManager {
       return arr.length == 0
         ? '-'
         : arr.length == 1
-          ? txt.charAt(0).toUpperCase()
-          : arr[0].charAt(0).toUpperCase() + arr[1].charAt(0).toUpperCase();
+        ? txt.charAt(0).toUpperCase()
+        : arr[0].charAt(0).toUpperCase() + arr[1].charAt(0).toUpperCase();
     } else {
       return '';
     }
@@ -472,19 +472,19 @@ export default class CommonDataManager {
       obj['uri'] = image?.uri
         ? image?.uri
         : image?.sourceURL
-          ? image?.sourceURL
-          : image?.path;
+        ? image?.sourceURL
+        : image?.path;
       obj['name'] = image?.filename
         ? image?.filename
         : image?.fileName
-          ? image?.fileName
-          : image?.name
-            ? image?.name
-            : image?.path
-              ? image?.path?.split('/')[image?.path?.split('/')?.length - 1]
-              : image?.sourceURL?.split('/')[
-              image?.sourceURL?.split('/')?.length - 1
-              ];
+        ? image?.fileName
+        : image?.name
+        ? image?.name
+        : image?.path
+        ? image?.path?.split('/')[image?.path?.split('/')?.length - 1]
+        : image?.sourceURL?.split('/')[
+            image?.sourceURL?.split('/')?.length - 1
+          ];
       obj['type'] = image?.type ? image?.type : image.mime;
     }
     return obj;
@@ -511,14 +511,21 @@ export default class CommonDataManager {
         password: socialParams.token,
       };
       await loginRequest(paramsObj, async response => {
-        console.log('response - loginRequest: ');
         console.log(response);
         if (response?.status) {
-          this.dispatch(setUserData(response?.data));
-
-          if (isPersisterUser) {
-            await saveUserData(response?.data);
-            this.dispatch(setUpdateFBToken(true));
+          if (response?.data?.isUserDisable == true) {
+            this.dispatch(
+              setIsAlertShow({
+                value: true,
+                message: `User doesn't exist`,
+              }),
+            );
+          } else {
+            this.dispatch(setUserData(response?.data));
+            if (isPersisterUser) {
+              await saveUserData(response?.data);
+              this.dispatch(setUpdateFBToken(true));
+            }
           }
         } else {
           this.dispatch(setIsLoader(false));
@@ -561,7 +568,7 @@ export default class CommonDataManager {
         fromUrl: videoUrl,
         toFile: downloadDest,
         discretionary: true,
-        begin: () => { }, // onBegin: (res: DownloadBeginCallbackResult) => void,
+        begin: () => {}, // onBegin: (res: DownloadBeginCallbackResult) => void,
         progress: onProgress,
       };
 
@@ -619,18 +626,21 @@ export default class CommonDataManager {
       fromUrl: imageUrl,
       toFile: localUri,
     });
-    console.log("response: ", response);
-    await RNFS.readFile(Platform.OS == 'android' ? localUri : `file://${localUri}`, "base64")
-      .then(async (base64String) => {
-        console.log("base64 image => ", base64String);
+    console.log('response: ', response);
+    await RNFS.readFile(
+      Platform.OS == 'android' ? localUri : `file://${localUri}`,
+      'base64',
+    )
+      .then(async base64String => {
+        console.log('base64 image => ', base64String);
         await Share.open({
           url: `data:image/jpeg;base64,${base64String}`,
         });
       })
-      .catch((error) => {
-        console.error("Error reading image:", error);
+      .catch(error => {
+        console.error('Error reading image:', error);
       });
-  }
+  };
 
   paginationLogic = (totalCount: number, limit: number) => {
     let totalPages = 0;

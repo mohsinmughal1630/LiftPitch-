@@ -177,8 +177,8 @@ export const searchUserfromFB = async (
     .then(querySnapshot => {
       let results: any = [];
 
-      querySnapshot.forEach(doc => {
-        if (userId != doc?.data()?.userId) {
+      querySnapshot.forEach((doc: any) => {
+        if (userId != doc?._data?.userId && !doc?._data?.isUserDisable) {
           results.push({
             userId: doc?.data()?.userId,
             userName: doc?.data()?.userName,

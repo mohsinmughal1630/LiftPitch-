@@ -17,6 +17,7 @@ export const Routes = {
   },
   HomeTab: {
     homeScreen: 'home',
+    feedScreen: 'FeedListingScreen',
   },
   FollowerTab: {
     followerListing: 'followerListing',
@@ -37,5 +38,8 @@ export const Routes = {
 
   Container: {
     Container: 'Container',
+  },
+  Setting: {
+    settingScreen: 'SettingScreen',
   },
 };

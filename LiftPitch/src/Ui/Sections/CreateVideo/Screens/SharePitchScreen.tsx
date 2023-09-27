@@ -6,7 +6,7 @@ import {
   hv,
   normalized,
 } from '../../../../Utils/AppConstants';
-import {SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Keyboard, SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import {useDispatch, useSelector} from 'react-redux';
@@ -65,14 +65,19 @@ const SharePitchScreen = (props: ScreenProps) => {
       );
       return;
     }
+    Keyboard.dismiss()
     dispatch(setIsLoader(true));
     let mediaType = props?.route?.params?.mediaType == 'video' ? true : false;
+    console.log('printImgErr11111 ', mediaType);
+
     ThreadManager.instance.uploadMedia(
       props?.route?.params?.mediaPath,
       mediaType,
       async (url: any) => {
         if (url != 'error') {
           let params: any = {};
+          console.log('printImgErr11 ', props?.route?.params?.mediaType);
+
           if (url && props?.route?.params?.mediaType == 'video') {
             createThumbnail({
               url: url,
@@ -84,6 +89,8 @@ const SharePitchScreen = (props: ScreenProps) => {
                 params['hastTags'] = hastTag;
                 params['caption'] = description;
                 await uploadThumnail(response.path, params);
+                console.log("tere111111")
+
               })
               .catch(err => {
                 dispatch(setIsLoader(false));
@@ -129,6 +136,8 @@ const SharePitchScreen = (props: ScreenProps) => {
   };
   const uploadThumnail = async (path: any, payload: any) => {
     let obj = {...payload};
+    console.log("tere111", obj)
+
     await ThreadManager.instance
       .uploadMedia(path, false, async (url: any) => {
         if (url !== 'error') {
@@ -143,9 +152,12 @@ const SharePitchScreen = (props: ScreenProps) => {
             .utc(new Date())
             .format(ThreadManager.instance.dateFormater.fullDate);
 
-          dispatch(setIsLoader(false));
+
+            console.log("tere111")
           await ThreadManager.instance.createPost(obj, (response: any) => {
             dispatch(setTab(0));
+            dispatch(setIsLoader(false));
+
             CommonDataManager.getSharedInstance().resetToScreen(
               props.navigation,
               Routes.Container.Container,

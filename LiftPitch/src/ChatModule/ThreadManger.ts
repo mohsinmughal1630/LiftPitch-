@@ -621,6 +621,22 @@ class ThreadManager {
         console.log('updateUserToken====>', err);
       });
   };
+  // SET FIREBASE TOKEN FOR FCM
+  userDeleteFun = async (status: any, userId: any, onComplete: any) => {
+    firestore()
+      .collection(Collections.Users)
+      .doc(userId)
+      .update({
+        isUserDisable: status,
+      })
+      .then(() => {
+        onComplete({status: true, message: ''});
+      })
+      .catch(err => {
+        onComplete({status: false, message: err});
+        console.log('updateUserState====>', err);
+      });
+  };
 
   // SET FIREBASE TOKEN FOR FCM
   updateUserStatus = async (userId: any, action: any) => {

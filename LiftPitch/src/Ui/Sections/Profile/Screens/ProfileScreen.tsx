@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   AppColors,
+  AppImages,
   ScreenProps,
   hv,
   normalized,
@@ -8,6 +9,8 @@ import {
   profileTabArrForOtherUser,
 } from '../../../../Utils/AppConstants';
 import {
+  FlatList,
+  Image,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -17,19 +20,15 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
-import { useDispatch, useSelector } from 'react-redux';
-import { logoutRequest } from '../../../../Network/Services/AuthServices';
-import { AppRootStore } from '../../../../Redux/store/AppStore';
+import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootStore} from '../../../../Redux/store/AppStore';
 import {
   setIsAlertShow,
   setIsLoader,
-  setIsPersisterUser,
-  setUserData,
 } from '../../../../Redux/reducers/AppReducer';
-import { saveUserData } from '../../../../Utils/AsyncStorage';
 import ProfileHeader from '../../../Components/CustomHeader/ProfileHeader';
-import { AppStrings, USER_TYPE } from '../../../../Utils/Strings';
+import {AppStrings, USER_TYPE} from '../../../../Utils/Strings';
 import ProfileCustomTab from '../../../Components/CustomTab/ProfileCustomTab';
 import {
   checkUserFollowState,
@@ -37,19 +36,23 @@ import {
   getOtherUserProfile,
 } from '../../../../Network/Services/ProfileServices';
 import ThreadManager from '../../../../ChatModule/ThreadManger';
-import { Routes } from '../../../../Utils/Routes';
-import { makeObjForChat } from '../../../../Utils/Helper';
+import {Routes} from '../../../../Utils/Routes';
+import {makeObjForChat} from '../../../../Utils/Helper';
 import CommonDataManager from '../../../../Utils/CommonManager';
 import FollowConfirmationModal from '../../Follower/Components/FollowConfirmationModal';
+import useUserManager from '../../../../Hooks/useUserManager';
+import AppImageViewer from '../../../Components/ProfileView/AppImageView';
 const ProfileScreen = (props: ScreenProps) => {
+  const [feeds, setFeeds] = useState([]);
   const selector = useSelector((AppState: any) => AppState.AppReducer);
   const params = props?.route?.params;
+  const {logoutClicked, fetchUserFeed} = useUserManager();
   const threadRef = useRef(null);
   const [profifleType, setProfileType] = useState('');
   const dispatch = useDispatch();
   const [isFollow, setIsFollow] = useState(false);
   const [data, setData] = useState<any>(null);
-  const { userData } = useSelector((state: AppRootStore) => state.AppReducer);
+  const {userData} = useSelector((state: AppRootStore) => state.AppReducer);
   const [selectedTab, setSelectedTab] = useState('Feed');
   const [confModal, setConfModal] = useState<any>({
     value: false,
@@ -57,21 +60,6 @@ const ProfileScreen = (props: ScreenProps) => {
     type: '',
   });
 
-  const logoutClicked = async () => {
-    await ThreadManager.instance.updateUserToken(
-      '',
-      selector?.userData?.userId?.toString(),
-    );
-
-    dispatch(setIsLoader(true));
-    dispatch(setUserData(null));
-    dispatch(setIsPersisterUser(false));
-    saveUserData(null);
-
-    await logoutRequest(userData?.userId).finally(() =>
-      dispatch(setIsLoader(false)),
-    );
-  };
   useEffect(() => {
     if (params?.userId && params?.userId != userData?.userId) {
       if (!selector?.isNetConnected) {
@@ -100,8 +88,19 @@ const ProfileScreen = (props: ScreenProps) => {
       setData(userData);
       setProfileType(USER_TYPE.owner);
     }
+    params?.userId || userData?.userId
+      ? fetchUserFeeds(params?.userId || userData?.userId)
+      : null;
   }, []);
-
+  const fetchUserFeeds = async (uId: any) => {
+    if (!selector?.isLoaderStart) {
+      dispatch(setIsLoader(true));
+    }
+    await fetchUserFeed(uId, (result: any) => {
+      dispatch(setIsLoader(false));
+      setFeeds(result);
+    });
+  };
   const goToChat = async () => {
     if (!selector?.isNetConnected) {
       dispatch(
@@ -199,7 +198,6 @@ const ProfileScreen = (props: ScreenProps) => {
       },
     );
   };
-
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
@@ -212,7 +210,7 @@ const ProfileScreen = (props: ScreenProps) => {
         isFollow={isFollow}
         atRightBtn={() => {
           if (profifleType == USER_TYPE.owner) {
-            console.log('go to setting Screen');
+            props?.navigation?.navigate(Routes.Setting.settingScreen);
           } else {
             setConfModal({
               value: true,
@@ -228,34 +226,83 @@ const ProfileScreen = (props: ScreenProps) => {
         }}
       />
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
+        style={{flex: 1}}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? hv(35) : hv(30)}>
-        <ScrollView
+        <FlatList
           contentContainerStyle={styles.containerStyle}
-          showsVerticalScrollIndicator={false}>
-          <View style={styles.mainContainer}>
-            <ProfileCustomTab
-              mainStyle={{ marginVertical: normalized(20) }}
-              list={
-                profifleType == USER_TYPE.owner
-                  ? profileTabArr
-                  : profileTabArrForOtherUser
-              }
-              selectTab={selectedTab}
-              atSelectTab={(el: any) => {
-                setSelectedTab(el?.txt);
-              }}
-            />
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-              <Text style={{
-                color: 'black',
-                fontSize: normalized(12),
-                ...AppStyles.textRegular
-              }}>{selectedTab}</Text>
-            </View>
-          </View>
-        </ScrollView>
+          data={[1, 2, 3, 4]}
+          keyExtractor={(item, index) => `${index}`}
+          showsVerticalScrollIndicator={false}
+          renderItem={({item, index}: any) => {
+            return index == 1 ? (
+              <ProfileCustomTab
+                mainStyle={{marginVertical: normalized(20)}}
+                list={
+                  profifleType == USER_TYPE.owner
+                    ? profileTabArr
+                    : profileTabArrForOtherUser
+                }
+                selectTab={selectedTab}
+                atSelectTab={(el: any) => {
+                  setSelectedTab(el?.txt);
+                }}
+              />
+            ) : index == 2 ? (
+              <View style={{flex: 1}}>
+                {selectedTab == 'Feed' ? (
+                  <FlatList
+                    numColumns={3}
+                    data={feeds}
+                    keyExtractor={(item, index) => `${index}`}
+                    renderItem={({item, index}: any) => {
+                      return (
+                        <TouchableOpacity
+                          style={styles.singleCont}
+                          activeOpacity={1}
+                          onPress={() => {
+                            let newArr = feeds.slice(index, feeds?.length);
+
+                            props?.navigation?.navigate(
+                              Routes.HomeTab.feedScreen,
+                              {
+                                data: newArr,
+                              },
+                            );
+                          }}>
+                          <AppImageViewer
+                            source={{
+                              uri: item?.photoUrl
+                                ? item?.photoUrl
+                                : item?.thumbnail,
+                            }}
+                            placeHolder={AppImages.bottomBar.Profile}
+                            style={styles.singleFeedStyle}
+                          />
+                          {item?.videoUrl ? (
+                            <Image
+                              source={AppImages.Videos.Play}
+                              style={styles.playIcon}
+                            />
+                          ) : null}
+                        </TouchableOpacity>
+                      );
+                    }}
+                  />
+                ) : (
+                  <Text
+                    style={{
+                      color: 'black',
+                      fontSize: normalized(12),
+                      ...AppStyles.textRegular,
+                    }}>
+                    {selectedTab}
+                  </Text>
+                )}
+              </View>
+            ) : null;
+          }}
+        />
 
         <TouchableOpacity
           style={styles.bottomBtn}
@@ -270,8 +317,8 @@ const ProfileScreen = (props: ScreenProps) => {
             {profifleType == USER_TYPE.owner
               ? 'LogOut'
               : `Chat with ${CommonDataManager.getSharedInstance().capitalizeFirstLetter(
-                data?.userName,
-              )}`}
+                  data?.userName,
+                )}`}
           </Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
@@ -307,7 +354,6 @@ const styles = StyleSheet.create({
   containerStyle: {
     marginHorizontal: AppHorizontalMargin,
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   dummyTxt: {
@@ -330,7 +376,30 @@ const styles = StyleSheet.create({
   bottomBtnTxt: {
     color: AppColors.white.white,
     fontSize: normalized(13),
-    ...AppStyles.textMedium
+    ...AppStyles.textMedium,
+  },
+  singleCont: {
+    backgroundColor: AppColors.white.white,
+    height: normalized(99),
+    width: normalized(99),
+    borderWidth: normalized(1),
+    borderColor: AppColors.black.light,
+    borderRadius: normalized(6),
+    margin: normalized(3),
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  singleFeedStyle: {
+    height: normalized(99),
+    width: normalized(99),
+    borderRadius: normalized(6),
+    backgroundColor: AppColors.white.bgWhite,
+  },
+  playIcon: {
+    position: 'absolute',
+    height: normalized(20),
+    width: normalized(20),
+    tintColor: AppColors.white.white,
   },
 });
 export default ProfileScreen;

@@ -9,8 +9,8 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native';
+import React, {useState} from 'react';
+import {SafeAreaView} from 'react-native';
 import {
   AppColors,
   AppImages,
@@ -18,13 +18,14 @@ import {
   normalized,
   videoHeaderOptions,
 } from '../../../../Utils/AppConstants';
-import { AppStyles } from '../../../../Utils/AppStyles';
+import {AppStyles} from '../../../../Utils/AppStyles';
 
 interface Props {
   selectedTab: number;
   onTabSelect: (val: number) => void;
   searchTxt: string;
   onSearchChange: (val: string) => void;
+  atSearchBtnPress: () => void;
 }
 
 const VideoHeaderSection = (props: Props) => {
@@ -40,18 +41,19 @@ const VideoHeaderSection = (props: Props) => {
       <View style={styles.rowContainer}>
         <View style={AppStyles.horiCommon}>
           {showSearch ? (
-            <View style={{
-              height: hv(55),
-              backgroundColor: AppColors.white.white,
-              borderRadius: 30,
-              width: '85%',
-              zIndex: 1,
-              marginTop: 10,
-              marginLeft: -40,
-              flexDirection: 'row',
-              alignItems: 'center',
-              paddingHorizontal: normalized(15),
-            }}>
+            <View
+              style={{
+                height: hv(55),
+                backgroundColor: AppColors.white.white,
+                borderRadius: 30,
+                width: '85%',
+                zIndex: 1,
+                marginTop: 10,
+                marginLeft: -40,
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingHorizontal: normalized(15),
+              }}>
               <TextInput
                 placeholder={'Search here..'}
                 value={props.searchTxt}
@@ -60,27 +62,32 @@ const VideoHeaderSection = (props: Props) => {
                   color: 'black',
                   fontSize: normalized(14),
                   flex: 1,
-                  ...AppStyles.textRegular
+                  ...AppStyles.textRegular,
                 }}
                 returnKeyType="search"
                 onSubmitEditing={toggleSearch}
               />
-              {
-                props.searchTxt ?
-                  <TouchableWithoutFeedback onPress={() => props.onSearchChange('')}>
-                    <View style={{
+              {props.searchTxt ? (
+                <TouchableWithoutFeedback
+                  onPress={() => props.onSearchChange('')}>
+                  <View
+                    style={{
                       height: 30,
                       width: 30,
                       justifyContent: 'center',
-                      alignItems: 'center'
+                      alignItems: 'center',
                     }}>
-                      <Image source={AppImages.Common.CrossFilled} resizeMode='contain' style={{
+                    <Image
+                      source={AppImages.Common.CrossFilled}
+                      resizeMode="contain"
+                      style={{
                         height: '55%',
-                        width: '55%'
-                      }} />
-                    </View>
-                  </TouchableWithoutFeedback> : null
-              }
+                        width: '55%',
+                      }}
+                    />
+                  </View>
+                </TouchableWithoutFeedback>
+              ) : null}
             </View>
           ) : (
             videoHeaderOptions.map((item, index) => (
@@ -110,7 +117,12 @@ const VideoHeaderSection = (props: Props) => {
         </View>
         <TouchableOpacity
           activeOpacity={0.7}
-          onPress={toggleSearch}
+          // onPress={toggleSearch}
+          onPress={() => {
+            if (props?.atSearchBtnPress) {
+              props?.atSearchBtnPress();
+            }
+          }}
           style={styles.searchBox}>
           <Image
             source={AppImages.Common.SearchIcon}
@@ -145,7 +157,7 @@ const styles = StyleSheet.create({
   tabTxt: {
     color: AppColors.white.white,
     fontSize: normalized(16),
-    ...AppStyles.textSemiBold
+    ...AppStyles.textSemiBold,
   },
   searchBox: {
     height: 35,

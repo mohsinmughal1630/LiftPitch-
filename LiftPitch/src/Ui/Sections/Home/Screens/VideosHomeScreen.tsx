@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -16,24 +16,24 @@ import {
   normalized,
 } from '../../../../Utils/AppConstants';
 import VideoHeaderSection from '../Components/VideoHeaderSection';
-import { useIsFocused } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  setIsAlertShow,
-  setIsLoader,
-  setUserData,
-} from '../../../../Redux/reducers/AppReducer';
-import { AppStrings } from '../../../../Utils/Strings';
+import {useIsFocused} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
+import {setIsLoader, setUserData} from '../../../../Redux/reducers/AppReducer';
 import {
   getUpdatedVideoListing,
   getVideoListSize,
 } from '../../../../Network/Services/VideoListingServices';
 import CommonDataManager from '../../../../Utils/CommonManager';
-import { getOtherUserProfile } from '../../../../Network/Services/ProfileServices';
-import { saveUserData } from '../../../../Utils/AsyncStorage';
-import { AppStyles } from '../../../../Utils/AppStyles';
+import {getOtherUserProfile} from '../../../../Network/Services/ProfileServices';
+import {saveUserData} from '../../../../Utils/AsyncStorage';
+import {AppStyles} from '../../../../Utils/AppStyles';
+import SearchModal from '../../../Components/CustomModal/SearchModal';
+import {Routes} from '../../../../Utils/Routes';
+import useUserManager from '../../../../Hooks/useUserManager';
 
 const VideosHomeScreen = (props: ScreenProps) => {
+  const [showSearchModal, setSearchModal] = useState(false);
+  const [searchResult, setSearchResult] = useState([]);
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const selector = useSelector((AppState: any) => AppState.AppReducer);
@@ -44,6 +44,9 @@ const VideosHomeScreen = (props: ScreenProps) => {
   const [totalPages, setTotalPages] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [videoList, setVideoList] = useState([]);
+
+  const {handleSearch} = useUserManager();
+
   const updateCurrentSlideIndex = (e: any) => {
     const contentOffsetY = e.nativeEvent.contentOffset.y;
     const currentIndex = Math.round(contentOffsetY / deviceHeightwithOutBar);
@@ -72,15 +75,6 @@ const VideosHomeScreen = (props: ScreenProps) => {
   };
 
   const fetchVideoListing = async (tabValue?: any, currentUserData?: any) => {
-    if (!selector.isNetConnected) {
-      dispatch(
-        setIsAlertShow({
-          value: true,
-          message: AppStrings.Network.internetError,
-        }),
-      );
-      return;
-    }
     try {
       if (counter?.current == 1 && !selector?.isLoaderStart) {
         dispatch(setIsLoader(true));
@@ -114,14 +108,19 @@ const VideosHomeScreen = (props: ScreenProps) => {
                 index === arr.findIndex((o: any) => obj?.videoId === o?.videoId)
               );
             });
+            dispatch(setIsLoader(false));
+
             setVideoList(newArr);
+          } else {
+            dispatch(setIsLoader(false));
           }
         },
       );
     } catch (e) {
       console.log('error video listing----> ', e);
-    } finally {
       dispatch(setIsLoader(false));
+    } finally {
+      // dispatch(setIsLoader(false));
     }
   };
 
@@ -136,6 +135,9 @@ const VideosHomeScreen = (props: ScreenProps) => {
           setSelectedTab(val);
           fetchVideoListing(val, selector?.userData);
         }}
+        atSearchBtnPress={() => {
+          setSearchModal(true);
+        }}
         searchTxt={searchTxt}
         onSearchChange={setSearchTxt}
       />
@@ -146,7 +148,7 @@ const VideosHomeScreen = (props: ScreenProps) => {
           pagingEnabled
           onMomentumScrollEnd={updateCurrentSlideIndex}
           keyExtractor={(item, index) => `${index}`}
-          renderItem={({ item, index }) => {
+          renderItem={({item, index}) => {
             return (
               <SingleVideoComponent
                 navigation={props?.navigation}
@@ -180,8 +182,8 @@ const VideosHomeScreen = (props: ScreenProps) => {
             );
           }}
         />
-      ) : selector?.isLoaderStart ? null : (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      ) : selector.isLoaderStart ? null : (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <Text
             style={{
               fontSize: normalized(14),
@@ -191,6 +193,36 @@ const VideosHomeScreen = (props: ScreenProps) => {
           </Text>
         </View>
       )}
+      {showSearchModal ? (
+        <SearchModal
+          placeHold={'Search User...'}
+          onClose={() => {
+            setSearchModal(false);
+          }}
+          searchTxt={searchTxt}
+          atSearch={async (val: any) => {
+            if (val?.length > 3) {
+              await handleSearch(val, (response: any) => {
+                setSearchResult(response);
+              });
+            } else if (val?.length == 0) {
+              setSearchResult([]);
+            }
+            setSearchTxt(val);
+          }}
+          list={searchResult}
+          atUserCellPress={(val: any) => {
+            if (val?.userId) {
+              props?.navigation.navigate(Routes.ProfileTab.ProfileScreen, {
+                userId: val?.userId,
+              });
+              setSearchResult([]);
+              setSearchTxt('');
+              setSearchModal(false);
+            }
+          }}
+        />
+      ) : null}
     </View>
   );
 };

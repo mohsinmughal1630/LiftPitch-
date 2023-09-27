@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Image,
   Modal,
@@ -8,17 +8,17 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
-} from "react-native";
+} from 'react-native';
 import {
   AppColors,
   AppImages,
   ILocation,
   hv,
   normalized,
-} from "../../../Utils/AppConstants";
-import { GOOGLE_API_KEY } from "../../../Utils/Strings";
-import PlacesInput from "react-native-places-input";
-import { AppStyles } from "../../../Utils/AppStyles";
+} from '../../../Utils/AppConstants';
+import {GOOGLE_API_KEY} from '../../../Utils/Strings';
+import PlacesInput from 'react-native-places-input';
+import {AppStyles} from '../../../Utils/AppStyles';
 
 interface Props {
   onSelectLocation: (val: ILocation) => void;
@@ -27,14 +27,13 @@ interface Props {
 
 const LocationPickerModal = (props: Props) => {
   return (
-    <Modal transparent onRequestClose={props.onClose} animationType="slide">
+    <Modal transparent onRequestClose={props?.onClose} animationType="slide">
       <View style={styles.outerMain}>
         <View style={styles.subContainer}>
           <SafeAreaView
             style={{
-              backgroundColor: "white",
-            }}
-          >
+              backgroundColor: 'white',
+            }}>
             <View style={styles.headerRow}>
               <TouchableWithoutFeedback onPress={props.onClose}>
                 <View style={styles.headerCrossBox}>
@@ -46,7 +45,7 @@ const LocationPickerModal = (props: Props) => {
                 </View>
               </TouchableWithoutFeedback>
               <Text style={styles.selectLocTitle}>Select Location</Text>
-              <View style={{ width: 40 }} />
+              <View style={{width: 40}} />
             </View>
           </SafeAreaView>
           <View style={styles.locOuter}>
@@ -54,9 +53,8 @@ const LocationPickerModal = (props: Props) => {
               <View
                 style={{
                   ...AppStyles.horiCommon,
-                  justifyContent: "space-between",
-                }}
-              >
+                  justifyContent: 'space-between',
+                }}>
                 <Text style={styles.locTitle}>Location</Text>
               </View>
             </View>
@@ -94,9 +92,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     minHeight: 60,
     paddingHorizontal: normalized(15),
     borderBottomColor: 'grey',
@@ -105,8 +103,8 @@ const styles = StyleSheet.create({
   headerCrossBox: {
     height: 40,
     width: 40,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headerCrossImg: {
     width: 15,
@@ -115,7 +113,7 @@ const styles = StyleSheet.create({
   selectLocTitle: {
     fontSize: 18,
     color: AppColors.black.black,
-    ...AppStyles.textMedium
+    ...AppStyles.textMedium,
   },
   locTitle: {
     fontSize: normalized(4),
@@ -128,7 +126,7 @@ const styles = StyleSheet.create({
     marginTop: normalized(10),
   },
   locInner: {
-    position: "absolute",
+    position: 'absolute',
     top: 10,
     right: 0,
     left: 0,
@@ -136,8 +134,8 @@ const styles = StyleSheet.create({
     height: 35,
   },
   placesContainer: {
-    position: "relative",
-    alignSelf: "stretch",
+    position: 'relative',
+    alignSelf: 'stretch',
     margin: 0,
     top: 0,
     left: 0,
@@ -146,9 +144,9 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     borderRadius: 5,
     borderWidth: 1,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     shadowOpacity: 0,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   placesListContainer: {
     borderColor: 'grey',
@@ -158,6 +156,6 @@ const styles = StyleSheet.create({
   },
   placesInputContainer: {
     fontSize: normalized(14),
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
 });
