@@ -46,7 +46,7 @@ const ProfileScreen = (props: ScreenProps) => {
   const [feeds, setFeeds] = useState([]);
   const selector = useSelector((AppState: any) => AppState.AppReducer);
   const params = props?.route?.params;
-  const {logoutClicked, fetchUserFeed} = useUserManager();
+  const {fetchUserFeed} = useUserManager();
   const threadRef = useRef(null);
   const [profifleType, setProfileType] = useState('');
   const dispatch = useDispatch();
@@ -303,24 +303,36 @@ const ProfileScreen = (props: ScreenProps) => {
             ) : null;
           }}
         />
-
-        <TouchableOpacity
-          style={styles.bottomBtn}
-          onPress={() => {
-            if (profifleType == USER_TYPE.owner) {
-              logoutClicked();
-            } else {
+        {profifleType == USER_TYPE.owner ? null : (
+          // <TouchableOpacity
+          //   style={styles.bottomBtn}
+          //   onPress={() => {
+          //     // if (profifleType == USER_TYPE.owner) {
+          //     //   logoutClicked();
+          //     // } else {
+          //     goToChat();
+          //     // }
+          //   }}>
+          //   <Text style={styles.bottomBtnTxt}>
+          //     {profifleType == USER_TYPE.owner
+          //       ? 'LogOut'
+          //       : `Chat with ${CommonDataManager.getSharedInstance().capitalizeFirstLetter(
+          //           data?.userName,
+          //         )}`}
+          //   </Text>
+          // </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.bottomBtn}
+            onPress={() => {
               goToChat();
-            }
-          }}>
-          <Text style={styles.bottomBtnTxt}>
-            {profifleType == USER_TYPE.owner
-              ? 'LogOut'
-              : `Chat with ${CommonDataManager.getSharedInstance().capitalizeFirstLetter(
-                  data?.userName,
-                )}`}
-          </Text>
-        </TouchableOpacity>
+            }}>
+            <Text style={styles.bottomBtnTxt}>
+              {`Chat with ${CommonDataManager.getSharedInstance().capitalizeFirstLetter(
+                data?.userName,
+              )}`}
+            </Text>
+          </TouchableOpacity>
+        )}
       </KeyboardAvoidingView>
       {confModal?.value ? (
         <FollowConfirmationModal

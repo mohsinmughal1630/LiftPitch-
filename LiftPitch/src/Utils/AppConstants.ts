@@ -2,6 +2,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {Dimensions, Platform, PixelRatio, StatusBar} from 'react-native';
 import moment from 'moment';
 import {AppStrings} from './Strings';
+import {Routes} from './Routes';
 export const platformVersion = Platform.Version;
 export type ScreenProps = StackScreenProps<any, any>;
 export const ScreenSize = Dimensions.get('screen');
@@ -117,7 +118,99 @@ export const AppImages = {
     Facebookinvite: require('../Ui/assets/images/Followers/Facebookinvite.png'),
     MailInvite: require('../Ui/assets/images/Followers/MailInvite.png'),
   },
+  setting: {
+    Activity: require('../Ui/assets/images/Setting/Activity.png'),
+    bell: require('../Ui/assets/images/Setting/bell.png'),
+    Chat: require('../Ui/assets/images/Setting/Chat.png'),
+    Document: require('../Ui/assets/images/Setting/Document.png'),
+    forward: require('../Ui/assets/images/Setting/forward.png'),
+    lock: require('../Ui/assets/images/Setting/lock.png'),
+    Logout: require('../Ui/assets/images/Setting/Logout.png'),
+    profile: require('../Ui/assets/images/Setting/profile.png'),
+    report: require('../Ui/assets/images/Setting/report.png'),
+    share: require('../Ui/assets/images/Setting/share.png'),
+    security: require('../Ui/assets/images/Setting/security.png'),
+  },
 };
+export const settingScreenList = [
+  {
+    title: 'ACCOUNT',
+    data: [
+      {
+        id: 1,
+        name: 'Profile & User Management',
+        icon: AppImages.setting.profile,
+        atPressMoveTo: 'Profile manage Screen',
+      },
+      {
+        id: 2,
+        name: 'Privacy',
+        icon: AppImages.setting.lock,
+        atPressMoveTo: 'Privacy',
+      },
+      {
+        id: 3,
+        name: 'Security',
+        icon: AppImages.setting.security,
+        atPressMoveTo: 'Security',
+      },
+      {
+        id: 4,
+        name: 'Analytics',
+        icon: AppImages.setting.Activity,
+        atPressMoveTo: 'Analytics',
+      },
+      {
+        id: 5,
+        name: 'Share profile',
+        icon: AppImages.setting.share,
+        atPressMoveTo: 'Share',
+      },
+      {line: true},
+    ],
+  },
+  {
+    title: 'Content & Display',
+    data: [
+      {
+        id: 6,
+        name: 'Push notifications',
+        icon: AppImages.setting.bell,
+        atPressMoveTo: 'Push notifications',
+      },
+      {
+        id: 7,
+        name: 'Comments',
+        icon: AppImages.setting.Chat,
+        atPressMoveTo: 'Comments',
+      },
+      {
+        id: 8,
+        name: 'Report a problem',
+        icon: AppImages.setting.report,
+        atPressMoveTo: 'Report',
+      },
+      {
+        id: 9,
+        name: 'Terms & Conditions',
+        icon: AppImages.setting.Document,
+        atPressMoveTo: 'Terms',
+      },
+
+      {
+        id: 10,
+        name: 'Log out',
+        icon: AppImages.setting.Logout,
+        atPressMoveTo: 'Log out',
+      },
+      {
+        id: 11,
+        color: '#E35252',
+        name: 'Delete Account',
+      },
+    ],
+  },
+];
 export const AppFonts = {
   Regular: 'Poppins-Regular',
   Medium: 'Poppins-Medium',
@@ -188,6 +281,7 @@ export const AppColors = {
     midGray: 'rgba(146, 148, 151, 1)',
     simple: '#DDDDDD',
     placeholderGrey: '#c5c5c7',
+    simpleGrey: '#86878B',
   },
   red: {
     warning: '#E35252',
