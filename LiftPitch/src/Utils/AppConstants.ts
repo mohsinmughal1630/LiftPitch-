@@ -1,7 +1,7 @@
-import {StackScreenProps} from '@react-navigation/stack';
-import {Dimensions, Platform, PixelRatio, StatusBar} from 'react-native';
+import { StackScreenProps } from '@react-navigation/stack';
+import { Dimensions, Platform, PixelRatio, StatusBar } from 'react-native';
 import moment from 'moment';
-import {AppStrings} from './Strings';
+import { AppStrings } from './Strings';
 export const platformVersion = Platform.Version;
 export type ScreenProps = StackScreenProps<any, any>;
 export const ScreenSize = Dimensions.get('screen');
@@ -111,6 +111,7 @@ export const AppImages = {
     menuIcon: require('../Ui/assets/images/Common/menuIcon.png'),
     LeftArrowIcon: require('../Ui/assets/images/Common/LeftArrowIcon.png'),
     CrossFilled: require('../Ui/assets/images/Common/CrossIconFilled.png'),
+    PurpleShadowBg: require('../Ui/assets/images/Common/PurpleShadowBg.png'),
   },
   Followers: {
     ContactsInvite: require('../Ui/assets/images/Followers/ContactsInvite.png'),
@@ -1241,3 +1242,114 @@ export const PITCH_IDEAS_LIST = [
     ],
   },
 ];
+
+export const timesConstantList = [
+  {
+    name: "12:00 AM",
+    value: 80,
+  },
+  {
+    name: "01:00 AM",
+    value: 20,
+  },
+  {
+    name: "02:00 AM",
+    value: 0,
+  },
+  {
+    name: "03:00 AM",
+    value: 0,
+  },
+  {
+    name: "04:00 AM",
+    value: 0,
+  },
+  {
+    name: "05:00 AM",
+    value: 30,
+  },
+  {
+    name: "06:00 AM",
+    value: 0,
+  },
+  {
+    name: "07:00 AM",
+    value: 0,
+  },
+  {
+    name: "08:00 AM",
+    value: 0,
+  },
+  {
+    name: "09:00 AM",
+    value: 0,
+  },
+  {
+    name: "10:00 AM",
+    value: 30,
+  },
+  {
+    name: "11:00 AM",
+    value: 0,
+  },
+  {
+    name: "12:00 PM",
+    value: 0,
+  },
+  {
+    name: "01:00 PM",
+    value: 10,
+  },
+  {
+    name: "02:00 PM",
+    value: 50,
+  },
+  {
+    name: "03:00 PM",
+    value: 0,
+  },
+  {
+    name: "04:00 PM",
+    value: 0,
+  },
+  {
+    name: "05:00 PM",
+    value: 0,
+  },
+  {
+    name: "06:00 PM",
+    value: 20,
+  },
+  {
+    name: "07:00 PM",
+    value: 0,
+  },
+  {
+    name: "08:00 PM",
+    value: 0,
+  },
+  {
+    name: "09:00 PM",
+    value: 0,
+  },
+  {
+    name: "10:00 PM",
+    value: 70,
+  },
+  {
+    name: "11:00 PM",
+    value: 0,
+  },
+  {
+    name: "11:59 PM",
+    value: 0,
+  },
+]
+
+export const timeNameConstantsList = [
+  "12 AM",
+  "06 AM",
+  "12 PM",
+  "06 PM",
+  "11 PM",
+]

@@ -1,0 +1,71 @@
+diff --git a/node_modules/react-native-chart-kit/dist/line-chart/LineChart.js b/node_modules/react-native-chart-kit/dist/line-chart/LineChart.js
+index 1ac4227..e0c63dc 100644
+--- a/node_modules/react-native-chart-kit/dist/line-chart/LineChart.js
++++ b/node_modules/react-native-chart-kit/dist/line-chart/LineChart.js
+@@ -330,11 +330,13 @@ var LineChart = /** @class */ (function (_super) {
+                     paddingTop: paddingTop,
+                     data: data
+                 });
+-                return (<Path key={index} d={result} fill="none" stroke={_this.getColor(dataset, 0.2)} strokeWidth={_this.getStrokeWidth(dataset)} strokeDasharray={dataset.strokeDashArray} strokeDashoffset={dataset.strokeDashOffset}/>);
++                return (<Path key={index} d={result} fill="none" stroke={_this.getColor(dataset, 1)} strokeWidth={_this.getStrokeWidth(dataset)} strokeDasharray={dataset.strokeDashArray} strokeDashoffset={dataset.strokeDashOffset}
++                />);
+             });
+         };
+         _this.renderBezierShadow = function (_a) {
+             var width = _a.width, height = _a.height, paddingRight = _a.paddingRight, paddingTop = _a.paddingTop, data = _a.data, useColorFromDataset = _a.useColorFromDataset;
++            const hideInnerColor = true;
+             return data.map(function (dataset, index) {
+                 var xMax = _this.getXMaxValues(data);
+                 var d = _this.getBezierLinePoints(dataset, {
+@@ -348,7 +350,7 @@ var LineChart = /** @class */ (function (_super) {
+                         ((width - paddingRight) / xMax) *
+                             (dataset.data.length - 1)) + "," + ((height / 4) * 3 +
+                         paddingTop) + " L" + paddingRight + "," + ((height / 4) * 3 + paddingTop) + " Z");
+-                return (<Path key={index} d={d} fill={"url(#fillShadowGradientFrom" + (useColorFromDataset ? "_" + index : "") + ")"} strokeWidth={0}/>);
++                return hideInnerColor ? null : (<Path key={index} d={d} fill={"url(#fillShadowGradientFrom" + (useColorFromDataset ? "_" + index : "") + ")"} strokeWidth={0}/>);
+             });
+         };
+         _this.renderLegend = function (width, legendOffset) {
+@@ -364,7 +366,7 @@ var LineChart = /** @class */ (function (_super) {
+         var _a = this.props, width = _a.width, height = _a.height, data = _a.data, _b = _a.withScrollableDot, withScrollableDot = _b === void 0 ? false : _b, _c = _a.withShadow, withShadow = _c === void 0 ? true : _c, _d = _a.withDots, withDots = _d === void 0 ? true : _d, _e = _a.withInnerLines, withInnerLines = _e === void 0 ? true : _e, _f = _a.withOuterLines, withOuterLines = _f === void 0 ? true : _f, _g = _a.withHorizontalLines, withHorizontalLines = _g === void 0 ? true : _g, _h = _a.withVerticalLines, withVerticalLines = _h === void 0 ? true : _h, _j = _a.withHorizontalLabels, withHorizontalLabels = _j === void 0 ? true : _j, _k = _a.withVerticalLabels, withVerticalLabels = _k === void 0 ? true : _k, _l = _a.style, style = _l === void 0 ? {} : _l, decorator = _a.decorator, onDataPointClick = _a.onDataPointClick, _m = _a.verticalLabelRotation, verticalLabelRotation = _m === void 0 ? 0 : _m, _o = _a.horizontalLabelRotation, horizontalLabelRotation = _o === void 0 ? 0 : _o, _p = _a.formatYLabel, formatYLabel = _p === void 0 ? function (yLabel) { return yLabel; } : _p, _q = _a.formatXLabel, formatXLabel = _q === void 0 ? function (xLabel) { return xLabel; } : _q, segments = _a.segments, _r = _a.transparent, transparent = _r === void 0 ? false : _r, chartConfig = _a.chartConfig;
+         var scrollableDotHorizontalOffset = this.state.scrollableDotHorizontalOffset;
+         var _s = data.labels, labels = _s === void 0 ? [] : _s;
+-        var _t = style.borderRadius, borderRadius = _t === void 0 ? 0 : _t, _u = style.paddingTop, paddingTop = _u === void 0 ? 16 : _u, _v = style.paddingRight, paddingRight = _v === void 0 ? 64 : _v, _w = style.margin, margin = _w === void 0 ? 0 : _w, _x = style.marginRight, marginRight = _x === void 0 ? 0 : _x, _y = style.paddingBottom, paddingBottom = _y === void 0 ? 0 : _y;
++        var _t = style.borderRadius, borderRadius = _t === void 0 ? 0 : _t, _u = style.paddingTop, paddingTop = _u === void 0 ? 16 : _u, _v = 0, paddingRight = 30, _w = 0, margin = 0, _x = 0, marginRight = 0, _y = style.paddingBottom, paddingBottom = _y === void 0 ? 0 : _y;
+         var config = {
+             width: width,
+             height: height,
+@@ -384,7 +386,7 @@ var LineChart = /** @class */ (function (_super) {
+             this.renderLegend(config.width, legendOffset)}
+           <G x="0" y={legendOffset}>
+             {this.renderDefs(__assign(__assign(__assign({}, config), chartConfig), { data: data.datasets }))}
+-            <G>
++            {/* <G>
+               {withHorizontalLines &&
+             (withInnerLines
+                 ? this.renderHorizontalLines(__assign(__assign({}, config), { count: count, paddingTop: paddingTop,
+@@ -393,19 +395,19 @@ var LineChart = /** @class */ (function (_super) {
+                     ? this.renderHorizontalLine(__assign(__assign({}, config), { paddingTop: paddingTop,
+                         paddingRight: paddingRight }))
+                     : null)}
+-            </G>
+-            <G>
++            </G> */}
++            {/* <G>
+               {withHorizontalLabels &&
+             this.renderHorizontalLabels(__assign(__assign({}, config), { count: count, data: datas, paddingTop: paddingTop, paddingRight: paddingRight, formatYLabel: formatYLabel, decimalPlaces: chartConfig.decimalPlaces }))}
+-            </G>
+-            <G>
++            </G> */}
++            {/* <G>
+               {withVerticalLines &&
+             (withInnerLines
+                 ? this.renderVerticalLines(__assign(__assign({}, config), { data: data.datasets[0].data, paddingTop: paddingTop, paddingRight: paddingRight }))
+                 : withOuterLines
+                     ? this.renderVerticalLine(__assign(__assign({}, config), { paddingTop: paddingTop, paddingRight: paddingRight }))
+                     : null)}
+-            </G>
++            </G> */}
+             <G>
+               {withVerticalLabels &&
+             this.renderVerticalLabels(__assign(__assign({}, config), { labels: labels, paddingTop: paddingTop, paddingRight: paddingRight, formatXLabel: formatXLabel }))}
