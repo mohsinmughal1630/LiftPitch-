@@ -14,7 +14,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -34,6 +33,7 @@ import {
   checkUserFollowState,
   followNFollowingUser,
   getOtherUserProfile,
+  updateRecentVisitedUser,
 } from '../../../../Network/Services/ProfileServices';
 import ThreadManager from '../../../../ChatModule/ThreadManger';
 import {Routes} from '../../../../Utils/Routes';
@@ -42,6 +42,8 @@ import CommonDataManager from '../../../../Utils/CommonManager';
 import FollowConfirmationModal from '../../Follower/Components/FollowConfirmationModal';
 import useUserManager from '../../../../Hooks/useUserManager';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
+import moment from 'moment';
+import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlaceHolderComp';
 const ProfileScreen = (props: ScreenProps) => {
   const [feeds, setFeeds] = useState([]);
   const selector = useSelector((AppState: any) => AppState.AppReducer);
@@ -71,21 +73,59 @@ const ProfileScreen = (props: ScreenProps) => {
         );
         return;
       }
+      if (!props?.route?.params?.userId) {
+        dispatch(
+          setIsAlertShow({
+            value: true,
+            message: AppStrings.Network.recordNotFound,
+          }),
+        );
+        return;
+      }
       dispatch(setIsLoader(true));
-      getOtherUserProfile(props?.route?.params?.userId, (response: any) => {
-        dispatch(setIsLoader(false));
-        setData(response);
-      });
-      checkUserFollowState(
-        userData?.userId,
+      getOtherUserProfile(
         props?.route?.params?.userId,
-        (result: any) => {
-          setIsFollow(result);
+        async (response: any) => {
+          await checkUserFollowState(
+            userData?.userId,
+            props?.route?.params?.userId,
+            (result: any) => {
+              setIsFollow(result);
+            },
+          );
+          let currentDate = moment
+            .utc(new Date())
+            .format(ThreadManager.instance.dateFormater.fullDate);
+          let newObj = {
+            userId: selector?.userData?.userId,
+            userName: selector?.userData?.userName,
+            profile: selector?.userData?.companyLogo,
+            role: selector?.userData?.companyType,
+            visitedDateTime: currentDate,
+          };
+          let recentViewer: any =
+            response?.recentVisitor?.length > 0
+              ? [...response?.recentVisitor, newObj]
+              : [newObj];
+          let updatedArr = recentViewer.filter((obj: any, index: any) => {
+            return (
+              index ===
+              recentViewer.findIndex((o: any) => obj.userId === o.userId)
+            );
+          });
+          await updateRecentVisitedUser(updatedArr, response?.userId);
+          setData({...response, recentVisitor: updatedArr});
+          setTimeout(() => {
+            dispatch(setIsLoader(false));
+          }, 1000);
         },
       );
+
       setProfileType(USER_TYPE.otherUser);
     } else {
-      setData(userData);
+      getOtherUserProfile(userData?.userId, async (response: any) => {
+        setData(response);
+      });
       setProfileType(USER_TYPE.owner);
     }
     params?.userId || userData?.userId
@@ -198,6 +238,7 @@ const ProfileScreen = (props: ScreenProps) => {
       },
     );
   };
+
   return (
     <View style={AppStyles.MainStyle}>
       <SafeAreaView />
@@ -289,7 +330,7 @@ const ProfileScreen = (props: ScreenProps) => {
                       );
                     }}
                   />
-                ) : (
+                ) : selectedTab == 'Analytics' ? (
                   <Text
                     style={{
                       color: 'black',
@@ -298,29 +339,67 @@ const ProfileScreen = (props: ScreenProps) => {
                     }}>
                     {selectedTab}
                   </Text>
-                )}
+                ) : selectedTab == 'Info' ? (
+                  <View>
+                    <Image source={AppImages.profile.infoImage} />
+                    <Text style={styles.userTxt}>Users</Text>
+                    <FlatList
+                      data={data?.recentVisitor}
+                      keyExtractor={(item, index) => `${index}`}
+                      renderItem={({item, index}) => {
+                        return (
+                          <TouchableOpacity
+                            activeOpacity={1}
+                            onPress={() => {
+                              props?.navigation.push(
+                                Routes.ProfileTab.ProfileScreen,
+                                {
+                                  userId: item?.userId,
+                                },
+                              );
+                            }}
+                            style={styles.userSingleItem}>
+                            <View style={styles.userOuterCont}>
+                              <View style={styles.userInnerCont}>
+                                {item?.profile?.length > 0 ? (
+                                  <AppImageViewer
+                                    source={{uri: item?.profile}}
+                                    placeHolder={AppImages.bottomBar.Profile}
+                                    style={styles.img}
+                                  />
+                                ) : (
+                                  <ProfilePlaceHolderComp
+                                    index={index}
+                                    name={item?.userName ? item?.userName : ''}
+                                    mainStyles={styles.img}
+                                    nameStyles={{
+                                      fontSize: normalized(16),
+                                      ...AppStyles.textMedium,
+                                    }}
+                                  />
+                                )}
+                                <View style={{marginStart: normalized(10)}}>
+                                  <Text style={styles.userNameTxt}>
+                                    {item?.userName}
+                                  </Text>
+                                  <Text style={styles.roleTxt}>
+                                    {item?.role}
+                                  </Text>
+                                </View>
+                              </View>
+                              <Image source={AppImages.profile.rightArrow} />
+                            </View>
+                          </TouchableOpacity>
+                        );
+                      }}
+                    />
+                  </View>
+                ) : null}
               </View>
             ) : null;
           }}
         />
         {profifleType == USER_TYPE.owner ? null : (
-          // <TouchableOpacity
-          //   style={styles.bottomBtn}
-          //   onPress={() => {
-          //     // if (profifleType == USER_TYPE.owner) {
-          //     //   logoutClicked();
-          //     // } else {
-          //     goToChat();
-          //     // }
-          //   }}>
-          //   <Text style={styles.bottomBtnTxt}>
-          //     {profifleType == USER_TYPE.owner
-          //       ? 'LogOut'
-          //       : `Chat with ${CommonDataManager.getSharedInstance().capitalizeFirstLetter(
-          //           data?.userName,
-          //         )}`}
-          //   </Text>
-          // </TouchableOpacity>
           <TouchableOpacity
             style={styles.bottomBtn}
             onPress={() => {
@@ -412,6 +491,53 @@ const styles = StyleSheet.create({
     height: normalized(20),
     width: normalized(20),
     tintColor: AppColors.white.white,
+  },
+  img: {
+    height: normalized(40),
+    width: normalized(40),
+    borderRadius: normalized(40 / 2),
+  },
+  userTxt: {
+    fontSize: normalized(15),
+    fontWeight: '600',
+    color: AppColors.black.black,
+    marginVertical: normalized(15),
+  },
+  userSingleItem: {
+    padding: normalized(15),
+    borderRadius: normalized(15),
+    width: '97%',
+    backgroundColor: AppColors.white.white,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 7,
+    marginVertical:normalized(5)
+  },
+  userOuterCont: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  userInnerCont: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  userNameTxt: {
+    fontSize: normalized(13),
+    fontWeight: '500',
+    color: AppColors.black.black,
+    marginVertical: normalized(3),
+  },
+  roleTxt: {
+    fontSize: normalized(13),
+    fontWeight: '500',
+    color: AppColors.black.light,
   },
 });
 export default ProfileScreen;

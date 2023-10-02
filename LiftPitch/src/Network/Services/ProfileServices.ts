@@ -193,3 +193,14 @@ export const searchUserfromFB = async (
       console.error('Error searching documents:', error);
     });
 };
+
+export const updateRecentVisitedUser = async (list: any, userId: any) => {
+  await firestore()
+    .collection(Collections.Users)
+    .doc(userId)
+    .update({recentVisitor: list})
+    .then(() => {})
+    .catch((error: any) => {
+      console.error('Error updating array value:', error);
+    });
+};

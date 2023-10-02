@@ -131,6 +131,10 @@ export const AppImages = {
     share: require('../Ui/assets/images/Setting/share.png'),
     security: require('../Ui/assets/images/Setting/security.png'),
   },
+  profile: {
+    rightArrow: require('../Ui/assets/images/Profile/rightArrow.png'),
+    infoImage: require('../Ui/assets/images/Profile/infoImage.png'),
+  },
 };
 export const settingScreenList = [
   {
