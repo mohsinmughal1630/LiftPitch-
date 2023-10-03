@@ -3,7 +3,9 @@ import {
   AppColors,
   AppImages,
   ScreenProps,
+  ScreenSize,
   hv,
+  isSmallDevice,
   normalized,
   profileTabArr,
   profileTabArrForOtherUser,
@@ -44,6 +46,8 @@ import useUserManager from '../../../../Hooks/useUserManager';
 import AppImageViewer from '../../../Components/ProfileView/AppImageView';
 import moment from 'moment';
 import ProfilePlaceHolderComp from '../../../Components/ProfileView/ProfilePlaceHolderComp';
+import BarGraph from '../Components/BarGraph';
+import CurveGraph from '../Components/CurveGraph';
 const ProfileScreen = (props: ScreenProps) => {
   const [feeds, setFeeds] = useState([]);
   const selector = useSelector((AppState: any) => AppState.AppReducer);
@@ -241,7 +245,7 @@ const ProfileScreen = (props: ScreenProps) => {
 
   return (
     <View style={AppStyles.MainStyle}>
-      <SafeAreaView />
+      <SafeAreaView style={{backgroundColor: AppColors.red.mainColor}} />
       <ProfileHeader
         atBackPress={() => {
           props?.navigation?.goBack();
@@ -331,14 +335,21 @@ const ProfileScreen = (props: ScreenProps) => {
                     }}
                   />
                 ) : selectedTab == 'Analytics' ? (
-                  <Text
+                  <View
                     style={{
-                      color: 'black',
-                      fontSize: normalized(12),
-                      ...AppStyles.textRegular,
+                      alignSelf: 'flex-start',
+                      flex: 1,
+                      width: ScreenSize.width,
+                      paddingHorizontal: normalized(30),
                     }}>
-                    {selectedTab}
-                  </Text>
+                    <FlatList
+                      data={[0, 1]}
+                      keyExtractor={(item, index) => index.toString()}
+                      renderItem={({index}) => {
+                        return index == 0 ? <BarGraph /> : <CurveGraph />;
+                      }}
+                    />
+                  </View>
                 ) : selectedTab == 'Info' ? (
                   <View>
                     <Image source={AppImages.profile.infoImage} />
@@ -463,6 +474,7 @@ const styles = StyleSheet.create({
     margin: normalized(5),
     alignSelf: 'center',
     paddingHorizontal: normalized(10),
+    marginBottom: isSmallDevice || Platform.OS == 'android' ? 10 : 20,
   },
   bottomBtnTxt: {
     color: AppColors.white.white,
@@ -516,7 +528,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.29,
     shadowRadius: 4.65,
     elevation: 7,
-    marginVertical:normalized(5)
+    marginVertical: normalized(5),
   },
   userOuterCont: {
     flexDirection: 'row',

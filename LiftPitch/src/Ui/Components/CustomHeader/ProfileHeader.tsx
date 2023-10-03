@@ -1,19 +1,20 @@
-import React, {useRef} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, { useRef } from 'react';
+import { Image, Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import {
   AppColors,
   AppImages,
   hv,
   normalized,
 } from '../../../Utils/AppConstants';
-import {AppHorizontalMargin, AppStyles} from '../../../Utils/AppStyles';
+import { AppHorizontalMargin, AppStyles } from '../../../Utils/AppStyles';
 import AppImageViewer from '../ProfileView/AppImageView';
 import ProfilePlaceHolderComp from '../ProfileView/ProfilePlaceHolderComp';
-import {USER_TYPE} from '../../../Utils/Strings';
+import { USER_TYPE } from '../../../Utils/Strings';
 import CommonDataManager from '../../../Utils/CommonManager';
 const ProfileHeader = (props: any) => {
   return (
     <View style={styles.maincontainer}>
+      <StatusBar backgroundColor={AppColors.red.mainColor} barStyle={'light-content'} />
       <View style={styles.childCont}>
         {props?.profileType !== USER_TYPE.owner ? (
           <TouchableOpacity
@@ -32,15 +33,15 @@ const ProfileHeader = (props: any) => {
 
         {props?.data?.companyLogo?.length > 0 ? (
           <AppImageViewer
-            source={{uri: props?.data?.companyLogo}}
+            source={{ uri: props?.data?.companyLogo }}
             placeHolder={AppImages.bottomBar.Profile}
-            style={{...styles.img, ...props.imgStyle}}
+            style={{ ...styles.img, ...props.imgStyle }}
           />
         ) : (
           <ProfilePlaceHolderComp
             index={props.index}
             name={props?.data?.userName ? props?.data?.userName : 'Testing'}
-            mainStyles={{...styles.img, ...props.imgStyle}}
+            mainStyles={{ ...styles.img, ...props.imgStyle }}
             nameStyles={{
               fontSize: normalized(16),
               ...AppStyles.textMedium,
@@ -92,7 +93,9 @@ const ProfileHeader = (props: any) => {
 const styles = StyleSheet.create({
   maincontainer: {
     backgroundColor: AppColors.red.mainColor,
-    height: normalized(120),
+    // height: normalized(120),
+    paddingVertical: 30,
+    paddingTop: Platform.OS == 'ios' ? 20 : 30,
     justifyContent: 'space-between',
     flexDirection: 'row',
     alignItems: 'center',

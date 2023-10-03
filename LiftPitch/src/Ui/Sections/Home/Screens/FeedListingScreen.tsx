@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Dimensions,
   FlatList,
@@ -16,12 +16,13 @@ import {
   AppColors,
   AppImages,
   ScreenProps,
+  ScreenSize,
   deviceHeight,
   deviceHeightwithOutBar,
   normalized,
 } from '../../../../Utils/AppConstants';
-import {useSelector} from 'react-redux';
-import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
+import { useSelector } from 'react-redux';
+import { AppHorizontalMargin, AppStyles } from '../../../../Utils/AppStyles';
 
 const FeedListingScreen = (props: ScreenProps) => {
   const list = props?.route?.params?.data;
@@ -47,7 +48,7 @@ const FeedListingScreen = (props: ScreenProps) => {
         }}>
         <Image
           source={AppImages.Auth.backIcon}
-          style={{tintColor: AppColors.white.white}}
+          style={{ tintColor: AppColors.white.white }}
         />
       </TouchableOpacity>
       {list?.length > 0 ? (
@@ -57,7 +58,7 @@ const FeedListingScreen = (props: ScreenProps) => {
           pagingEnabled
           onMomentumScrollEnd={updateCurrentSlideIndex}
           keyExtractor={(item, index) => `${index}`}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
               <SingleVideoComponent
                 navigation={props?.navigation}
@@ -67,19 +68,24 @@ const FeedListingScreen = (props: ScreenProps) => {
                 currentVideoIndex={currentVideoIndex}
                 mainStyle={{
                   backgroundColor: AppColors.black.black,
-                  height:
-                    Platform.OS == 'android'
-                      ? Dimensions.get('screen').height -
-                        Dimensions.get('screen').height -
-                        Dimensions.get('window').height
-                      : deviceHeight,
+                  // height:
+                  //   Platform.OS == 'android'
+                  //     ? Dimensions.get('screen').height -
+                  //       Dimensions.get('screen').height -
+                  //       Dimensions.get('window').height
+                  //     : deviceHeight,
+                  height: Platform.OS == 'android'
+                    ? Dimensions.get('screen').height - (
+                      ScreenSize.height - Dimensions.get('window').height
+                    )
+                    : deviceHeight
                 }}
               />
             );
           }}
         />
       ) : selector.isLoaderStart ? null : (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text
             style={{
               fontSize: normalized(14),
