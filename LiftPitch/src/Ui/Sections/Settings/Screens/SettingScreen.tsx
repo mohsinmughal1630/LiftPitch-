@@ -20,6 +20,7 @@ import CustomHeader from '../../../Components/CustomHeader/CustomHeader';
 import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import ConfirmationModal from '../../../Components/CustomModal/ConfirmationModal';
 import useUserManager from '../../../../Hooks/useUserManager';
+import {Routes} from '../../../../Utils/Routes';
 const SettingScreen = (props: ScreenProps) => {
   const {logoutClicked} = useUserManager();
   const {deleteUser} = useUserManager();
@@ -27,7 +28,7 @@ const SettingScreen = (props: ScreenProps) => {
   const moveToNext = (index: any) => {
     switch (index) {
       case 1:
-        console.log('move to profile manage Screen');
+        props?.navigation?.navigate(Routes.Setting.updateProfile);
         break;
       case 2:
         console.log('move to Privacy Screen');

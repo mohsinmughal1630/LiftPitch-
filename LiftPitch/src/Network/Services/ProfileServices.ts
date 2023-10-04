@@ -204,3 +204,16 @@ export const updateRecentVisitedUser = async (list: any, userId: any) => {
       console.error('Error updating array value:', error);
     });
 };
+
+export const updateUserProfileReq = async (newObj: any) => {
+  await firestore()
+    .collection(Collections.Users)
+    .doc(newObj?.userId)
+    .update(newObj)
+    .then(() => {
+      console.log('update Successfully!');
+    })
+    .catch((error: any) => {
+      console.error('Error updating array value:', error);
+    });
+};

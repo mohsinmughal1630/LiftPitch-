@@ -12,6 +12,7 @@ export const AppStrings = {
     invalidEmail: 'That email address is invalid!',
     invalidPassword: 'The password is invalid!',
     userNotFound: 'User not found against this Email.',
+    profileUpdateSuccessfully: 'Profile Updated Successfully!',
   },
   Validation: {
     fieldsEmptyError: 'Please fill the fields properly',

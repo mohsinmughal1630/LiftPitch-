@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   Pressable,
@@ -7,13 +7,18 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { AppColors, AppImages, hv, normalized } from '../../../Utils/AppConstants';
-import { AppStyles } from '../../../Utils/AppStyles';
+import {
+  AppColors,
+  AppImages,
+  hv,
+  normalized,
+} from '../../../Utils/AppConstants';
+import {AppStyles} from '../../../Utils/AppStyles';
 const SimpleInput = React.forwardRef((props: any, ref: any) => {
   const [secureEntry, setSecureEntry] = useState(props?.secureEntry);
   return (
     <View>
-      <View style={{ ...styles.inputContainer, ...props.container }}>
+      <View style={{...styles.inputContainer, ...props.container}}>
         {props?.rightIcon ? (
           <Pressable>
             <Image
@@ -29,12 +34,14 @@ const SimpleInput = React.forwardRef((props: any, ref: any) => {
           keyboardType={
             props?.keyboardType ? props?.keyboardType : 'email-address'
           }
-          placeholderTextColor={props.placeHolderColor || AppColors.grey.placeholderGrey}
+          placeholderTextColor={
+            props.placeHolderColor || AppColors.grey.placeholderGrey
+          }
           placeholder={props?.placeHold}
-          style={{ ...styles.txtInput, ...props.textInputStyle }}
+          style={{...styles.txtInput, ...props.textInputStyle}}
           secureTextEntry={secureEntry}
           onChangeText={(txt: any) => {
-            if (props?.setValue) {
+            if (props?.setValue && !props?.isDisable) {
               props?.setValue(txt);
             }
           }}
@@ -48,7 +55,7 @@ const SimpleInput = React.forwardRef((props: any, ref: any) => {
 
         {props?.showLastIcon ? (
           <Pressable
-            style={{ padding: 5 }}
+            style={{padding: 5}}
             onPress={() => {
               setSecureEntry(!secureEntry);
             }}>
@@ -66,7 +73,7 @@ const SimpleInput = React.forwardRef((props: any, ref: any) => {
         ) : null}
       </View>
       {props?.errorMsg?.length > 0 ? (
-        <Text style={{ ...styles.errorMsg, ...props.errorStyle }}>
+        <Text style={{...styles.errorMsg, ...props.errorStyle}}>
           {props?.errorMsg}
         </Text>
       ) : null}
@@ -89,7 +96,7 @@ const styles = StyleSheet.create({
     color: 'black',
     paddingLeft: normalized(12),
     maxWidth: normalized(270),
-    ...AppStyles.textRegular
+    ...AppStyles.textRegular,
   },
   errorMsg: {
     marginTop: hv(1),

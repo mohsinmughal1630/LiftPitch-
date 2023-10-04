@@ -41,5 +41,6 @@ export const Routes = {
   },
   Setting: {
     settingScreen: 'SettingScreen',
+    updateProfile: 'UpdateProfile',
   },
 };

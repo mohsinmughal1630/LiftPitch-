@@ -15,6 +15,7 @@ import UploadMediaPreviewScreen from '../Ui/Sections/CreateVideo/Screens/UploadM
 import SharePitchScreen from '../Ui/Sections/CreateVideo/Screens/SharePitchScreen';
 import SettingScreen from '../Ui/Sections/Settings/Screens/SettingScreen';
 import FeedListingScreen from '../Ui/Sections/Home/Screens/FeedListingScreen';
+import UpdateProfileSccreen from '../Ui/Sections/Settings/Screens/UpdateProfileScreen';
 const MainStack = createStackNavigator();
 
 export default function MainNavigation() {
@@ -66,6 +67,10 @@ export default function MainNavigation() {
       <MainStack.Screen
         name={Routes.HomeTab.feedScreen}
         component={FeedListingScreen}
+      />
+      <MainStack.Screen
+        name={Routes.Setting.updateProfile}
+        component={UpdateProfileSccreen}
       />
     </MainStack.Navigator>
   );

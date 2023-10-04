@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   Pressable,
@@ -9,24 +9,34 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { AppColors, AppImages, hv, normalized } from '../../../Utils/AppConstants';
-import { AppStyles } from '../../../Utils/AppStyles';
+import {
+  AppColors,
+  AppImages,
+  hv,
+  normalized,
+} from '../../../Utils/AppConstants';
+import {AppStyles} from '../../../Utils/AppStyles';
 interface Props {
-  value: string | undefined,
+  value: string | undefined;
   onPress: () => void;
   onClear: () => void;
-  container?: ViewStyle
-  placeholderColor?: string
+  container?: ViewStyle;
+  placeholderColor?: string;
 }
 const PressableInput = (props: Props) => {
   return (
-    <TouchableWithoutFeedback onPress={props.onPress} disabled={props.value ? true : false}>
+    <TouchableWithoutFeedback
+      onPress={props.onPress}
+      disabled={props.value ? true : false}>
       <View style={[styles.inputContainer, props.container]}>
-        <Text style={{
-          color: props.value ? 'black' : AppColors.grey.placeholderGrey,
-          flex: 1,
-          ...AppStyles.textRegular
-        }}>{props.value ? props.value : 'Company Address'}</Text>
+        <Text
+          style={{
+            color: props.value ? 'black' : AppColors.grey.placeholderGrey,
+            flex: 1,
+            ...AppStyles.textRegular,
+          }}>
+          {props.value ? props.value : 'Company Address'}
+        </Text>
 
         {props.value ? (
           <TouchableWithoutFeedback onPress={props.onClear}>
@@ -41,7 +51,7 @@ const PressableInput = (props: Props) => {
       </View>
     </TouchableWithoutFeedback>
   );
-}
+};
 const styles = StyleSheet.create({
   inputContainer: {
     height: normalized(56),
@@ -51,7 +61,7 @@ const styles = StyleSheet.create({
     borderColor: '#E2E3E4',
     borderRadius: normalized(12),
     alignItems: 'center',
-    paddingHorizontal: normalized(12)
+    paddingHorizontal: normalized(12),
   },
   txtInput: {
     height: normalized(55),
@@ -76,11 +86,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 20,
     height: 20,
-    alignSelf: "center",
+    alignSelf: 'center',
     marginRight: -5,
     zIndex: 2,
     backgroundColor: AppColors.grey.placeholderGrey,
-    borderRadius: 15
+    borderRadius: 15,
   },
   crossImg: {
     width: 7,
