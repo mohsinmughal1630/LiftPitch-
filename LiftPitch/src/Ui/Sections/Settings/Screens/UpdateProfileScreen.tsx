@@ -178,7 +178,7 @@ const UpdateProfileSccreen = (props: ScreenProps) => {
   };
   const updateProfileReq = async (payload: any) => {
     let newObj: any = {...userData, ...payload};
-    await updateUserProfileReq(newObj)
+    await updateUserProfileReq(payload, userData?.userId)
       .then(() => {
         saveUserData(newObj);
         dispatch(setUserData(newObj));

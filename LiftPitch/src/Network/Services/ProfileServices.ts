@@ -205,10 +205,10 @@ export const updateRecentVisitedUser = async (list: any, userId: any) => {
     });
 };
 
-export const updateUserProfileReq = async (newObj: any) => {
+export const updateUserProfileReq = async (newObj: any, userId: any) => {
   await firestore()
     .collection(Collections.Users)
-    .doc(newObj?.userId)
+    .doc(userId)
     .update(newObj)
     .then(() => {
       console.log('update Successfully!');
