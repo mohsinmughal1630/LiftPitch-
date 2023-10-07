@@ -172,10 +172,11 @@ export const likeNDisListReq = async (
       }
     });
 };
-const checkIsAlreadyReported = async (val: any, onResponse: any) => {
+export const checkIsAlreadyReported = async (val: any, onResponse: any) => {
+  let userId = val?.reportedBy?.userId ? val?.reportedBy?.userId : val;
   await firestore()
     .collection(Collections.REPORTED_USER)
-    .doc(val?.reportedBy?.userId)
+    .doc(userId)
     .get()
     .then((snapDoc: any) => {
       if (snapDoc?._data) {
@@ -251,7 +252,6 @@ export const getUpdatedVideoListing = async (
         }
       });
       setTimeout(() => {
-        console.log('list-------->', list?.length);
         onUpdates(list);
       }, 1000);
     })

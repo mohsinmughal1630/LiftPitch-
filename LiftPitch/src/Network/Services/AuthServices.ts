@@ -25,6 +25,7 @@ export const userSignupRequest = async (
             companyLocation: userInput?.companyLocation,
             companyLogo: userInput?.companyLogo,
             userId: id,
+            isPushEnable: true,
           })
           .then(docRef => {
             let loginObj = {

@@ -52,7 +52,8 @@ const ProfileScreen = (props: ScreenProps) => {
   const [feeds, setFeeds] = useState([]);
   const selector = useSelector((AppState: any) => AppState.AppReducer);
   const params = props?.route?.params;
-  const {fetchUserFeed} = useUserManager();
+  const {fetchUserFeed, getRecentVisitedList} = useUserManager();
+  const [recentViewerList, setRecentViewList] = useState([]);
   const threadRef = useRef(null);
   const [profifleType, setProfileType] = useState('');
   const dispatch = useDispatch();
@@ -68,67 +69,14 @@ const ProfileScreen = (props: ScreenProps) => {
 
   useEffect(() => {
     if (params?.userId && params?.userId != userData?.userId) {
-      if (!selector?.isNetConnected) {
-        dispatch(
-          setIsAlertShow({
-            value: true,
-            message: AppStrings.Network.internetError,
-          }),
-        );
-        return;
-      }
-      if (!props?.route?.params?.userId) {
-        dispatch(
-          setIsAlertShow({
-            value: true,
-            message: AppStrings.Network.recordNotFound,
-          }),
-        );
-        return;
-      }
-      dispatch(setIsLoader(true));
-      getOtherUserProfile(
-        props?.route?.params?.userId,
-        async (response: any) => {
-          await checkUserFollowState(
-            userData?.userId,
-            props?.route?.params?.userId,
-            (result: any) => {
-              setIsFollow(result);
-            },
-          );
-          let currentDate = moment
-            .utc(new Date())
-            .format(ThreadManager.instance.dateFormater.fullDate);
-          let newObj = {
-            userId: selector?.userData?.userId,
-            userName: selector?.userData?.userName,
-            profile: selector?.userData?.companyLogo,
-            role: selector?.userData?.companyType,
-            visitedDateTime: currentDate,
-          };
-          let recentViewer: any =
-            response?.recentVisitor?.length > 0
-              ? [...response?.recentVisitor, newObj]
-              : [newObj];
-          let updatedArr = recentViewer.filter((obj: any, index: any) => {
-            return (
-              index ===
-              recentViewer.findIndex((o: any) => obj.userId === o.userId)
-            );
-          });
-          await updateRecentVisitedUser(updatedArr, response?.userId);
-          setData({...response, recentVisitor: updatedArr});
-          setTimeout(() => {
-            dispatch(setIsLoader(false));
-          }, 1000);
-        },
-      );
-
-      setProfileType(USER_TYPE.otherUser);
+      initialFun();
     } else {
       getOtherUserProfile(userData?.userId, async (response: any) => {
         setData(response);
+        if (response?.recentVisitor?.length > 0) {
+          let result: any = await getRecentVisitedList(response?.recentVisitor);
+          setRecentViewList(result);
+        }
       });
       setProfileType(USER_TYPE.owner);
     }
@@ -136,12 +84,74 @@ const ProfileScreen = (props: ScreenProps) => {
       ? fetchUserFeeds(params?.userId || userData?.userId)
       : null;
   }, []);
+  const initialFun = async () => {
+    if (!selector?.isNetConnected) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.internetError,
+        }),
+      );
+      return;
+    }
+    if (!props?.route?.params?.userId) {
+      dispatch(
+        setIsAlertShow({
+          value: true,
+          message: AppStrings.Network.recordNotFound,
+        }),
+      );
+      return;
+    }
+    dispatch(setIsLoader(true));
+    await getOtherUserProfile(
+      props?.route?.params?.userId,
+      async (response: any) => {
+        await checkUserFollowState(
+          userData?.userId,
+          props?.route?.params?.userId,
+          (result: any) => {
+            setIsFollow(result);
+          },
+        );
+        let currentDate = moment
+          .utc(new Date())
+          .format(ThreadManager.instance.dateFormater.fullDate);
+        let newObj = {
+          userId: selector?.userData?.userId,
+          userName: selector?.userData?.userName,
+          profile: selector?.userData?.companyLogo,
+          role: selector?.userData?.companyType,
+          visitedDateTime: currentDate,
+        };
+        let recentViewer: any =
+          response?.recentVisitor?.length > 0
+            ? [...response?.recentVisitor, newObj]
+            : [newObj];
+        let updatedArr = recentViewer.filter((obj: any, index: any) => {
+          return (
+            index ===
+            recentViewer.findIndex((o: any) => obj.userId === o.userId)
+          );
+        });
+        await updateRecentVisitedUser(updatedArr, response?.userId);
+
+        setData({...response, recentVisitor: updatedArr});
+        setTimeout(() => {
+          dispatch(setIsLoader(false));
+        }, 2000);
+      },
+    );
+    setProfileType(USER_TYPE.otherUser);
+  };
   const fetchUserFeeds = async (uId: any) => {
     if (!selector?.isLoaderStart) {
       dispatch(setIsLoader(true));
     }
     await fetchUserFeed(uId, (result: any) => {
-      dispatch(setIsLoader(false));
+      setTimeout(() => {
+        dispatch(setIsLoader(false));
+      }, 2000);
       setFeeds(result);
     });
   };
@@ -355,9 +365,9 @@ const ProfileScreen = (props: ScreenProps) => {
                     <Image source={AppImages.profile.infoImage} />
                     <Text style={styles.userTxt}>Users</Text>
                     <FlatList
-                      data={data?.recentVisitor}
+                      data={recentViewerList}
                       keyExtractor={(item, index) => `${index}`}
-                      renderItem={({item, index}) => {
+                      renderItem={({item, index}: any) => {
                         return (
                           <TouchableOpacity
                             activeOpacity={1}

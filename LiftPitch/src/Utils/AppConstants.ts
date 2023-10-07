@@ -2,6 +2,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import {Dimensions, Platform, PixelRatio, StatusBar} from 'react-native';
 import moment from 'moment';
 import {AppStrings} from './Strings';
+import {Routes} from './Routes';
 export const platformVersion = Platform.Version;
 export type ScreenProps = StackScreenProps<any, any>;
 export const ScreenSize = Dimensions.get('screen');
@@ -150,26 +151,26 @@ export const settingScreenList = [
         id: 2,
         name: 'Privacy',
         icon: AppImages.setting.lock,
-        atPressMoveTo: 'Privacy',
+        atPressMoveTo: Routes.Setting.privacy,
       },
-      {
-        id: 3,
-        name: 'Security',
-        icon: AppImages.setting.security,
-        atPressMoveTo: 'Security',
-      },
+      // {
+      //   id: 3,
+      //   name: 'Security',
+      //   icon: AppImages.setting.security,
+      //   atPressMoveTo: 'Security',
+      // },
       {
         id: 4,
         name: 'Analytics',
         icon: AppImages.setting.Activity,
-        atPressMoveTo: 'Analytics',
+        atPressMoveTo: Routes.Setting.analytics,
       },
-      {
-        id: 5,
-        name: 'Share profile',
-        icon: AppImages.setting.share,
-        atPressMoveTo: 'Share',
-      },
+      // {
+      //   id: 5,
+      //   name: 'Share profile',
+      //   icon: AppImages.setting.share,
+      //   atPressMoveTo: 'Share',
+      // },
       {line: true},
     ],
   },
@@ -180,25 +181,25 @@ export const settingScreenList = [
         id: 6,
         name: 'Push notifications',
         icon: AppImages.setting.bell,
-        atPressMoveTo: 'Push notifications',
+        switchBtn: true,
       },
-      {
-        id: 7,
-        name: 'Comments',
-        icon: AppImages.setting.Chat,
-        atPressMoveTo: 'Comments',
-      },
+      // {
+      //   id: 7,
+      //   name: 'Comments',
+      //   icon: AppImages.setting.Chat,
+      //   atPressMoveTo: 'Comments',
+      // },
       {
         id: 8,
         name: 'Report a problem',
         icon: AppImages.setting.report,
-        atPressMoveTo: 'Report',
+        atPressMoveTo: Routes.Setting.reportProblem,
       },
       {
         id: 9,
         name: 'Terms & Conditions',
         icon: AppImages.setting.Document,
-        atPressMoveTo: 'Terms',
+        atPressMoveTo: Routes.Setting.terms,
       },
 
       {
@@ -209,6 +210,7 @@ export const settingScreenList = [
       },
       {
         id: 11,
+        icon: AppImages.Common.DeleteIcon,
         color: '#E35252',
         name: 'Delete Account',
       },

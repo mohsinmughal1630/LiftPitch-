@@ -42,5 +42,9 @@ export const Routes = {
   Setting: {
     settingScreen: 'SettingScreen',
     updateProfile: 'UpdateProfile',
+    terms: 'TermNConScreen',
+    privacy: 'PrivacyNPolicycreen',
+    analytics: 'AnalyticsScreen',
+    reportProblem: 'ReportProblem',
   },
 };

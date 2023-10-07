@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   AppColors,
   AppImages,
@@ -21,23 +21,33 @@ import {AppHorizontalMargin, AppStyles} from '../../../../Utils/AppStyles';
 import ConfirmationModal from '../../../Components/CustomModal/ConfirmationModal';
 import useUserManager from '../../../../Hooks/useUserManager';
 import {Routes} from '../../../../Utils/Routes';
+import CustomSwitch from '../../../Components/CustomSwitch/CustomSwitch';
+import {useDispatch, useSelector} from 'react-redux';
+import {setUserData} from '../../../../Redux/reducers/AppReducer';
+import {saveUserData} from '../../../../Utils/AsyncStorage';
 const SettingScreen = (props: ScreenProps) => {
   const {logoutClicked} = useUserManager();
-  const {deleteUser} = useUserManager();
+  const selector = useSelector((AppState: any) => AppState.AppReducer);
+  const dispatch = useDispatch();
+  const [isPushEnable, setIsPushEnable] = useState(
+    selector?.userData?.isPushEnable ? selector?.userData?.isPushEnable : false,
+  );
+  const {deleteUser, setPushState} = useUserManager();
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
   const moveToNext = (index: any) => {
     switch (index) {
       case 1:
         props?.navigation?.navigate(Routes.Setting.updateProfile);
         break;
       case 2:
-        console.log('move to Privacy Screen');
+        props?.navigation?.navigate(Routes.Setting.privacy);
         break;
       case 3:
         console.log('move to Security Screen');
         break;
       case 4:
-        console.log('move to Analytics Screen');
+        props?.navigation?.navigate(Routes.Setting.analytics);
         break;
       case 5:
         console.log('move to Share profile Function');
@@ -49,10 +59,10 @@ const SettingScreen = (props: ScreenProps) => {
         console.log('move to Comments Screen');
         break;
       case 8:
-        console.log('move to Report Screen');
+        props?.navigation?.navigate(Routes.Setting.reportProblem);
         break;
       case 9:
-        console.log('move to Terms & Conditions Screen');
+        props?.navigation?.navigate(Routes.Setting.terms);
         break;
       case 10:
         logoutClicked();
@@ -74,15 +84,7 @@ const SettingScreen = (props: ScreenProps) => {
           props?.navigation.goBack();
         }}
       />
-      {/* <TouchableOpacity
-        activeOpacity={1}
-        style={styles.singleCell}
-        onPress={() => {
-          setShowConfirmationModal(true);
-        }}>
-        <Text style={styles.simpleTxt}>Delete Account</Text>
-        <Image source={AppImages.Common.LeftArrowIcon} />
-      </TouchableOpacity> */}
+
       <SectionList
         style={{flex: 1, marginHorizontal: AppHorizontalMargin}}
         sections={settingScreenList}
@@ -103,31 +105,22 @@ const SettingScreen = (props: ScreenProps) => {
               onPress={() => {
                 moveToNext(item?.id);
               }}
-              style={{
-                flexDirection: 'row',
-                padding: normalized(10),
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}>
+              style={styles.mainUpperCont}>
+              <View style={styles.innerCont}>
                 <Image
                   source={item?.icon}
                   style={{
-                    resizeMode: 'contain',
-                    height: normalized(16),
-                    width: normalized(14),
-                    tintColor: AppColors.grey.simpleGrey,
+                    ...styles.imageStyle,
+                    tintColor: item?.color
+                      ? item?.color
+                      : AppColors.grey.simpleGrey,
                   }}
                 />
                 <Text
                   style={{
                     marginStart: normalized(8),
-                    fontSize: normalized(13),
-                    fontWeight: '400',
+                    fontSize: normalized(14),
+                    fontWeight: '500',
                     color: item?.color ? item?.color : AppColors.black.black,
                   }}>
                   {item?.name}
@@ -135,6 +128,19 @@ const SettingScreen = (props: ScreenProps) => {
               </View>
               {item?.atPressMoveTo ? (
                 <Image source={AppImages.setting.forward} />
+              ) : item?.switchBtn ? (
+                <CustomSwitch
+                  value={isPushEnable}
+                  onToggle={val => {
+                    setPushState(val, (result: any) => {
+                      saveUserData({...selector?.userData, isPushEnable: val});
+                      dispatch(
+                        setUserData({...selector?.userData, isPushEnable: val}),
+                      );
+                      setIsPushEnable(val);
+                    });
+                  }}
+                />
               ) : (
                 <View />
               )}
@@ -143,7 +149,7 @@ const SettingScreen = (props: ScreenProps) => {
         }}
         renderSectionHeader={({section: {title}}) => {
           return (
-            <View>
+            <View style={{backgroundColor: AppColors.white.white}}>
               <Text style={styles.header}>{title}</Text>
             </View>
           );
@@ -188,6 +194,23 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+  },
+  mainUpperCont: {
+    flexDirection: 'row',
+    paddingVertical: normalized(15),
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: normalized(8),
+  },
+  innerCont: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  imageStyle: {
+    resizeMode: 'contain',
+    height: normalized(16),
+    width: normalized(14),
+    tintColor: AppColors.grey.simpleGrey,
   },
 });
 export default SettingScreen;

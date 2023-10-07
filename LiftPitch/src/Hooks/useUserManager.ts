@@ -12,6 +12,7 @@ import {saveUserData} from '../Utils/AsyncStorage';
 import {logoutRequest} from '../Network/Services/AuthServices';
 import {AppStrings, Collections} from '../Utils/Strings';
 import {searchUserfromFB} from '../Network/Services/ProfileServices';
+import {checkIsAlreadyReported} from '../Network/Services/VideoListingServices';
 const useUserManager = () => {
   const selector = useSelector((AppState: any) => AppState.AppReducer);
   const dispatch = useDispatch();
@@ -93,11 +94,84 @@ const useUserManager = () => {
         console.error('Error getting documents: ', error);
       });
   };
+  const getRecentVisitedList = (users: any) => {
+    users.sort((a: any, b: any) => {
+      const dateA: any = new Date(a.visitedDateTime);
+      const dateB: any = new Date(b.visitedDateTime);
+      return dateB - dateA;
+    });
+    return users.slice(0, 5);
+  };
+  const setPushState = async (val: any, onComplete: any) => {
+    dispatch(setIsLoader(true));
+    await ThreadManager.instance.setPushIsEnable(
+      val,
+      selector?.userData?.userId?.toString(),
+      async (onResponse: any) => {
+        onComplete();
+        dispatch(setIsLoader(false));
+      },
+    );
+  };
+
+  const reportProblemFun = async (reason: any, onComplete: any) => {
+    dispatch(setIsLoader(true));
+    await checkIsAlreadyReported(
+      selector?.userData?.userId,
+      async (result: any) => {
+        if (result?.data) {
+          let updateArr = [
+            ...result?.data,
+            {
+              type: 'Reported Problem',
+              reason: reason,
+            },
+          ];
+          await firestore()
+            .collection(Collections.REPORTED_USER)
+            .doc(selector?.userData?.userId)
+            .update({reported_User_List: updateArr})
+            .then(() => {
+              onComplete('reported Successfully!');
+            })
+            .catch((error: any) => {
+              onComplete('error!');
+              console.error('Error updating array value:', error);
+            });
+        } else {
+          let updateObj: any = {
+            reportedById: selector?.userData?.userId,
+            reported_User_List: [
+              {
+                type: 'Reported Problem',
+                reason: reason,
+              },
+            ],
+          };
+          await firestore()
+            .collection(Collections.REPORTED_USER)
+            .doc(selector?.userData?.userId)
+            .set(updateObj)
+            .then(() => {
+              onComplete('reported Successfully!');
+            })
+            .catch((error: any) => {
+              onComplete('error!');
+              console.error('Error updating array value:', error);
+            });
+        }
+        dispatch(setIsLoader(false));
+      },
+    );
+  };
   return {
     deleteUser,
     logoutClicked,
     handleSearch,
     fetchUserFeed,
+    getRecentVisitedList,
+    setPushState,
+    reportProblemFun,
   };
 };
 

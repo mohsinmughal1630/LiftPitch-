@@ -16,6 +16,10 @@ import SharePitchScreen from '../Ui/Sections/CreateVideo/Screens/SharePitchScree
 import SettingScreen from '../Ui/Sections/Settings/Screens/SettingScreen';
 import FeedListingScreen from '../Ui/Sections/Home/Screens/FeedListingScreen';
 import UpdateProfileSccreen from '../Ui/Sections/Settings/Screens/UpdateProfileScreen';
+import TermsNConditionScreen from '../Ui/Sections/Settings/Screens/TermsNConditionScreen';
+import PrivacyScreen from '../Ui/Sections/Settings/Screens/PrivacyScreen';
+import AnalyticsScreen from '../Ui/Sections/Settings/Screens/AnalyticsScreen';
+import ReportProblemScreen from '../Ui/Sections/Settings/Screens/ReportProblemScreen';
 const MainStack = createStackNavigator();
 
 export default function MainNavigation() {
@@ -71,6 +75,22 @@ export default function MainNavigation() {
       <MainStack.Screen
         name={Routes.Setting.updateProfile}
         component={UpdateProfileSccreen}
+      />
+      <MainStack.Screen
+        name={Routes.Setting.terms}
+        component={TermsNConditionScreen}
+      />
+      <MainStack.Screen
+        name={Routes.Setting.privacy}
+        component={PrivacyScreen}
+      />
+      <MainStack.Screen
+        name={Routes.Setting.analytics}
+        component={AnalyticsScreen}
+      />
+      <MainStack.Screen
+        name={Routes.Setting.reportProblem}
+        component={ReportProblemScreen}
       />
     </MainStack.Navigator>
   );
